@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doggy See, Doggy Do — Dog Parenting Resource Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --yellow: #FFD600;
+  --orange: #FF5C00;
+  --blue: #00C2FF;
+  --red: #FF3B3B;
+  --dark: #1a1a1a;
+  --offwhite: #fafaf8;
+  --green: #2ECC71;
+  --purple: #9B59B6;
+  --border: 2.5px solid #1a1a1a;
+  --shadow: 4px 4px 0px #1a1a1a;
+  --shadow-hover: 6px 6px 0px #1a1a1a;
+  --radius: 12px;
+  --font-display: 'Bangers', cursive;
+  --font-body: 'Nunito', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--offwhite);
+  color: var(--dark);
+  line-height: 1.6;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* NAV */
+.nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--yellow);
+  border-bottom: var(--border);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  cursor: pointer; white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+}
+.nav-links { display: flex; gap: 4px; list-style: none; }
+.nav-links a {
+  font-weight: 700; font-size: 0.85rem;
+  padding: 5px 12px; border-radius: 999px;
+  transition: all 0.2s;
+}
+.nav-links a:hover { background: rgba(0,0,0,0.06); }
+.nav-links a.active { color: var(--orange); }
+.nav-cta {
+  background: var(--orange); color: #fff;
+  font-weight: 800; font-size: 0.8rem;
+  padding: 8px 18px; border-radius: 999px;
+  border: var(--border); box-shadow: 3px 3px 0px var(--dark);
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.nav-cta:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+.mobile-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+.mobile-menu {
+  display: none; position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+  background: var(--yellow); flex-direction: column; align-items: center;
+  padding-top: 40px; gap: 16px; z-index: 999;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-weight: 700; font-size: 1.2rem; padding: 10px 24px; border-radius: 999px; }
+.mobile-menu a.active { color: var(--orange); }
+
+/* SHARED */
+.section { padding: 68px 0; }
+.section-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+}
+.section-header h2 { font-size: 2.1rem; }
+.section-header .sub { font-weight: 600; color: #666; font-size: 0.9rem; margin-top: 2px; }
+.pill-btn {
+  display: inline-flex; align-items: center;
+  padding: 9px 20px; border-radius: 999px;
+  border: var(--border); box-shadow: var(--shadow);
+  font-family: var(--font-body); font-weight: 800;
+  font-size: 0.82rem; cursor: pointer;
+  transition: all 0.15s; background: var(--yellow); color: var(--dark);
+}
+.pill-btn:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+.pill-btn.outline { background: #fff; }
+.pill-btn.dark { background: var(--dark); color: #fff; }
+.pill-btn.orange { background: var(--orange); color: #fff; }
+.badge {
+  display: inline-block; padding: 3px 12px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 800; border: 2px solid var(--dark);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.card {
+  background: #fff; border: var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); transition: all 0.2s; overflow: hidden;
+}
+.card:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+
+/* HOME HERO */
+.hero-home {
+  background: var(--yellow); border-bottom: var(--border);
+  position: relative; overflow: hidden;
+}
+.hero-home::before {
+  content: ''; position: absolute; inset: 0; opacity: 0.12; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ctext x='10' y='35' font-size='20'%3E🦴%3C/text%3E%3Ctext x='45' y='65' font-size='16'%3E🐾%3C/text%3E%3C/svg%3E");
+}
+.hero-home-inner {
+  max-width: 1200px; margin: 0 auto; padding: 44px 24px 52px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 36px;
+  align-items: center; position: relative; z-index: 1;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--dark); color: #fff;
+  padding: 5px 14px; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 800; margin-bottom: 14px;
+}
+.hero-badge .star { color: var(--yellow); }
+.hero-home h1 { font-size: 3.4rem; line-height: 1.0; margin-bottom: 14px; }
+.hero-home p { font-size: 0.92rem; margin-bottom: 22px; max-width: 420px; line-height: 1.65; }
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-img-box {
+  background: #fff; border: var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); display: flex; align-items: center; justify-content: center;
+  min-height: 280px; font-size: 9rem;
+}
+
+/* WHAT WE COVER */
+.cover-section { text-align: center; }
+.cover-section h2 { font-size: 2.1rem; margin-bottom: 4px; }
+.cover-section .sub { color: #666; font-size: 0.88rem; margin-bottom: 32px; }
+.cover-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.cover-card { padding: 24px 18px; text-align: left; }
+.cover-icon {
+  width: 40px; height: 40px; border-radius: 10px; border: 2px solid var(--dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; margin-bottom: 12px; box-shadow: 2px 2px 0px var(--dark);
+}
+.cover-card h3 { font-family: var(--font-body); font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
+.cover-card p { font-size: 0.82rem; color: #666; font-weight: 500; line-height: 1.5; }
+.cover-card.blue-card { background: var(--blue); }
+.cover-card.blue-card p { color: #1a1a1a; }
+.cover-card.red-card { background: var(--red); color: #fff; }
+.cover-card.red-card p { color: rgba(255,255,255,0.85); }
+.cover-card.red-card .cover-icon { background: #fff; }
+
+/* STAT BANNER */
+.stat-banner {
+  background: var(--blue); border-top: var(--border); border-bottom: var(--border);
+  padding: 52px 0; text-align: center;
+}
+.stat-banner h2 { font-size: 2.2rem; margin-bottom: 6px; }
+.stat-banner .sub { color: var(--dark); font-size: 0.88rem; margin-bottom: 28px; opacity: 0.75; }
+.stat-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  max-width: 780px; margin: 0 auto; padding: 0 24px;
+}
+.stat-card {
+  background: #fff; border: var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 24px 14px; text-align: center;
+}
+.stat-emoji { font-size: 1.4rem; margin-bottom: 6px; }
+.stat-card .num { font-family: var(--font-display); font-size: 2.2rem; line-height: 1.1; }
+.stat-card p { font-weight: 700; margin-top: 2px; font-size: 0.84rem; color: #555; }
+
+/* BLOG CARDS */
+.blog-card .card-img {
+  height: 170px; display: flex; align-items: center; justify-content: center;
+  font-size: 3.5rem; border-bottom: var(--border); position: relative;
+}
+.blog-card .card-img .badge {
+  position: absolute; top: 10px; left: 10px; font-size: 0.68rem; padding: 3px 10px;
+}
+.blog-card .card-body { padding: 16px; }
+.blog-card .card-meta {
+  font-size: 0.76rem; color: #999; font-weight: 600;
+  display: flex; justify-content: space-between; margin-bottom: 6px;
+}
+.blog-card h3 {
+  font-family: var(--font-body); font-weight: 800; font-size: 0.98rem;
+  line-height: 1.32; margin-bottom: 6px;
+}
+.blog-card .card-excerpt {
+  font-size: 0.82rem; color: #666; font-weight: 500; line-height: 1.5;
+  margin-bottom: 12px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.blog-card .read-more { color: var(--orange); font-weight: 800; font-size: 0.82rem; }
+.blog-card .read-more:hover { text-decoration: underline; }
+
+/* EMAIL CTA */
+.email-cta {
+  background: var(--orange); border-top: var(--border); border-bottom: var(--border);
+  padding: 52px 0; text-align: center; color: #fff;
+}
+.email-dog { font-size: 4rem; margin-bottom: 10px; }
+.email-cta h2 { font-size: 2.6rem; margin-bottom: 6px; }
+.email-cta > .container > p { margin-bottom: 24px; font-size: 0.92rem; opacity: 0.9; }
+.email-form {
+  display: inline-flex; max-width: 420px; width: 100%;
+  background: #fff; border-radius: 999px; border: var(--border);
+  box-shadow: var(--shadow); overflow: hidden; align-items: center;
+}
+.email-form input {
+  flex: 1; padding: 12px 18px; border: none;
+  font-family: var(--font-body); font-size: 0.88rem; outline: none; min-width: 0;
+}
+.email-form .mail-ico { padding: 0 6px 0 0; font-size: 1rem; }
+.email-form button {
+  padding: 12px 22px; background: var(--orange); color: #fff; border: none;
+  border-left: var(--border); font-family: var(--font-body); font-weight: 800;
+  font-size: 0.85rem; cursor: pointer; white-space: nowrap;
+}
+.email-form button:hover { background: #e65200; }
+.email-fine { font-size: 0.76rem; margin-top: 12px; opacity: 0.7; }
+
+/* FOOTER */
+.footer { background: var(--dark); color: #aaa; padding: 48px 0 0; }
+.footer-grid {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 36px; max-width: 1200px; margin: 0 auto; padding: 0 24px;
+}
+.footer h3 {
+  font-family: var(--font-display); color: var(--orange);
+  font-size: 1.1rem; margin-bottom: 12px;
+}
+.footer-brand-name {
+  font-family: var(--font-display); color: var(--yellow);
+  font-size: 1.1rem; margin-bottom: 8px;
+}
+.footer-brand { font-size: 0.85rem; line-height: 1.7; color: #888; }
+.footer ul { list-style: none; }
+.footer ul li { margin-bottom: 7px; font-size: 0.88rem; }
+.footer ul a { color: #aaa; transition: color 0.15s; }
+.footer ul a:hover { color: var(--yellow); }
+.footer-bottom {
+  border-top: 1px solid #333; margin-top: 36px; padding: 16px 24px;
+  text-align: center; font-size: 0.78rem; color: #666;
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 1200px; margin-left: auto; margin-right: auto;
+}
+.footer-bottom-links a { margin-left: 16px; color: #666; }
+.footer-bottom-links a:hover { color: var(--yellow); }
+
+/* FAQ PAGE */
+.hero-faq {
+  background: var(--yellow); border-bottom: var(--border);
+  text-align: center; padding: 44px 24px;
+}
+.hero-faq h1 { font-size: 2.8rem; margin-bottom: 18px; }
+.search-bar {
+  max-width: 440px; margin: 0 auto; display: flex; align-items: center;
+  border: var(--border); border-radius: 999px; box-shadow: var(--shadow);
+  background: #fff; padding-left: 14px;
+}
+.search-bar .si { font-size: 0.95rem; color: #999; flex-shrink: 0; }
+.search-bar input {
+  flex: 1; padding: 12px 12px; border: none;
+  font-family: var(--font-body); font-size: 0.88rem; outline: none; background: transparent;
+}
+.faq-layout {
+  display: grid; grid-template-columns: 180px 1fr;
+  gap: 44px; max-width: 1060px; margin: 0 auto; padding: 40px 24px 72px;
+}
+.faq-sidebar { position: sticky; top: 76px; align-self: start; }
+.faq-sidebar-title { font-family: var(--font-body); font-weight: 900; font-size: 0.92rem; margin-bottom: 10px; }
+.faq-sidebar a {
+  display: block; padding: 5px 0; font-weight: 600; font-size: 0.84rem;
+  color: #555; transition: color 0.15s;
+}
+.faq-sidebar a:hover { color: var(--dark); }
+.faq-category { margin-bottom: 32px; }
+.faq-cat-header { display: inline-block; margin-bottom: 14px; position: relative; }
+.faq-cat-label {
+  font-family: var(--font-display); font-size: 1.6rem;
+  position: relative; z-index: 1; padding: 2px 12px;
+}
+.faq-cat-hl {
+  position: absolute; bottom: 2px; left: 0; right: 0;
+  height: 45%; z-index: 0; border-radius: 4px;
+}
+.faq-item {
+  border: var(--border); border-radius: var(--radius);
+  margin-bottom: 7px; box-shadow: 2px 2px 0px #e0e0d8;
+  background: #fff; overflow: hidden;
+}
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; cursor: pointer; font-weight: 700; font-size: 0.88rem;
+  user-select: none; transition: background 0.15s; gap: 10px;
+}
+.faq-q:hover { background: #fefdf5; }
+.faq-chev {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--yellow); border: 2px solid var(--dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; flex-shrink: 0;
+  transition: transform 0.25s, background 0.2s;
+  box-shadow: 1px 1px 0px var(--dark);
+}
+.faq-item.open .faq-chev { transform: rotate(180deg); background: var(--orange); }
+.faq-ans { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-ans-inner { padding: 0 16px 14px; font-size: 0.86rem; color: #555; line-height: 1.7; font-weight: 500; }
+
+/* BLOG PAGE */
+.hero-blog {
+  background: var(--dark); border-bottom: var(--border);
+  text-align: center; padding: 48px 24px; color: #fff;
+}
+.hero-blog .bugle {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #333; color: #fff; padding: 5px 14px; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 800; margin-bottom: 14px; border: 2px solid #555;
+}
+.hero-blog h1 { font-size: 3rem; margin-bottom: 6px; line-height: 1.05; }
+.hero-blog p { font-size: 0.9rem; opacity: 0.65; }
+.filter-bar {
+  display: flex; gap: 7px; flex-wrap: wrap; justify-content: center;
+  padding: 24px 24px 6px; max-width: 1200px; margin: 0 auto;
+}
+.filter-btn {
+  padding: 6px 16px; border-radius: 999px; border: var(--border); background: #fff;
+  font-family: var(--font-body); font-weight: 700; font-size: 0.8rem;
+  cursor: pointer; transition: all 0.15s; box-shadow: 2px 2px 0px var(--dark);
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--dark); color: #fff;
+  transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--dark);
+}
+.blog-grid { max-width: 1200px; margin: 0 auto; padding: 20px 24px 72px; }
+.blog-img-training { background: linear-gradient(135deg, #FFE082, #FFD600); }
+.blog-img-nutrition { background: linear-gradient(135deg, #FFAB91, #FF5C00); }
+.blog-img-health { background: linear-gradient(135deg, #EF9A9A, #FF3B3B); }
+.blog-img-puppies { background: linear-gradient(135deg, #A5D6A7, #2ECC71); }
+.blog-img-seniors { background: linear-gradient(135deg, #CE93D8, #9B59B6); }
+.blog-img-gear { background: linear-gradient(135deg, #90CAF9, #00C2FF); }
+.blog-img-behavior { background: linear-gradient(135deg, #FFCC80, #FF9800); }
+
+/* RESOURCES PAGE */
+.hero-resources {
+  background: linear-gradient(135deg, var(--orange), #FF3B3B);
+  border-bottom: var(--border); text-align: center; padding: 52px 24px; color: #fff;
+}
+.hero-resources h1 { font-size: 2.8rem; margin-bottom: 10px; line-height: 1.05; }
+.hero-resources p { font-size: 0.88rem; opacity: 0.9; max-width: 480px; margin: 0 auto; }
+.resource-section { max-width: 1200px; margin: 0 auto; padding: 40px 24px 0; }
+.resource-section:last-of-type { padding-bottom: 72px; }
+.resource-section h2 {
+  font-size: 1.7rem; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 8px;
+}
+.res-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--dark); color: #fff;
+  font-family: var(--font-display); font-size: 1rem; flex-shrink: 0;
+}
+.resource-card { padding: 20px; display: flex; flex-direction: column; }
+.resource-card h3 { font-family: var(--font-body); font-weight: 800; font-size: 0.95rem; margin-bottom: 4px; }
+.resource-card p { font-size: 0.82rem; color: #666; margin-bottom: 14px; font-weight: 500; line-height: 1.45; flex: 1; }
+.visit-btn {
+  display: inline-flex; align-items: center; gap: 3px;
+  color: var(--orange); font-weight: 800; font-size: 0.8rem;
+  padding: 7px 16px; border-radius: 999px; border: 2px solid var(--orange);
+  background: transparent; cursor: pointer; transition: all 0.15s;
+  align-self: flex-start; font-family: var(--font-body);
+}
+.visit-btn:hover { background: var(--orange); color: #fff; }
+.product-wrap {
+  background: #FFF5D0; border: var(--border); border-radius: var(--radius);
+  padding: 32px; margin-top: 4px;
+}
+.product-card { position: relative; }
+.product-card .star-b { position: absolute; top: 10px; right: 10px; font-size: 1rem; }
+.shop-btn {
+  display: inline-flex; align-items: center;
+  padding: 7px 16px; border-radius: 999px;
+  background: var(--orange); color: #fff;
+  border: 2px solid var(--dark); box-shadow: 2px 2px 0px var(--dark);
+  font-family: var(--font-body); font-weight: 800;
+  font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
+}
+.shop-btn:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--dark); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav-links, .nav-cta-wrap { display: none; }
+  .mobile-toggle { display: block; }
+  .hero-home-inner { grid-template-columns: 1fr; text-align: center; }
+  .hero-home h1 { font-size: 2.5rem; }
+  .hero-home p { margin: 0 auto 22px; }
+  .hero-btns { justify-content: center; }
+  .hero-img-box { min-height: 180px; font-size: 6rem; }
+  .cover-grid, .grid-3, .stat-grid, .footer-grid { grid-template-columns: 1fr; }
+  .faq-layout { grid-template-columns: 1fr; }
+  .faq-sidebar { display: none; }
+  .email-form { flex-direction: column; border-radius: var(--radius); }
+  .email-form input { border-radius: 999px; border: var(--border); padding: 12px 18px; }
+  .email-form .mail-ico { display: none; }
+  .email-form button { border-radius: 999px; border: var(--border); margin-top: 8px; }
+  .section-header { flex-direction: column; text-align: center; }
+  .hero-faq h1, .hero-blog h1, .hero-resources h1 { font-size: 2.2rem; }
+  .product-wrap { padding: 18px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page.active { animation: fadeUp 0.25s ease; }
+.page { display: none; }
+.page.active { display: block; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="navigateTo('home')">🐾 Doggy See, Doggy Do</div>
+    <ul class="nav-links">
+      <li><a href="#" data-page="home" class="active" onclick="navigateTo('home')">Home</a></li>
+      <li><a href="#" data-page="faq" onclick="navigateTo('faq')">How Do I...?</a></li>
+      <li><a href="#" data-page="blog" onclick="navigateTo('blog')">Blog</a></li>
+      <li><a href="#" data-page="resources" onclick="navigateTo('resources')">Resources</a></li>
+    </ul>
+    <div class="nav-cta-wrap"><button class="nav-cta" onclick="scrollToEmail()">Join Our Pack</button></div>
+    <button class="mobile-toggle" onclick="toggleMobileMenu()">☰</button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" data-page="home" class="active" onclick="navigateTo('home');closeMobile()">Home</a>
+  <a href="#" data-page="faq" onclick="navigateTo('faq');closeMobile()">How Do I...?</a>
+  <a href="#" data-page="blog" onclick="navigateTo('blog');closeMobile()">Blog</a>
+  <a href="#" data-page="resources" onclick="navigateTo('resources');closeMobile()">Resources</a>
+  <button class="nav-cta" onclick="scrollToEmail();closeMobile()" style="margin-top:12px;">Join Our Pack</button>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <section class="hero-home">
+    <div class="hero-home-inner">
+      <div>
+        <div class="hero-badge"><span class="star">⭐</span> Rated #1 by Good Boys &amp; Girls</div>
+        <h1>Welcome to<br>The Pack.</h1>
+        <p>Your ultimate guide to dog parenting — from first-time puppy panic to senior dog wisdom. Real answers. Deep dives. Zero fluff.</p>
+        <div class="hero-btns">
+          <button class="pill-btn dark" onclick="navigateTo('faq')">How Do I...?</button>
+          <button class="pill-btn outline" onclick="navigateTo('blog')">Read the Blog</button>
+        </div>
+      </div>
+      <div class="hero-img-box">🐕</div>
+    </div>
+  </section>
+
+  <section class="section cover-section">
+    <div class="container">
+      <h2>What We Cover</h2>
+      <p class="sub">Everything you need to raise a healthy, happy, well-adjusted best friend.</p>
+      <div class="cover-grid">
+        <div class="card cover-card"><div class="cover-icon" style="background:var(--yellow)">🐕</div><h3>Training &amp; Behavior</h3><p>From sit to stay to stop eating my shoes.</p></div>
+        <div class="card cover-card blue-card"><div class="cover-icon" style="background:var(--blue)">🥩</div><h3>Food &amp; Diet</h3><p>What's actually in that bag? We break it down.</p></div>
+        <div class="card cover-card"><div class="cover-icon" style="background:var(--red)">❤️</div><h3>Health &amp; Vet Care</h3><p>Know the signs before it becomes an emergency.</p></div>
+        <div class="card cover-card"><div class="cover-icon" style="background:#ddd">✂️</div><h3>Grooming &amp; Hygiene</h3><p>Yes, you do need to brush their teeth.</p></div>
+        <div class="card cover-card"><div class="cover-icon" style="background:var(--green)">🧠</div><h3>Mental Stimulation</h3><p>A bored dog is a destructive dog. Let's fix that.</p></div>
+        <div class="card cover-card red-card"><div class="cover-icon" style="background:#fff">🐾</div><h3>Life Stages</h3><p>Puppies, adults, seniors — every phase covered.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stat-banner">
+    <div class="container">
+      <h2>Because Google doesn't have a dog.</h2>
+      <p class="sub">Real advice from people who've cleaned up the messes.</p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-emoji">📝</div><div class="num">1,000+</div><p>Questions Answered</p></div>
+        <div class="stat-card"><div class="stat-emoji">🐾</div><div class="num">200+</div><p>Deep-Dive Blog Posts</p></div>
+        <div class="stat-card"><div class="stat-emoji">❤️</div><div class="num">50+</div><p>Vetted Resource Links</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div><h2>Latest from the Blog</h2><p class="sub">Fresh tips, tricks, and tales.</p></div>
+        <button class="pill-btn" onclick="navigateTo('blog')">View All Posts →</button>
+      </div>
+      <div class="grid-3" id="homeBlogPreview"></div>
+    </div>
+  </section>
+
+  <section class="email-cta" id="emailCta">
+    <div class="container">
+      <div class="email-dog">🐶</div>
+      <h2>Join the Pack. It's Free.</h2>
+      <p>Get the best dog advice delivered straight to your inbox every week.</p>
+      <div class="email-form">
+        <input type="email" placeholder="Enter your email address">
+        <span class="mail-ico">📬</span>
+        <button>Subscribe</button>
+      </div>
+      <p class="email-fine">No spam. Unsubscribe anytime. We're dog people, not monsters.</p>
+    </div>
+  </section>
+</div>
+
+<!-- FAQ -->
+<div class="page" id="page-faq">
+  <section class="hero-faq">
+    <h1>How Do I...?</h1>
+    <div class="search-bar">
+      <span class="si">🔍</span>
+      <input type="text" placeholder="Search any dog question..." id="faqSearch" oninput="filterFAQ()">
+    </div>
+  </section>
+  <div class="faq-layout">
+    <aside class="faq-sidebar" id="faqSidebar"></aside>
+    <div id="faqContent"></div>
+  </div>
+</div>
+
+<!-- BLOG -->
+<div class="page" id="page-blog">
+  <section class="hero-blog">
+    <div class="bugle">📰 The Doggy Bugle</div>
+    <h1>Deep Dives for<br>Dog People.</h1>
+    <p>We go beyond the basics so you don't have to.</p>
+  </section>
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="blog-grid"><div class="grid-3" id="blogGrid"></div></div>
+</div>
+
+<!-- RESOURCES -->
+<div class="page" id="page-resources">
+  <section class="hero-resources">
+    <h1>Resources We<br>Actually Stand<br>Behind.</h1>
+    <p>Vetted links, trusted trainers, and products we've tested ourselves. Affiliate links marked with ⭐</p>
+  </section>
+  <div id="resourcesContent"></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">🐾 Doggy See, Doggy Do</div>
+      <p class="footer-brand">Every question. Every stage. Every dog.</p>
+    </div>
+    <div>
+      <h3>Explore</h3>
+      <ul>
+        <li><a href="#" onclick="navigateTo('home')">Home</a></li>
+        <li><a href="#" onclick="navigateTo('faq')">How Do I...</a></li>
+        <li><a href="#" onclick="navigateTo('blog')">Blog</a></li>
+        <li><a href="#" onclick="navigateTo('resources')">Resources</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Popular Topics</h3>
+      <ul>
+        <li><a href="#" onclick="navigateTo('faq')">Puppy Training</a></li>
+        <li><a href="#" onclick="navigateTo('faq')">Dog Nutrition</a></li>
+        <li><a href="#" onclick="navigateTo('faq')">Fixing Bad Habits</a></li>
+        <li><a href="#" onclick="navigateTo('blog')">Health &amp; Wellness</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Doggy See, Doggy Do. Made with <span style="color:var(--red)">❤️</span> for dog people.</span>
+    <span class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></span>
+  </div>
+</footer>
+
+<script>
+const blogPosts=[
+{tag:"Training",tc:"#FFD600",tt:"#1a1a1a",ic:"blog-img-training",title:"The Real Reason Positive Reinforcement Works (And Why Punishment Backfires)",excerpt:"Science shows that punishment doesn't just fail to work — it actually backfires by increasing fear and anxiety. Here's what the research actually says about training.",date:"Mar 15, 2025",read:"7 min read",emoji:"🎓"},
+{tag:"Nutrition",tc:"#FF5C00",tt:"#fff",ic:"blog-img-nutrition",title:"Raw vs. Kibble vs. Fresh: We Broke Down the Research So You Don't Have To",excerpt:"We analyzed dozens of studies so you don't have to. The answer is more nuanced than the internet would have you believe, and it depends heavily on your individual dog.",date:"Mar 10, 2025",read:"9 min read",emoji:"🍖"},
+{tag:"Health",tc:"#FF3B3B",tt:"#fff",ic:"blog-img-health",title:"10 Signs Your Dog Is Trying to Tell You They're Sick",excerpt:"Dogs can't tell you they're hurting, but their bodies send signals. Learn to read the subtle signs before a problem becomes a crisis.",date:"Mar 5, 2025",read:"6 min read",emoji:"🩺"},
+{tag:"Training",tc:"#FFD600",tt:"#1a1a1a",ic:"blog-img-training",title:"Why Your Dog is Leash Reactive — And a 4-Week Plan to Fix It",excerpt:"Leash reactivity isn't aggression — it's frustration and anxiety. Understanding why is the first step to a calmer walk.",date:"Feb 28, 2025",read:"11 min read",emoji:"🦮"},
+{tag:"Puppies",tc:"#2ECC71",tt:"#fff",ic:"blog-img-puppies",title:"The First 30 Days With a New Puppy: A Realistic Week-by-Week Guide",excerpt:"Nobody tells you just how exhausting those first weeks are. We did — and also gave you a realistic roadmap to get through them.",date:"Feb 20, 2025",read:"8 min read",emoji:"🐶"},
+{tag:"Health",tc:"#FF3B3B",tt:"#fff",ic:"blog-img-health",title:"Everything You Need to Know About Brushing Your Dog's Teeth",excerpt:"Dental affects 80% of dogs by age 3. The good news: it's almost entirely preventable with the right routine.",date:"Feb 15, 2025",read:"6 min read",emoji:"🪥"},
+{tag:"Training",tc:"#FFD600",tt:"#1a1a1a",ic:"blog-img-training",title:"How to Teach 'Leave It' (Even If Your Dog Is Food-Obsessed)",excerpt:"Leave it might be the single most important cue you can teach. Here's a step-by-step method that works even for the most treat-motivated dogs.",date:"Feb 10, 2025",read:"8 min read",emoji:"🦴"},
+{tag:"Seniors",tc:"#9B59B6",tt:"#fff",ic:"blog-img-seniors",title:"Aging Gracefully: How to Support Your Senior Dog's Quality of Life",excerpt:"The senior years can be your dog's best years with the right support. Here's how to help them thrive through every stage of aging.",date:"Feb 1, 2025",read:"7 min read",emoji:"🐕‍🦺"},
+{tag:"Nutrition",tc:"#FF5C00",tt:"#fff",ic:"blog-img-nutrition",title:"The Dog Food Label Decoder: What Every Ingredient Actually Means",excerpt:"Chicken meal, by-products, desiccated — what does it all mean? We decode the cryptic language of dog food labels.",date:"Jan 25, 2025",read:"6 min read",emoji:"🏷️"},
+{tag:"Gear",tc:"#00C2FF",tt:"#1a1a1a",ic:"blog-img-gear",title:"The Only Dog Gear You Actually Need (And What's a Waste of Money)",excerpt:"We tested dozens of products so you don't waste your money. Here's what actually makes a difference.",date:"Jan 19, 2025",read:"8 min read",emoji:"🎒"},
+{tag:"Behavior",tc:"#FF9800",tt:"#fff",ic:"blog-img-behavior",title:"Anxiety in Dogs: Causes, Signs, and What Actually Helps",excerpt:"Dog anxiety is more common than you think. Understanding the root causes is the first step to helping your pup feel safe.",date:"Jan 15, 2025",read:"8 min read",emoji:"😰"},
+{tag:"Health",tc:"#FF3B3B",tt:"#fff",ic:"blog-img-health",title:"Separation Anxiety 101: A Complete Guide for Dog Parents",excerpt:"Separation anxiety is one of the most common behavioral issues. Here's what works — and what definitely doesn't.",date:"Jan 12, 2025",read:"6 min read",emoji:"🏠"}
+];
+
+const faqData=[
+{category:"Training",color:"#00C2FF",questions:[
+{q:"How do I teach my dog to sit?",a:"Start by holding a treat above your dog's nose and slowly moving it back over their head. As their bottom naturally lowers, say 'sit' and reward immediately. Practice in short sessions of 5 minutes, several times a day."},
+{q:"How do I stop my dog from jumping on people?",a:"Turn away and ignore your dog when they jump. Only give attention when all four paws are on the ground. Ask guests to do the same. Consistency is key — everyone in the household needs to follow the same rule."},
+{q:"How do I crate train my dog?",a:"Make the crate a positive space by placing treats and toys inside. Start with the door open, then gradually close it for short periods. Never use the crate as punishment. Build up duration slowly over days and weeks."},
+{q:"How do I stop my dog from pulling on the leash?",a:"Stop walking the moment the leash goes taut. Only move forward when there's slack. A front-clip harness can also help. Practice in low-distraction environments first before hitting the busy sidewalk."},
+{q:'How do I teach "leave it"?',a:"Hold a treat in a closed fist. When your dog stops trying to get it, reward with a different treat. Gradually increase difficulty by placing the treat on the floor. This builds impulse control over time."},
+{q:"How do I stop my dog from barking at everything?",a:"Identify the trigger — is it boredom, fear, or alerting? Address the root cause. For attention barking, ignore it completely. Reward quiet moments. Consider enrichment toys to reduce boredom-based barking."},
+{q:"How do I train an older dog?",a:"Old dogs absolutely can learn new tricks. Use high-value rewards and keep sessions short (5-10 minutes). Be patient — older dogs may take longer to build new habits, but they're often calmer and more focused."},
+{q:"How do I teach my dog to come when called?",a:"Start indoors with minimal distractions. Say their name + 'come' in an excited voice. Reward generously when they arrive. Never call your dog to you for something unpleasant. Build up to outdoor recall gradually."},
+{q:"How do I stop my dog from biting or nipping?",a:"When your dog nips, let out a yelp and stop play immediately. Redirect to a chew toy. For puppies, this is normal teething behavior — provide appropriate outlets. If biting is aggressive, consult a professional."},
+{q:"How do I use positive reinforcement correctly?",a:"Timing is everything — reward within 1-2 seconds of the desired behavior. Use a marker word ('yes!') or clicker. Vary your rewards between treats, praise, and play. Gradually phase out treats as the behavior becomes reliable."}
+]},
+{category:"Feeding",color:"#FF5C00",questions:[
+{q:"How do I know how much to feed my dog?",a:"Portion size depends on your dog's weight, age, activity level, and the food's calorie density. Follow the guidelines on the packaging as a starting point, then adjust based on your vet's recommendation and body condition."},
+{q:"How do I switch my dog's food safely?",a:"Transition gradually over 7-10 days. Start with 75% old food / 25% new, then shift the ratio every few days. This prevents digestive upset. Watch for loose stools or vomiting during the transition."},
+{q:"How do I know if my dog has a food allergy?",a:"Common signs include itchy skin, ear infections, and digestive issues. Your vet may recommend an elimination diet — feeding a novel protein for 8-12 weeks to identify the culprit. Don't self-diagnose; work with your vet."},
+{q:"How do I read a dog food label?",a:"Ingredients are listed by weight. Look for a named protein source first. Check the AAFCO statement to ensure it meets nutritional standards. Fewer ingredients isn't always better."},
+{q:"How do I feed a raw diet safely?",a:"Raw feeding requires careful planning to ensure nutritional balance. Consult a veterinary nutritionist. Handle raw food with the same hygiene precautions as raw meat for humans."},
+{q:"How do I stop my dog from eating too fast?",a:"Use a slow-feeder bowl, puzzle feeder, or scatter food on a snuffle mat. Eating too fast can cause bloat, especially in deep-chested breeds, so it's worth addressing."},
+{q:"How do I know if my dog is a healthy weight?",a:"You should be able to feel (but not see) your dog's ribs easily. When viewed from above, there should be a visible waist. Your vet can provide a body condition score."},
+{q:"How do I feed a puppy vs. an adult dog?",a:"Puppies need puppy-specific food with higher calories. Feed 3-4 times daily for young puppies, reducing to twice daily around 6 months. Transition to adult food around 12 months."},
+{q:"How do I store dry dog food properly?",a:"Keep dry food in its original bag inside an airtight container. Store in a cool, dry place away from sunlight. The bag's lining helps preserve freshness and makes recalls easier to track."}
+]},
+{category:"Health",color:"#FF3B3B",questions:[
+{q:"How do I know if my dog is sick?",a:"Watch for changes in appetite, energy level, bathroom habits, or behavior. Vomiting, diarrhea, excessive thirst, limping, or hiding can all be signs. When in doubt, call your vet."},
+{q:"How do I clean my dog's ears?",a:"Use a vet-approved ear cleaner. Squeeze solution into the ear canal, massage the base for 30 seconds, then let your dog shake. Wipe away debris with a cotton ball."},
+{q:"How do I brush my dog's teeth?",a:"Use dog-specific toothpaste (never human toothpaste). Start by letting your dog taste the paste, then gently brush in small circles on the outer surfaces. Aim for daily brushing."},
+{q:"How do I check my dog for ticks?",a:"Run your hands over your dog's entire body after outdoor time. Check between toes, inside ears, around the collar, and near the tail. Use fine-tipped tweezers to remove ticks straight out."},
+{q:"How do I give my dog a pill?",a:"Hide it in a soft treat, pill pocket, or peanut butter. If your dog spits it out, place the pill at the back of their tongue, close their mouth, and stroke their throat."},
+{q:"How do I know if my dog has worms?",a:"Signs include visible worms in stool, scooting, weight loss, and dull coat. Regular fecal exams at the vet catch worms early. Preventative dewormers are highly recommended."},
+{q:"How do I help my dog with anxiety?",a:"Identify triggers and gradually desensitize. Create a safe space at home. Exercise and mental stimulation help burn anxious energy. For severe cases, talk to your vet about medication."},
+{q:"How often does my dog need to go to the vet?",a:"Healthy adults: once a year. Puppies: every 3-4 weeks until vaccines are complete. Senior dogs (7+): twice yearly to catch age-related issues early."},
+{q:"How do I know if my dog is in pain?",a:"Look for reluctance to move, changes in posture, panting at rest, decreased appetite, whimpering, or aggression when touched. Any sudden behavioral change warrants a vet visit."},
+{q:"How do I handle my dog's allergies?",a:"Common allergens include pollen, dust mites, certain foods, and flea saliva. Your vet can help identify the cause. Treatment may include antihistamines, special diets, or immunotherapy."}
+]},
+{category:"Grooming",color:"#FFD600",questions:[
+{q:"How do I bathe my dog at home?",a:"Use lukewarm water and dog-specific shampoo. Lather from neck to tail (avoid eyes and ears), rinse completely. Most dogs only need baths every 4-6 weeks."},
+{q:"How do I cut my dog's nails safely?",a:"Use sharp clippers and trim small amounts. Avoid the quick (pink area). For dark nails, trim conservatively and look for a chalky ring. Keep styptic powder handy."},
+{q:"How do I brush a dog that hates being brushed?",a:"Start with very short sessions and lots of treats. Use a gentle brush for your dog's coat type. Gradually increase duration. Make it positive, not a battle."},
+{q:"How do I deal with dog shedding?",a:"Regular brushing is the best defense — daily for heavy shedders. A deshedding tool helps. Ensure a healthy diet with omega fatty acids."},
+{q:"How do I clean my dog's paws after walks?",a:"Keep a towel and shallow basin by the door. A quick rinse removes salt, chemicals, and allergens. In winter, check between toes for ice balls."},
+{q:"How often should I groom my dog?",a:"It depends on breed and coat type. Short-haired dogs: brush once a week. Long-haired breeds: daily grooming. Professional grooming every 4-8 weeks for breeds that need haircuts."}
+]},
+{category:"Puppy Life",color:"#2ECC71",questions:[
+{q:"How do I potty train a puppy?",a:"Take your puppy outside first thing in the morning, after meals, after naps, and before bed. Praise and treat immediately when they go outside. Puppies can hold it roughly 1 hour per month of age."},
+{q:"How do I socialize a puppy?",a:"Expose your puppy to people, sounds, surfaces, and experiences between 3-14 weeks. Keep experiences positive — never force interactions. Puppy classes are great for socialization."},
+{q:"How do I stop puppy biting?",a:"Redirect to chew toys. If they nip, yelp and disengage briefly. Provide plenty of teething toys. This phase improves significantly by 6 months."},
+{q:"How do I set up a puppy schedule?",a:"Schedule regular meals, potty breaks, play, training, and naps. Young puppies need 18-20 hours of sleep. A consistent schedule accelerates potty training."},
+{q:"How do I introduce a puppy to other pets?",a:"Go slow and supervise. Let them sniff through a barrier first. Keep meetings short and positive. Never leave a puppy unsupervised with existing pets initially."},
+{q:"When does a puppy sleep through the night?",a:"Most puppies sleep through by 4-6 months. Until then, expect one or two nighttime potty breaks. Keep nighttime trips boring — no play, minimal light."},
+{q:"How do I puppy-proof my home?",a:"Secure electrical cords, move toxic plants, lock cabinets, pick up small objects, block unsafe areas with baby gates. Assume everything is a chew toy."},
+{q:"What vaccinations does my puppy need?",a:"Core vaccines: distemper, parvovirus, adenovirus, and rabies. Boosters every 3-4 weeks until ~16 weeks. Non-core vaccines depend on your area and lifestyle."},
+{q:"How do I get a puppy used to being alone?",a:"Practice short absences first. Gradually increase duration. Leave a Kong or puzzle toy to create a positive association. Avoid dramatic departures and returns."},
+{q:"When should I start training my puppy?",a:"Start the day you bring them home! Puppies can learn sit, name recognition, and recall as early as 8 weeks. Keep sessions short (3-5 minutes) and fun."}
+]},
+{category:"Senior Dogs",color:"#9B59B6",questions:[
+{q:"How do I know my dog is entering senior years?",a:"Most dogs are senior around 7-8 years (large breeds age faster). Signs: graying muzzle, decreased energy, stiffness after rest, sleep pattern changes."},
+{q:"How do I manage arthritis in my dog?",a:"Keep weight healthy, try low-impact exercise like swimming, provide orthopedic bedding and ramps. Your vet may recommend joint supplements or anti-inflammatory meds."},
+{q:"How do I adjust my senior dog's diet?",a:"Senior dogs often need fewer calories but more joint-supporting nutrients. Consider senior-formula food. Consult your vet about supplements like glucosamine and omega-3s."},
+{q:"How do I keep a senior dog mentally stimulated?",a:"Try food puzzles, sniff walks, new gentle training cues, and rotating toys. Even a slow walk in a new environment provides enriching stimulation."},
+{q:"How do I know when my dog is in pain?",a:"Watch for panting at rest, reluctance to climb stairs, licking specific areas, appetite changes, or unusual aggression. Regular vet checkups catch issues early."},
+{q:"How do I help a dog with vision or hearing loss?",a:"Keep furniture consistent. Use hand signals for seeing dogs, touch-based cues for deaf dogs. Approach from the front. Most dogs adapt remarkably well."},
+{q:"How often should a senior dog see the vet?",a:"Twice a year is recommended. More frequent visits catch kidney disease, cancer, and cognitive decline early. Ask about baseline bloodwork panels."},
+{q:"How do I handle incontinence in a senior dog?",a:"It's common and treatable. Don't punish accidents. Talk to your vet about medications. Consider dog diapers or waterproof bedding. More frequent potty breaks help."},
+{q:"How do I keep my senior dog comfortable at night?",a:"Provide an orthopedic bed in a warm, draft-free spot. A nightlight helps declining vision. Keep water accessible. Some dogs benefit from a raised bed."},
+{q:"How do I know when it's time to say goodbye?",a:"Consider quality of life: are they eating, enjoying interactions, able to do things they love? Talk to your vet about quality-of-life scales. Prioritizing their comfort is always right."}
+]}
+];
+
+const resTraining=[
+{n:"Karen Pryor Academy",d:"Leading positive reinforcement training education"},
+{n:"Victoria Stilwell Positively",d:"Science-based dog training resources and trainer directory"},
+{n:"Association of Professional Dog Trainers (APDT)",d:"Find a certified trainer near you"},
+{n:"Kikopup (YouTube)",d:"Emily Larlham's free video training library"},
+{n:"Dr. Ian Dunbar's Dog Star Daily",d:"Free behavior resources from a pioneer in positive training"},
+{n:"Fenzi Dog Sports Academy",d:"Online courses for sport and pet dog training"}
+];
+const resHealth=[
+{n:"American Veterinary Medical Association (AVMA)",d:"Official vet guidance for pet owners"},
+{n:"PetMD",d:"Evidence-based health articles reviewed by veterinarians"},
+{n:"VCA Animal Hospitals",d:"Comprehensive condition library and care guides"},
+{n:"AKC Canine Health Foundation",d:"Research-backed health resources"},
+{n:"Merck Veterinary Manual",d:"The professional-grade reference guide"},
+{n:"ASPCA Animal Poison Control",d:"24/7 hotline + toxic plant/food database"}
+];
+const resProducts=[
+{n:"Furbo Dog Camera",d:"Two-way audio + treat tossing for when you're away"},
+{n:"West Paw Zogoflex Toys",d:"Nearly indestructible, dishwasher safe, made in the USA"},
+{n:"Kong Classic",d:"The gold standard of enrichment toys, endlessly versatile"},
+{n:"Ruffwear Front Range Harness",d:"Best all-day wear harness we've found"},
+{n:"Whimzees Dental Chews",d:"Vet-recommended natural dental chews"},
+{n:"The Farmer's Dog",d:"Fresh, vet-formulated food delivered to your door"}
+];
+
+function navigateTo(p){
+  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.nav-links a,.mobile-menu a').forEach(a=>a.classList.toggle('active',a.dataset.page===p));
+  window.scrollTo({top:0,behavior:'instant'});
+  const el=document.getElementById('page-'+p);el.style.animation='none';el.offsetHeight;el.style.animation='';
+}
+function scrollToEmail(){navigateTo('home');setTimeout(()=>document.getElementById('emailCta').scrollIntoView({behavior:'smooth'}),100);}
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+function closeMobile(){document.getElementById('mobileMenu').classList.remove('open');}
+
+function blogCard(p){
+  return`<div class="card blog-card" data-tag="${p.tag}">
+    <div class="card-img ${p.ic}"><span class="badge" style="background:${p.tc};color:${p.tt};border-color:var(--dark)">${p.tag}</span><span style="font-size:3.2rem;opacity:0.35">${p.emoji}</span></div>
+    <div class="card-body"><div class="card-meta"><span>${p.date}</span><span>${p.read}</span></div><h3>${p.title}</h3><p class="card-excerpt">${p.excerpt}</p><a href="#" class="read-more">Read Full Article →</a></div></div>`;
+}
+document.getElementById('homeBlogPreview').innerHTML=blogPosts.slice(0,3).map(blogCard).join('');
+document.getElementById('blogGrid').innerHTML=blogPosts.map(blogCard).join('');
+
+const tags=["All","Training","Nutrition","Health","Grooming","Puppies","Seniors","Gear","Behavior"];
+document.getElementById('filterBar').innerHTML=tags.map((t,i)=>`<button class="filter-btn${i===0?' active':''}" onclick="filterBlog('${t}',this)">${t}</button>`).join('');
+function filterBlog(t,b){
+  document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.querySelectorAll('#blogGrid .blog-card').forEach(c=>c.style.display=(t==='All'||c.dataset.tag===t)?'':'none');
+}
+
+let fH='',sH='<div class="faq-sidebar-title">Categories</div>';
+faqData.forEach(c=>{
+  const id=c.category.toLowerCase().replace(/\s+/g,'-');
+  sH+=`<a href="#faq-${id}" onclick="event.preventDefault();document.getElementById('faq-${id}').scrollIntoView({behavior:'smooth'})">${c.category}</a>`;
+  fH+=`<div class="faq-category" id="faq-${id}"><div class="faq-cat-header"><div class="faq-cat-hl" style="background:${c.color}"></div><span class="faq-cat-label">${c.category}</span></div>`;
+  c.questions.forEach(q=>{
+    fH+=`<div class="faq-item" data-q="${q.q.toLowerCase()}"><div class="faq-q" onclick="toggleFAQ(this)"><span>${q.q}</span><span class="faq-chev">▾</span></div><div class="faq-ans"><div class="faq-ans-inner">${q.a}</div></div></div>`;
+  });
+  fH+='</div>';
+});
+document.getElementById('faqContent').innerHTML=fH;
+document.getElementById('faqSidebar').innerHTML=sH;
+function toggleFAQ(el){const i=el.parentElement,a=i.querySelector('.faq-ans');i.classList.toggle('open');a.style.maxHeight=i.classList.contains('open')?a.scrollHeight+'px':'0';}
+function filterFAQ(){
+  const q=document.getElementById('faqSearch').value.toLowerCase();
+  document.querySelectorAll('.faq-item').forEach(i=>i.style.display=i.dataset.q.includes(q)?'':'none');
+  document.querySelectorAll('.faq-category').forEach(c=>{const v=c.querySelectorAll('.faq-item:not([style*="display: none"])');c.style.display=v.length?'':'none';});
+}
+
+let rH='';
+rH+=`<div class="resource-section"><h2><span class="res-num">①</span> Reputable Training Resources</h2><div class="grid-3">`;
+resTraining.forEach(i=>rH+=`<div class="card resource-card"><h3>${i.n}</h3><p>${i.d}</p><button class="visit-btn">Visit Site ↗</button></div>`);
+rH+='</div></div>';
+rH+=`<div class="resource-section"><h2><span class="res-num">②</span> Health &amp; Vet Resources</h2><div class="grid-3">`;
+resHealth.forEach(i=>rH+=`<div class="card resource-card"><h3>${i.n}</h3><p>${i.d}</p><button class="visit-btn">Visit Site ↗</button></div>`);
+rH+='</div></div>';
+rH+=`<div class="resource-section"><div class="product-wrap"><h2><span class="res-num">③</span> Favorite Pet Products ⭐</h2><div class="grid-3">`;
+resProducts.forEach(i=>rH+=`<div class="card resource-card product-card"><span class="star-b">⭐</span><h3>${i.n}</h3><p>${i.d}</p><button class="shop-btn">Shop Gear →</button></div>`);
+rH+='</div></div></div>';
+document.getElementById('resourcesContent').innerHTML=rH;
+</script>
+</body>
+</html>
