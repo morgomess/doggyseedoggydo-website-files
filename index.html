@@ -408,6 +408,58 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 }
 .shop-btn:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--dark); }
 
+.hero-article {
+  border-bottom: var(--border); position: relative; overflow: hidden;
+  height: 340px; background: #eee;
+}
+.hero-article img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-article .article-badge {
+  position: absolute; top: 18px; left: 18px; z-index: 2;
+}
+.article-wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 72px; }
+.article-back {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin: 22px 0 4px; font-weight: 800; font-size: 0.82rem;
+  padding: 8px 16px; border-radius: 999px; border: var(--border);
+  box-shadow: 2px 2px 0px var(--dark); background: #fff; cursor: pointer;
+  font-family: var(--font-body); transition: all 0.15s;
+}
+.article-back:hover { transform: translate(-2px,-2px); box-shadow: var(--shadow-hover); }
+.article-head { padding: 26px 0 8px; border-bottom: 2px solid #eee; margin-bottom: 8px; }
+.article-head h1 {
+  font-family: var(--font-display); font-size: 2.5rem; line-height: 1.05;
+  letter-spacing: 1px; margin-bottom: 12px;
+}
+.article-meta {
+  display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+  font-size: 0.82rem; color: #888; font-weight: 700;
+}
+.article-body { padding-top: 18px; }
+.article-body .lead {
+  font-size: 1.12rem; font-weight: 700; line-height: 1.6;
+  color: #333; margin-bottom: 22px;
+}
+.article-body h2 {
+  font-family: var(--font-body); font-weight: 900; font-size: 1.35rem;
+  margin: 30px 0 10px; letter-spacing: 0;
+}
+.article-body h3 {
+  font-family: var(--font-body); font-weight: 800; font-size: 1.08rem;
+  margin: 22px 0 6px; color: var(--orange); letter-spacing: 0;
+}
+.article-body p { font-size: 1rem; line-height: 1.75; margin-bottom: 16px; font-weight: 500; color: #2a2a2a; }
+.article-body strong { font-weight: 800; color: var(--dark); }
+.article-body em { font-style: italic; }
+.article-cta {
+  margin-top: 36px; padding: 26px; text-align: center;
+  background: var(--yellow); border: var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.article-cta h3 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 6px; }
+.article-cta p { font-size: 0.88rem; margin-bottom: 14px; font-weight: 600; }
+.article-related { margin-top: 44px; }
+.article-related h3 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 16px; }
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .nav-links, .nav-cta-wrap { display: none; }
@@ -426,6 +478,9 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
   .email-form button { border-radius: 999px; border: var(--border); margin-top: 8px; }
   .section-header { flex-direction: column; text-align: center; }
   .hero-faq h1, .hero-blog h1, .hero-resources h1 { font-size: 2.2rem; }
+  .hero-article { height: 220px; }
+  .article-head h1 { font-size: 1.8rem; }
+  .article-body .lead { font-size: 1.02rem; }
   .product-wrap { padding: 18px; }
   .footer-bottom { flex-direction: column; gap: 8px; }
 }
@@ -564,6 +619,28 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
     <p>Vetted links, trusted trainers, and products we've tested ourselves. Affiliate links marked with ⭐</p>
   </section>
   <div id="resourcesContent"></div>
+</div>
+
+<!-- ARTICLE -->
+<div class="page" id="page-article">
+  <div class="hero-article" id="articleHero"></div>
+  <div class="article-wrap">
+    <button class="article-back" onclick="navigateTo('blog')">← Back to all posts</button>
+    <div class="article-head">
+      <h1 id="articleTitle"></h1>
+      <div class="article-meta" id="articleMeta"></div>
+    </div>
+    <div class="article-body" id="articleBody"></div>
+    <div class="article-cta">
+      <h3>Liked this? Join the pack.</h3>
+      <p>New guides like this one, straight to your inbox.</p>
+      <button class="pill-btn orange" onclick="scrollToEmail()">Join the Pack</button>
+    </div>
+    <div class="article-related">
+      <h3>Keep reading</h3>
+      <div class="grid-3" id="articleRelated"></div>
+    </div>
+  </div>
 </div>
 
 <footer class="footer">
@@ -720,9 +797,10 @@ function toggleMobileMenu(){document.getElementById('mobileMenu').classList.togg
 function closeMobile(){document.getElementById('mobileMenu').classList.remove('open');}
 
 function blogCard(p){
-  return`<div class="card blog-card" data-tag="${p.tag}">
+  const idx=blogPosts.indexOf(p);
+  return`<div class="card blog-card" data-tag="${p.tag}" onclick="openPost(${idx})" style="cursor:pointer">
     <div class="card-img ${p.ic}"><span class="badge" style="position:relative;z-index:1;margin:10px;background:${p.tc};color:${p.tt};border-color:var(--dark)">${p.tag}</span></div>
-    <div class="card-body"><div class="card-meta"><span>${p.date}</span><span>${p.read}</span></div><h3>${p.title}</h3><p class="card-excerpt">${p.excerpt}</p><a href="#" class="read-more">Read Full Article →</a></div></div>`;
+    <div class="card-body"><div class="card-meta"><span>${p.date}</span><span>${p.read}</span></div><h3>${p.title}</h3><p class="card-excerpt">${p.excerpt}</p><span class="read-more">Read Full Article →</span></div></div>`;
 }
 document.getElementById('homeBlogPreview').innerHTML=blogPosts.slice(0,3).map(blogCard).join('');
 document.getElementById('blogGrid').innerHTML=blogPosts.map(blogCard).join('');
@@ -768,6 +846,428 @@ rH+=`<div class="resource-section"><div class="product-wrap"><h2><span class="re
 resProducts.forEach(i=>rH+=`<div class="card resource-card product-card"><span class="star-b">⭐</span><h3>${i.n}</h3><p>${i.d}</p><button class="shop-btn">Shop Gear →</button></div>`);
 rH+='</div></div></div>';
 document.getElementById('resourcesContent').innerHTML=rH;
+
+// This file builds the postBodies object that gets injected into index.html
+// Each key is the post index (0-11), value is the full article HTML body.
+
+const postBodies = {};
+
+// 0 - Positive Reinforcement (Training, 7 min)
+postBodies[0] = `
+<p class="lead">If you've ever been told to "show your dog who's boss," you've been handed advice that the science quietly retired years ago. Here's what actually happens in a dog's brain when you train with rewards versus corrections, and why one builds a partner while the other builds a problem.</p>
+
+<h2>What positive reinforcement actually means</h2>
+<p>Positive reinforcement is simple to define and easy to fumble. You add something the dog values - a treat, praise, a game of tug - immediately after a behavior you want to see again. That's it. The "positive" doesn't mean upbeat or gentle. It means you're <em>adding</em> something. The reinforcement means the behavior gets stronger because of it.</p>
+<p>The fumble usually happens in the timing. Reinforcement that lands two seconds late isn't rewarding the sit, it's rewarding whatever your dog did two seconds later. We'll come back to that, because it's the single biggest thing separating dogs who "get it" from dogs who seem stubborn.</p>
+
+<h2>Why punishment backfires</h2>
+<p>Punishment can absolutely suppress a behavior in the moment. Yell loud enough and a dog will stop barking. The problem is what else it does. Decades of behavioral research point to the same conclusion: aversive methods raise a dog's stress, fear, and anxiety, and those side effects don't stay neatly contained to the behavior you were targeting.</p>
+<p>A dog corrected harshly for growling, for example, often learns to skip the growl entirely and go straight to a bite, because the warning got punished. You didn't fix the aggression. You deleted the early-warning system. That's the central danger of punishment: it changes the symptom without touching the cause, and it frequently makes the underlying emotion worse.</p>
+<p>There's also the relationship cost. Dogs trained primarily through corrections tend to show more avoidance of their handlers and more conflicted body language. The dog isn't working <em>with</em> you. It's working to avoid you being upset, which is a fundamentally different and more fragile thing.</p>
+
+<h2>What's happening in the brain</h2>
+<p>When a dog earns a reward, the brain releases dopamine, and dopamine doesn't just feel good - it tags the preceding behavior as worth repeating. You're not bribing your dog. You're giving the brain the exact chemical signal it uses to build habits. Repeat the loop enough times and the behavior becomes automatic, no treat required.</p>
+<p>Fear-based learning runs on a different system, one built around the amygdala and threat detection. It learns fast, which is why punishment can look effective. But threat-based learning is rigid, context-specific, and prone to generalizing in unhelpful ways. A dog that learns "the living room is where scary corrections happen" may simply become anxious in the living room.</p>
+
+<h2>How to actually do it well</h2>
+<p>Good reinforcement training comes down to a few mechanics most people never get taught.</p>
+<p><strong>Mark the moment.</strong> Use a consistent marker - a clicker, or a crisp word like "yes" - the instant the behavior happens. The marker bridges the gap between the behavior and the treat that arrives a second later. Without it, your timing has to be superhuman. With it, you have a tool that says "that, right there, is what earned this."</p>
+<p><strong>Pay well at first, then taper.</strong> When a behavior is brand new, reward every single time. Once it's reliable, shift to rewarding intermittently. Counterintuitively, this makes the behavior <em>stronger</em>, the same way a slot machine keeps people pulling the lever. Predictable rewards build behaviors; unpredictable rewards maintain them.</p>
+<p><strong>Keep sessions short.</strong> Five minutes, several times a day, beats one marathon session. Dogs consolidate learning during rest, so frequent short reps with breaks outperform long grinds.</p>
+<p><strong>Raise difficulty one variable at a time.</strong> A dog that sits perfectly in your kitchen may completely blank in a busy park. That's not defiance, it's the difficulty jumping on three axes at once - distraction, location, and distance. Change one thing at a time.</p>
+
+<h2>The bottom line</h2>
+<p>You're not choosing between being "firm" and being "soft." You're choosing between a method that builds a confident, willing dog and one that suppresses symptoms while quietly raising the emotional temperature. The research has been pointing the same direction for a long time. Reward the behavior you want, mark it precisely, and let your dog's own brain chemistry do the heavy lifting.</p>
+`;
+
+// 1 - Raw vs Kibble vs Fresh (Nutrition, 9 min)
+postBodies[1] = `
+<p class="lead">Ask the internet what to feed your dog and you'll get three camps yelling past each other. We read through the actual evidence on raw, kibble, and fresh-cooked diets so you can make a calm, informed decision instead of a panicked one.</p>
+
+<h2>First, the only rule that always applies</h2>
+<p>Whatever you feed, it needs to be complete and balanced for your dog's life stage. In practical terms, that means the food meets the nutrient profiles set by AAFCO (the Association of American Feed Control Officials). A diet can be raw, cooked, or kibble and still be excellent - or any of those three and still be dangerously incomplete. Format is not the same as quality.</p>
+<p>Hold onto that, because most of the online shouting treats format as if it were the whole story. It isn't.</p>
+
+<h2>Kibble: the convenient default</h2>
+<p>Dry kibble dominates for real reasons. It's shelf-stable, affordable, easy to portion, and the major brands run feeding trials and employ veterinary nutritionists. A well-formulated kibble is a genuinely solid choice that keeps millions of dogs healthy for full lifespans.</p>
+<p>The tradeoffs: kibble is processed at high heat, which is efficient but does alter some nutrients (brands compensate by adding them back). It's also calorie-dense and low in moisture, so portion discipline matters more, and some dogs do better with added water or wet food mixed in. Quality varies enormously between brands, which is exactly why the label matters more than the marketing - more on reading labels in our decoder guide.</p>
+
+<h2>Fresh-cooked: the rising middle ground</h2>
+<p>Fresh diets - gently cooked, refrigerated or frozen, portioned to your dog - have exploded in popularity, and the appeal is obvious. The ingredients look like food. Many dogs find them more palatable, which helps with picky eaters and seniors. Early research on minimally processed diets is promising, particularly around digestibility.</p>
+<p>The honest caveats: fresh food costs substantially more, especially for large dogs. Quality depends entirely on whether the company formulates to AAFCO standards with proper supplementation - a homemade chicken-and-rice bowl is <em>not</em> balanced no matter how wholesome it looks, and DIY fresh diets are where most nutritional deficiencies sneak in. If you go fresh, use a company with veterinary nutritionists on staff or work with one directly.</p>
+
+<h2>Raw: the most polarizing option</h2>
+<p>Raw feeding advocates point to ancestral diets and report glossy coats and smaller stools. Some dogs do visibly well on raw. But this is the format where the evidence and the enthusiasm diverge most sharply, and it's worth being clear-eyed.</p>
+<p>The documented risks are real: raw meat can carry Salmonella, Listeria, and other pathogens that threaten both the dog and the humans handling the food, especially anyone immunocompromised in the household. Bones, a common component, carry fracture and obstruction risks. And many homemade raw diets are nutritionally unbalanced when analyzed. The "ancestral diet" argument is also shakier than it sounds, since dogs diverged from wolves thousands of years ago and evolved to digest starch alongside humans.</p>
+<p>None of that means raw can't be done responsibly. It means raw demands the most knowledge, the most hygiene discipline, and ideally professional formulation. It's the option with the least room for winging it.</p>
+
+<h2>So what should you actually do?</h2>
+<p>Here's the framework we'd use:</p>
+<p><strong>Start with your dog, not the trend.</strong> A healthy young dog thriving on quality kibble has no medical reason to switch. "Could be better" is doing a lot of work in most upgrade pitches.</p>
+<p><strong>Match the diet to real factors.</strong> Budget, your dog's health conditions, palatability problems, your time, and your tolerance for food-safety protocols all legitimately shape the right answer. A senior who's stopped eating kibble is a great candidate for fresh. A multi-dog household on a tight budget probably isn't.</p>
+<p><strong>Demand formulation, whatever you pick.</strong> The question that cuts through the marketing on every brand: "Is this formulated by a veterinary nutritionist to meet AAFCO profiles, and do you run feeding trials?" Strong brands in all three categories answer confidently.</p>
+<p><strong>Loop in your vet.</strong> Especially for dogs with kidney issues, allergies, weight problems, or other conditions where diet is part of the treatment.</p>
+
+<h2>The bottom line</h2>
+<p>There is no single best format - there's the best <em>execution</em> of a format for your specific dog. A balanced kibble, a properly formulated fresh diet, and a responsibly built raw diet can all produce a healthy dog. A careless version of any of them can't. Spend your energy on formulation quality and portion control, not on winning an internet argument.</p>
+`;
+
+// 2 - 10 Signs Your Dog Is Sick (Health, 6 min)
+postBodies[2] = `
+<p class="lead">Dogs are wired to hide weakness. It's an instinct that served their ancestors well and serves your worry levels poorly, because by the time a dog "looks sick," they've often been unwell for a while. Here are the signals worth knowing before a small problem becomes an emergency.</p>
+
+<h2>Why dogs hide illness</h2>
+<p>In the wild, an animal that broadcasts pain becomes a target. That instinct didn't disappear when dogs moved onto our couches. Your dog will often carry on wagging and eating through discomfort that would have a human calling in sick. That's exactly why learning the subtle signs matters - you're reading a patient who's actively trying not to tell you anything.</p>
+
+<h2>The signs worth watching</h2>
+<p><strong>1. Appetite changes.</strong> Both directions count. A dog suddenly uninterested in food, or one that's ravenous and losing weight anyway, is flagging something. One skipped meal isn't a crisis; a clear pattern is.</p>
+<p><strong>2. Drinking and urination shifts.</strong> Noticeably more thirst and more frequent urination can point to kidney issues, diabetes, or other endocrine problems. A dog suddenly drinking far more than usual deserves a vet conversation, not a wait-and-see.</p>
+<p><strong>3. Energy and engagement drops.</strong> Lethargy is vague but real. The dog who normally meets you at the door and now doesn't, who sleeps through cues that used to thrill them, is telling you something even if nothing else looks wrong.</p>
+<p><strong>4. Bathroom changes.</strong> Diarrhea, constipation, straining, blood, or a change in color or frequency all matter. A single soft stool happens. Persistent changes, or any blood, warrant attention.</p>
+<p><strong>5. Vomiting that doesn't quit.</strong> Occasional vomiting is common and often benign. Repeated vomiting, vomiting with lethargy, or an inability to keep water down moves into urgent territory.</p>
+<p><strong>6. Coat and skin changes.</strong> A dull coat, new bald patches, excessive scratching, or unusual lumps can reflect anything from allergies to thyroid problems. Run your hands over your dog regularly so you notice new bumps early.</p>
+<p><strong>7. Breathing changes.</strong> Panting at rest, labored breathing, or persistent coughing are never things to ignore. Breathing trouble can escalate fast.</p>
+<p><strong>8. Mobility and posture.</strong> Limping, stiffness after rest, reluctance on stairs, or a hunched posture often signal pain. Dogs rarely cry out; they just quietly stop doing things that hurt.</p>
+<p><strong>9. Bad breath and mouth changes.</strong> Genuinely foul breath isn't just "dog breath" - it can signal dental disease or, occasionally, metabolic problems. Drooling, pawing at the mouth, or dropping food are related flags.</p>
+<p><strong>10. Behavior and temperament shifts.</strong> A sudden change in personality - new irritability, hiding, clinginess, or aggression when touched in a certain spot - is one of the most reliable signs that something hurts. Pain changes behavior before it changes anything you can see.</p>
+
+<h2>When to call now versus watch</h2>
+<p>Call your vet immediately for: difficulty breathing, repeated vomiting or diarrhea, a distended or hard abdomen, collapse, suspected poisoning, inability to urinate, or any bleeding that won't stop. These don't get a wait-and-see window.</p>
+<p>For milder, single-instance changes, a 24-hour watch is reasonable - but trust your read. You know your dog's normal better than anyone, and "something is off" from the person who lives with them is genuinely useful diagnostic information.</p>
+
+<h2>The bottom line</h2>
+<p>You're not trying to become a diagnostician. You're trying to notice change early, because early is where the cheap, easy fixes live. Know your dog's baseline - their normal energy, appetite, and habits - and let any meaningful drift from it be the thing that prompts a call. The dogs who do best are the ones whose people caught the quiet signals first.</p>
+<p><em>This article is general information, not veterinary advice. When in doubt, call your vet.</em></p>
+`;
+
+// 3 - Leash Reactivity (Training, 11 min)
+postBodies[3] = `
+<p class="lead">Your dog turns into a lunging, barking tornado the second another dog appears, and you've started planning walks like a covert operation. Leash reactivity is exhausting and embarrassing - and it's also one of the most fixable behavior problems out there, once you understand what's actually driving it.</p>
+
+<h2>Reactivity is not aggression</h2>
+<p>This is the reframe that changes everything. A reactive dog usually isn't trying to start a fight. They're having an outsized emotional reaction - most often frustration or fear - that they can't regulate, made worse by being trapped on a leash with nowhere to go. The barking and lunging is the overflow, not a battle plan.</p>
+<p>That distinction matters because it points to the fix. You don't correct your way out of an emotion. You change how the dog <em>feels</em> about the trigger, and the behavior follows.</p>
+
+<h2>Why the leash makes it worse</h2>
+<p>Off-leash, a dog who's unsure about another dog has options: approach in an arc, sniff, retreat, look away. The leash deletes all of that. Now they can't create distance, can't move naturally, and often can't even see clearly past your legs. That trapped feeling cranks up the intensity. Add the way we instinctively tighten the leash when we spot a trigger - which telegraphs our own tension straight down the line - and you've built a feedback loop.</p>
+
+<h2>Understanding threshold</h2>
+<p>The single most important concept for fixing reactivity is <strong>threshold</strong>: the point at which your dog tips from "aware but coping" into "over it and reacting." Below threshold, your dog can see the trigger and still think, eat, and respond to you. Above threshold, the thinking brain goes offline and no amount of treats or cues will land.</p>
+<p>Almost all reactivity training happens below threshold. If your dog is already lunging, you're not training - you're managing damage. The entire game is keeping enough distance that your dog stays in the workable zone, then gradually shrinking that distance over weeks.</p>
+
+<h2>The 4-week plan</h2>
+<p>This is a starting framework, not a guarantee - some dogs move faster, some need a trainer's hands-on help. But it's a real, ordered progression you can begin this week.</p>
+
+<h3>Week 1: Foundation and engagement, no triggers</h3>
+<p>Before you face the scary stuff, build the tools. In calm, trigger-free spaces, teach a rock-solid "find it" (toss a treat to the ground) and a reliable name response that snaps your dog's attention to you. Pay generously. You're building an attention habit you can later borrow under pressure. Practice the mechanics of feeding fast and often while walking, so it's smooth when it counts.</p>
+<p>Also this week: get your gear right. A well-fitted harness with a front clip gives you better control without choking, and a standard six-foot leash beats a retractable for this work. Stop walking your dog in places that reliably blow past threshold - every full reaction sets you back, so management starts now.</p>
+
+<h3>Week 2: Find your threshold distance</h3>
+<p>Now you introduce triggers at a distance where your dog notices but stays under threshold - this might be across a wide park, or half a block away. The instant your dog sees the trigger, start feeding. The sequence you're building: trigger appears, good things rain down. Trigger leaves, the buffet closes.</p>
+<p>This is classical conditioning, and it's doing something subtle but powerful: it's rewiring "other dog = tension" into "other dog = my person turns into a treat dispenser." You're not asking for obedience yet. You're changing the emotional association. Find the distance where your dog can take treats calmly, and work there. If they won't eat, you're too close - back up.</p>
+
+<h3>Week 3: Add the pattern and shrink distance</h3>
+<p>Once your dog reliably looks at a distant trigger and then back at you for the treat - that voluntary check-in is the behavior you want - you can start closing distance slightly. Emphasis on slightly. Shrink the gap a few feet at a time across multiple sessions, and only when your dog is succeeding consistently at the current distance.</p>
+<p>This is also where you can introduce a "let's go" cue - a cheerful turn-and-move-away that gives your dog a productive exit instead of a reaction. Reactive dogs feel better when they learn they can leave. You're handing back the option the leash took away.</p>
+
+<h3>Week 4: Generalize and stress-test</h3>
+<p>Behavior that works on your quiet practice street won't automatically transfer to a busy sidewalk. Week 4 is about repeating the earlier work in new locations, at new times, with different types of triggers. Each new context is partly a fresh start, so drop back to a comfortable distance when you change the setting, then rebuild.</p>
+<p>By now you should be seeing the pattern: your dog spots a trigger and, instead of erupting, looks to you. That look is gold. It means the thinking brain stayed online. Reward it every time, because it's the foundation everything else is built on.</p>
+
+<h2>Common mistakes that stall progress</h2>
+<p><strong>Working too close.</strong> The most common error by far. If your dog is reacting, you're over threshold and no learning is happening. Distance is your most powerful tool - use more of it than you think you need.</p>
+<p><strong>Punishing the reaction.</strong> Correcting a fearful or frustrated dog for reacting often deepens the negative association with other dogs. Now the trigger predicts both the scary dog <em>and</em> a leash pop. You've made it worse.</p>
+<p><strong>Going too fast.</strong> Shrinking distance before your dog is ready guarantees reactions, which set you back. Slow is fast here.</p>
+<p><strong>Inconsistent gear and handling.</strong> Tightening the leash, holding your breath, and bracing all signal danger to your dog. Practice keeping your hands and breathing relaxed - your calm is part of the training.</p>
+
+<h2>When to get a pro</h2>
+<p>If your dog's reactivity includes genuine aggression, has a bite history, or simply isn't budging with consistent work, bring in a certified trainer or a veterinary behaviorist. Some reactivity has a fear or anxiety component significant enough that medication, alongside training, makes the behavioral work possible. That's not failure - it's using every tool available to help a struggling dog.</p>
+
+<h2>The bottom line</h2>
+<p>Reactivity feels like a character flaw and is really an emotional regulation problem - which means it responds to patient, distance-aware training that changes how your dog feels rather than just what they do. Stay under threshold, pair triggers with great things, shrink distance slowly, and protect every win. The tornado on the end of your leash can absolutely become a dog who glances at another dog and then looks to you. Thousands of dogs have made exactly that trip.</p>
+`;
+
+
+// Posts 4-7
+
+// 4 - First 30 Days With a New Puppy (Puppies, 8 min)
+postBodies[4] = `
+<p class="lead">The internet sold you a montage of puppy snuggles. Nobody mentioned the 3 a.m. potty trips, the needle teeth, or the way a six-pound animal can dismantle your entire routine. Here's an honest, week-by-week map of the first month, so you know what's normal and what to do about it.</p>
+
+<h2>Before we start: lower your expectations (kindly)</h2>
+<p>The first 30 days are not when your puppy becomes a well-behaved dog. They're when your puppy learns that the world is safe, that you're trustworthy, and where the bathroom is. That's the whole job. If you measure success by obedience, you'll feel like you're failing. Measure it by safety, bonding, and slow potty progress, and you'll see how much is actually going right.</p>
+
+<h3>Week 1: Survival and safety</h3>
+<p>Your puppy just lost everything they knew - their mother, littermates, and the only home they'd experienced. The first week is about stability, not training. Keep the world small. One or two calm rooms, a consistent crate or pen, and a predictable rhythm of eat, potty, play, sleep, repeat.</p>
+<p>Expect disrupted nights. Most young puppies can't hold their bladder through the night yet, so plan for one or two outings, kept boring and businesslike - out, potty, praise, back to bed, no party. Crying the first few nights is normal; a crate near your bed often helps the puppy settle, since proximity reassures them they're not alone.</p>
+<p>Potty training starts now and runs on a simple truth: puppies can hold it roughly one hour per month of age, and they need to go after waking, after eating, after playing, and roughly every couple of hours otherwise. Take them out on a schedule, reward wildly when they go outside, and supervise relentlessly indoors. Accidents are management failures, not defiance.</p>
+
+<h3>Week 2: Routine and the first lessons</h3>
+<p>As your puppy settles, you can start layering in gentle structure. Their name, "come" as a happy game, and getting comfortable with the crate as a good place rather than a punishment. Keep training sessions absurdly short - two or three minutes - and end while it's still fun.</p>
+<p>This is also when the famous needle teeth become a daily reality. Puppy biting is normal teething and play behavior, not aggression. Redirect to appropriate chew toys every time, and if a nip really lands, a brief "ouch" and a pause in play teaches bite inhibition. You're not stopping the chewing, you're aiming it.</p>
+<p>Begin handling exercises too: touch the paws, peek in the ears, run your hands all over. You're banking trust now that pays off at every future vet and grooming visit.</p>
+
+<h3>Week 3: The socialization window is open</h3>
+<p>Here's the most time-sensitive thing in this entire article. The prime socialization window closes around 14 to 16 weeks, and what your puppy experiences during it shapes their adult temperament more than almost anything else. This is your chance to build a confident dog.</p>
+<p>Socialization doesn't mean overwhelming your puppy. It means positive, controlled exposure to variety: different people, gentle sounds, new surfaces, car rides, the vacuum, an umbrella opening, calm and vaccinated friendly dogs. The goal is "huh, that's normal" not "that was terrifying." Keep every experience positive and let your puppy approach at their own pace - never force them toward something that scares them.</p>
+<p>Talk to your vet about safely socializing before the full vaccine series is complete, since the behavioral risk of <em>under</em>-socializing is real too. Puppy classes designed for this stage are often a great structured option.</p>
+
+<h3>Week 4: Patterns emerge</h3>
+<p>By the fourth week, you'll start seeing the payoff. Potty accidents drop. Your puppy knows their name and comes running. The crate is becoming a chosen nap spot. You've got the beginnings of a rhythm, and your puppy is becoming a small individual with preferences and a personality.</p>
+<p>This is also when the exhaustion can peak, weirdly, because the adrenaline of the new arrival fades and the grind sets in. That's normal. Lean on the routine. Consistency is doing more work than you can see.</p>
+
+<h2>A few things that'll save your sanity</h2>
+<p><strong>Sleep is non-negotiable.</strong> Young puppies need 18 to 20 hours of sleep a day, and an overtired puppy looks exactly like a "hyper" or "bitey" puppy. When yours gets frantic, the answer is usually a nap, not more play. Enforce downtime.</p>
+<p><strong>Puppy-proof ruthlessly.</strong> Cords, shoes, toxic plants, small swallowable objects - assume everything within reach is a chew toy and act accordingly. A pen or gated area keeps your puppy safe when you can't have eyes on them.</p>
+<p><strong>Reward what you want.</strong> It's tempting to spend all day saying "no." Flip it. Catch your puppy doing something good - settling quietly, chewing the right toy, four paws on the floor - and reward it. You get more of what you reinforce.</p>
+<p><strong>Don't compare.</strong> Your neighbor's puppy who was "potty trained in a week" was either a fluke or a slight exaggeration. Development isn't a race.</p>
+
+<h2>The bottom line</h2>
+<p>The first 30 days are intense, occasionally miserable, and completely foundational. You're not building a perfectly trained dog yet - you're building a puppy who feels safe, trusts you, and is learning the shape of the world during the most important developmental window of their life. Protect their sleep, flood them with good experiences, keep potty trips on schedule, and forgive yourself the rough nights. It gets easier, and faster than you'd believe right now at 3 a.m.</p>
+`;
+
+// 5 - Brushing Your Dog's Teeth (Health, 6 min)
+postBodies[5] = `
+<p class="lead">Most dogs show signs of dental disease by age three, and it's one of the most common health problems vets see - yet it's also one of the most preventable. The catch is that "preventable" requires a toothbrush and a little consistency. Here's how to make it painless for both of you.</p>
+
+<h2>Why this matters more than it sounds</h2>
+<p>Dental disease isn't just bad breath and yellow teeth. Plaque hardens into tartar, gums become inflamed, and bacteria gain a foothold that can affect the heart, kidneys, and liver over time. The mouth is a gateway, and a neglected one causes real pain - dogs just hide it, eating through discomfort that would have us at the dentist immediately.</p>
+<p>The good news baked into all of this: a consistent home routine prevents the large majority of it. You're not managing an inevitable decline. You're stopping a problem before it starts.</p>
+
+<h2>The one rule you can't skip</h2>
+<p>Never use human toothpaste. It often contains xylitol or fluoride, both of which are toxic to dogs, and dogs can't spit. Use a toothpaste made for dogs - they come in flavors like poultry and beef that make the whole thing easier to sell to your skeptical patient.</p>
+
+<h2>How to actually brush</h2>
+<p>The mistake most people make is going straight for a full brushing on day one, getting resistance, and concluding their dog "won't let them." The fix is to build up in stages over a couple of weeks.</p>
+<p><strong>Step 1: Make the paste a treat.</strong> For a few days, just let your dog lick a little dog toothpaste off your finger. That's it. You're teaching them that this stuff is good news.</p>
+<p><strong>Step 2: Touch the teeth.</strong> Once they're happy with the paste, start gently lifting a lip and rubbing the paste onto a few teeth with your finger or a finger brush. Keep it short and pleasant. Stop before they get squirmy.</p>
+<p><strong>Step 3: Introduce the brush.</strong> Move to a dog toothbrush, angled slightly toward the gumline, with gentle small circles on the outer surfaces of the teeth. You mostly only need to do the outsides - the tongue handles a lot of the inner surfaces, and reaching them tends to start fights you don't need.</p>
+<p><strong>Step 4: Build the habit.</strong> Aim for daily. Plaque starts mineralizing into tartar within a couple of days, so frequency genuinely matters. A quick daily pass beats an occasional deep scrub. Tie it to an existing routine - after your own evening brush, say - so it becomes automatic.</p>
+
+<h2>What about all the other products?</h2>
+<p>Dental chews, water additives, and special diets can help, and vet-recommended dental treats with the right credentials do reduce plaque. But treat them as supplements to brushing, not replacements. Nothing matches the mechanical action of a brush actually disrupting plaque before it hardens. Think of chews as the floss, not the toothbrush.</p>
+
+<h2>Don't skip the professional cleaning</h2>
+<p>Home care prevents buildup; it doesn't remove tartar that's already cemented on or address disease below the gumline. That's what professional dental cleanings under anesthesia are for. Your vet will tell you the right interval for your dog, and resist the appeal of "anesthesia-free" cleanings, which mostly polish the visible surface while missing the part that actually matters under the gums.</p>
+
+<h2>Signs you need the vet sooner</h2>
+<p>Book a dental check if you notice persistent bad breath, red or bleeding gums, visible tartar, broken or loose teeth, dropping food, pawing at the mouth, or reluctance to chew. These are signs disease is already underway, and the longer it runs, the more invasive the fix.</p>
+
+<h2>The bottom line</h2>
+<p>Two minutes a day with a dog toothbrush and dog toothpaste prevents the most common health problem your dog is likely to face. Build the habit slowly so your dog tolerates it, brush daily once they do, back it up with vet cleanings on schedule, and you'll spare your dog a lot of avoidable pain - and yourself a lot of avoidable vet bills. Start tonight, even if it's just letting them lick the paste off your finger.</p>
+`;
+
+// 6 - Teach 'Leave It' (Training, 8 min)
+postBodies[6] = `
+<p class="lead">A chicken bone on the sidewalk. A dropped pill. Something unspeakable your dog found in the grass. "Leave it" is the cue that can genuinely save your dog's life, and it works even on dogs who treat every walk like an all-you-can-eat buffet. Here's how to teach it from scratch.</p>
+
+<h2>What "leave it" really means</h2>
+<p>"Leave it" isn't "drop the thing in your mouth" - that's a different cue, usually "drop it." "Leave it" means "don't make contact with that in the first place." You're teaching your dog to disengage from something <em>before</em> they grab it, which is exactly what you need when they spot something dangerous on the ground.</p>
+<p>The deeper skill underneath it is impulse control: the ability to want something and choose not to take it because something better comes from listening to you. That's a muscle you build, and "leave it" is a great way to build it.</p>
+
+<h2>The core method</h2>
+<p>The whole technique rests on one elegant idea: your dog learns that ignoring the thing they want gets them something <em>better</em> than the thing they wanted. Here's the progression.</p>
+
+<h3>Stage 1: The closed fist</h3>
+<p>Put a boring treat in your closed fist and present it to your dog. They'll sniff, lick, paw, maybe nibble at your hand trying to get it. Just wait. The instant they stop and pull back - even for a second - mark it ("yes!") and reward from your <em>other</em> hand with a <em>better</em> treat.</p>
+<p>Read that again: they never get the treat they were pestering. They get a better one from the other hand, for choosing to disengage. That's the entire concept in miniature. Repeat until your dog backs off the fist quickly.</p>
+
+<h3>Stage 2: Add the words and the open hand</h3>
+<p>Now introduce the cue. Say "leave it" as you present the closed fist. Once your dog reliably backs off, level up by opening your hand flat with the treat exposed. If they go for it, close your hand. They only earn the reward (from the other hand) for leaving the open treat alone. This is harder - the temptation is visible now - so be patient.</p>
+
+<h3>Stage 3: Treat on the floor</h3>
+<p>Place a treat on the floor and cover it with your hand or foot, ready to block. Say "leave it." Reward disengagement from your hand. Gradually expose more of the treat, then work up to leaving it uncovered on the floor while your dog holds back. You're getting closer to the real-world scenario.</p>
+
+<h3>Stage 4: Movement and the real world</h3>
+<p>Practice walking past treats on the floor. Drop a treat and cue "leave it" as you keep moving. Then take it on the road - around dropped food, other dogs, interesting smells. Lower your expectations when you raise the difficulty: a distracting park is far harder than your living room, so reward generously when you add real-world temptation.</p>
+
+<h2>The food-obsessed dog</h2>
+<p>If your dog is intensely food-motivated, you might think "leave it" is hopeless. It's actually the opposite - their love of food is the lever. The reason "leave it" works is that you're trading up. A dog who desperately wants the floor treat learns that the treat in your hand is even better and comes <em>guaranteed</em> when they listen. For a foodie, that's a deal worth taking. You just need higher-value rewards (real meat, cheese) to outbid the temptation, and more reps to build the habit.</p>
+
+<h2>Common mistakes</h2>
+<p><strong>Letting them get the forbidden item.</strong> If your dog ever succeeds in snatching the thing you said "leave it" about, you've taught them that persistence pays. Set up so you can always block, especially early on.</p>
+<p><strong>Rewarding from the wrong hand.</strong> The reward should never be the item they were told to leave. Always pay from the other hand, with something better. This keeps "leave it" meaning "disengage," not "wait and you'll get it anyway."</p>
+<p><strong>Jumping ahead.</strong> Open hand before the closed fist is solid, floor before the hand is reliable - rushing the stages just produces failures. Each stage should be easy before you advance.</p>
+<p><strong>Only practicing with treats.</strong> Generalize it. Practice "leave it" with toys, with the cat, with that spot on the walk where the trash always is. The cue should mean the same thing regardless of what it's pointed at.</p>
+
+<h2>The bottom line</h2>
+<p>"Leave it" is built one small choice at a time: your dog wants something, chooses to disengage, and discovers that listening to you pays better than grabbing. Start with the closed fist today, move through the stages only as each gets easy, and use high-value rewards for your foodie. Done right, you'll end up with a dog who can spot a dropped pill on the kitchen floor and look up at you instead - which, one day, might be the most important thing they ever learned.</p>
+`;
+
+// 7 - Senior Dog Quality of Life (Seniors, 7 min)
+postBodies[7] = `
+<p class="lead">Your dog's muzzle is going gray, the stairs take a little longer, and the puppy energy has mellowed into something calmer and sweeter. The senior years aren't a sad epilogue - with the right support, they can be some of the richest years you share. Here's how to help your old friend thrive.</p>
+
+<h2>When is a dog "senior"?</h2>
+<p>It depends heavily on size. Large and giant breeds age faster and may be seniors by six or seven, while small dogs often don't hit that stage until nine or ten. The signs tend to arrive gradually: a grayer face, more napping, slower mornings, stiffness after rest. None of it means decline is inevitable - it means your dog's needs are shifting, and your care should shift with them.</p>
+
+<h2>Stay ahead of pain</h2>
+<p>The most important thing you can do for a senior dog is recognize that they hide pain expertly. Arthritis is extremely common in older dogs, and they rarely cry out - they just quietly stop doing things. Reluctance on stairs, hesitation jumping into the car, slowness to rise, or a new grumpiness when touched are all worth a vet conversation.</p>
+<p>The encouraging part: there's a lot you can do. Keeping your dog at a healthy weight dramatically reduces joint strain. Your vet may recommend joint supplements, anti-inflammatory medication, or other pain management, and modern options are genuinely effective. A comfortable old dog is a happier, more active old dog, and managing pain early slows the downward spiral that inactivity creates.</p>
+
+<h2>Adjust the environment</h2>
+<p>Small changes make a big difference for aging bodies. Orthopedic beds support sore joints. Ramps or steps help dogs reach couches and cars without jarring impact. Rugs or runners over slick floors give traction to dogs whose footing isn't what it was. Raised food and water bowls ease strain on the neck and back. None of this is expensive, and all of it adds up to a dog who moves through their day more comfortably.</p>
+
+<h2>Rethink exercise, don't abandon it</h2>
+<p>Senior dogs still need movement - it keeps joints mobile, weight in check, and minds engaged - but the formula changes. Shorter, more frequent walks usually beat one long trek. Low-impact options like swimming are wonderful for arthritic dogs. Let your dog set the pace, watch for signs they're tiring, and adjust to the weather, since older dogs handle heat and cold less well. The goal is consistent gentle activity, not athletic performance.</p>
+
+<h2>Feed for the life stage</h2>
+<p>Older dogs often need fewer calories as their metabolism and activity slow, which makes portion control important to avoid the weight gain that worsens joint problems. At the same time, they may benefit from nutrients that support joints and aging bodies. Senior-formula diets are built around this balance. Talk to your vet about whether a diet adjustment or supplements like glucosamine and omega-3s make sense for your specific dog.</p>
+
+<h2>Keep the mind sharp</h2>
+<p>Cognitive decline is real in dogs, and mental engagement helps keep it at bay. Food puzzles, sniff-focused walks that let your dog read the world with their nose, gentle new tricks, and rotating toys all give the aging brain a workout. A slow amble through a new environment can be more enriching than a brisk lap of the usual block. Keep your dog curious and engaged, and you support both their mood and their mind.</p>
+
+<h2>See the vet more often</h2>
+<p>Twice-yearly checkups become genuinely valuable in the senior years, because the conditions that shorten and dim old age - kidney disease, cancer, dental disease, cognitive decline - are far more manageable when caught early. Ask about baseline bloodwork so your vet has a reference point to spot changes. Senior care is largely a game of catching things early, and regular visits are how you win it.</p>
+
+<h2>The hard part, gently</h2>
+<p>At some point, quality of life becomes the central question. It helps to think in terms of the things your dog loves: Are they still eating with interest? Engaging with you? Able to do the things that bring them joy, even slowly? Veterinarians use quality-of-life scales that can give structure to a decision that otherwise feels impossibly subjective. You don't have to face that alone - your vet is a partner in it. For now, the point is simply this: prioritizing your dog's comfort is always the right instinct.</p>
+
+<h2>The bottom line</h2>
+<p>A senior dog isn't a diminished version of who they were - they're the same friend, asking for slightly different care. Stay ahead of pain, soften their environment, keep them moving and thinking, feed them for their stage, and lean on your vet to catch problems early. Do that, and the gray-muzzle years can be calm, comfortable, and deeply good - a slower, sweeter chapter that's worth every bit of the effort.</p>
+`;
+
+
+// Posts 8-11
+
+// 8 - Dog Food Label Decoder (Nutrition, 6 min)
+postBodies[8] = `
+<p class="lead">Dog food labels read like they were designed to confuse you, and honestly, some of them were. "Chicken meal," "by-products," "natural flavor" - the bag is covered in words engineered to sound wholesome while telling you very little. Here's how to actually read one.</p>
+
+<h2>Start with the AAFCO statement</h2>
+<p>Before you read a single ingredient, find the nutritional adequacy statement, usually in small print on the back. This is the most important sentence on the bag. It tells you whether the food is "complete and balanced" for a life stage, and how the company knows - either by meeting AAFCO nutrient profiles, or, even better, by passing AAFCO feeding trials where real dogs ate it.</p>
+<p>If a food doesn't carry this statement, or is labeled "for intermittent or supplemental feeding only," it's not designed to be your dog's sole diet. This one line filters out a lot of products immediately.</p>
+
+<h2>How the ingredient list actually works</h2>
+<p>Ingredients are listed by weight before cooking, heaviest first. That sounds helpful until you understand the catch: fresh meat is roughly 70% water, so when "chicken" tops the list, much of that weight is moisture that cooks off. A dry "chicken meal" further down the list may actually contribute more protein, because the water's already gone. Top billing isn't the slam dunk the marketing implies.</p>
+<p>This is why "first ingredient is real meat!" is a weaker selling point than it appears. It's not bad - it's just not the whole picture.</p>
+
+<h2>Decoding the scary-sounding words</h2>
+<p><strong>"Meal" (chicken meal, lamb meal).</strong> This sounds processed and lesser, but meal is simply meat and tissue with the water and fat rendered out. It's a concentrated, legitimate protein source - often a sign of a sensibly formulated food, not a red flag.</p>
+<p><strong>"By-products."</strong> The internet has decided these are garbage, but by-products are mostly organ meats and tissues that aren't the prime cuts humans prefer - liver, kidney, spleen. These are nutrient-dense foods that wild canines eat first. The word is unappealing; the ingredient often isn't.</p>
+<p><strong>"Natural flavor."</strong> Usually a small amount of digest or similar used to improve palatability. Not a concern in the quantities involved.</p>
+<p><strong>Named vs. unnamed sources.</strong> Here's a real distinction worth caring about: "chicken meal" (named) tells you the species. "Meat meal" or "animal fat" (unnamed) doesn't, which means less traceable sourcing. Named sources are generally a sign of a more transparent product.</p>
+
+<h2>The "fewer ingredients is better" myth</h2>
+<p>A short ingredient list looks clean and appealing, but it's not inherently better. A long list often just reflects the vitamins and minerals required to make a food complete and balanced - exactly what you want. Don't be spooked by a string of nutrient names you can't pronounce; those are usually the supplements doing the nutritional heavy lifting, not mysterious additives.</p>
+
+<h2>What the marketing words don't mean</h2>
+<p>Some of the biggest words on the front of the bag are the least regulated. "Premium," "holistic," and "human-grade" have limited or no standardized legal definition in pet food, so they tell you about the brand's marketing budget more than the food's quality. "Grain-free" became a trend, but grains aren't inherently bad for most dogs, and the FDA has investigated possible links between certain grain-free diets and heart issues - so grain-free is a choice to make with your vet, not an automatic upgrade.</p>
+
+<h2>A practical reading routine</h2>
+<p>Next time you're holding a bag, run this quick pass: Find the AAFCO statement and confirm it's complete and balanced for the right life stage. Check that protein sources are named. Glance at whether the formula seems built around real, identifiable ingredients. Then ignore the front-of-bag buzzwords almost entirely. That five-second routine puts you ahead of most shoppers.</p>
+
+<h2>The bottom line</h2>
+<p>The label is decodable once you know the trick: the AAFCO statement matters more than the ingredient panel, "weight before cooking" explains the ingredient order, and the scariest-sounding words ("meal," "by-products") are often perfectly good while the prettiest words ("premium," "holistic") mean almost nothing. Read with those filters and you'll choose based on what's actually in the bag - and if your dog has specific health needs, bring the label to your vet and decide together.</p>
+`;
+
+// 9 - Dog Gear You Actually Need (Gear, 8 min)
+postBodies[9] = `
+<p class="lead">The pet industry would love to sell you a closet full of gadgets, themed outfits, and a different harness for every day of the week. We've tested an embarrassing amount of it. Here's the short list of gear that earns its place - and the popular stuff that's mostly a waste of money.</p>
+
+<h2>The genuinely essential</h2>
+<p><strong>A well-fitted harness.</strong> For most dogs, a good harness beats a collar for walking - it takes pressure off the neck and gives you better control, especially for pullers or flat-faced breeds prone to airway strain. A front-clip design adds gentle steering for dogs still learning leash manners. Fit is everything: you should be able to slide two fingers under any strap, with no rubbing at the armpits. This is worth spending on and worth fitting carefully.</p>
+<p><strong>A standard leash.</strong> A simple four-to-six-foot leash gives you control and clear communication. Skip the retractable for everyday walks - more on that below. A sturdy clip and comfortable handle are all you need; you don't have to overthink it.</p>
+<p><strong>ID and a collar to hang it on.</strong> Even microchipped dogs need a visible ID tag - it's the fastest route home if your dog gets loose, since anyone who finds them can read a phone number instantly. The collar's main job for many dogs is simply holding that tag. Pair the tag with a registered microchip and keep both up to date.</p>
+<p><strong>Food and water bowls that suit your dog.</strong> Stainless steel is durable, dishwasher-safe, and doesn't harbor bacteria the way scratched plastic can. For fast eaters, a slow-feeder bowl genuinely helps, since gulping air contributes to bloat risk in deep-chested breeds. This is a cheap upgrade with a real payoff.</p>
+<p><strong>Enrichment toys.</strong> Not a luxury - a necessity. A bored dog is a destructive dog, and food-puzzle toys that make your dog work for a meal burn mental energy that would otherwise go into your shoes. A classic stuffable rubber toy is the workhorse here: nearly indestructible, endlessly reusable, and capable of keeping a dog happily occupied.</p>
+<p><strong>A crate or defined space.</strong> Used well, a crate is a safe den for rest, travel, and house-training - not a punishment. Size it so your dog can stand, turn, and lie down comfortably. Many dogs come to love having a space that's reliably theirs.</p>
+
+<h2>Worth it for some dogs</h2>
+<p><strong>A quality bed.</strong> Most dogs appreciate a supportive bed, and for seniors or large breeds, an orthopedic one is genuinely worth the cost for joint comfort. For a young dog who shreds everything, you might wait until the chewing phase passes before investing.</p>
+<p><strong>Cold and wet weather gear.</strong> Coats and boots are pure fashion for some dogs and real necessities for others - thin-coated breeds in genuine cold, or dogs walking on salted or scorching pavement. Need, not trend, should decide.</p>
+<p><strong>A grooming brush suited to the coat.</strong> The right brush for your dog's specific coat type makes shedding and matting manageable. The wrong one does little. Match the tool to the coat rather than grabbing whatever's nearest the register.</p>
+<p><strong>A long line.</strong> For recall training and giving dogs freedom in open spaces, a fifteen-to-thirty-foot training line is fantastic - the controlled freedom a retractable only pretends to offer.</p>
+
+<h2>Save your money</h2>
+<p><strong>Retractable leashes.</strong> They teach pulling (the dog learns that pulling extends the lead), offer poor control in an emergency, and the thin cord can cause nasty injuries. For training and city walks, they're a step backward. A long line does the "freedom" job far better and more safely.</p>
+<p><strong>Most clothing and costumes.</strong> Cute for a photo, but unless it's solving a real cold-weather or protection problem, your dog doesn't need a wardrobe. Many actively dislike it.</p>
+<p><strong>Gimmick gadgets.</strong> The endless parade of novelty feeders, single-use contraptions, and "as seen online" devices mostly end up in a drawer. When tempted, ask what real problem it solves that simpler gear doesn't.</p>
+<p><strong>Overpriced "designer" everything.</strong> A premium price tag on a basic collar or bowl rarely buys better function. Spend on the things where quality matters - harness, bed, enrichment - and stay basic on the rest.</p>
+
+<h2>How to decide on anything</h2>
+<p>Before any purchase, one question cuts through the marketing: what problem does this solve for <em>my</em> dog? A puller needs a front-clip harness. A gulper needs a slow feeder. A senior needs an orthopedic bed. A bored chewer needs puzzle toys. Buy for the dog in front of you and their actual needs, and you'll skip almost everything the industry hopes you'll impulse-buy.</p>
+
+<h2>The bottom line</h2>
+<p>The real essentials are short: a well-fitted harness, a standard leash, ID, sensible bowls, enrichment toys, and a crate or defined space. Add a good bed and weather gear if your dog needs them. Skip the retractable leashes, the costumes, and the gadgets. Spend where function matters and stay basic everywhere else - your dog cares about a comfortable walk and a good chew, not a designer label.</p>
+`;
+
+// 10 - Anxiety in Dogs (Behavior, 8 min)
+postBodies[10] = `
+<p class="lead">A dog who paces, trembles, destroys things when alone, or shuts down at the sight of a stranger isn't being dramatic or difficult. They're anxious - and canine anxiety is more common than most people realize. The good news is that understanding the root cause is the first real step toward helping your dog feel safe.</p>
+
+<h2>What anxiety looks like in dogs</h2>
+<p>Anxiety wears a lot of disguises, and many get mislabeled as misbehavior. The signs span a wide range: pacing, panting when it isn't hot, trembling, excessive drooling, destructive chewing, house-soiling in a trained dog, excessive barking or whining, hiding, clinginess, and sometimes the opposite - a frozen, shut-down stillness. Some dogs lick or chew themselves raw. Others can't settle.</p>
+<p>The thread connecting all of it is an internal state of distress the dog can't regulate. Reading the behavior as anxiety rather than disobedience changes everything about how you respond, because you can't punish away a feeling.</p>
+
+<h2>The common root causes</h2>
+<p><strong>Fear-based anxiety.</strong> Triggered by specific things - thunderstorms, fireworks, strangers, other dogs, the vet. Often rooted in genetics, a scary past experience, or insufficient early socialization.</p>
+<p><strong>Separation anxiety.</strong> Genuine panic at being left alone, distinct from boredom. It's common enough and significant enough that we've covered it in depth in its own guide.</p>
+<p><strong>Under-socialization.</strong> Dogs who missed broad, positive exposure to the world during their critical puppy window often find ordinary things - a man in a hat, a skateboard, a tile floor - genuinely frightening as adults.</p>
+<p><strong>Age-related anxiety.</strong> Older dogs can develop new anxiety as cognitive decline, vision or hearing loss, or chronic pain make the world feel less predictable and more threatening.</p>
+<p><strong>Change and instability.</strong> A move, a new baby or pet, a schedule upheaval, or the loss of a family member can all unsettle a sensitive dog.</p>
+
+<h2>What actually helps</h2>
+<p><strong>Identify the triggers.</strong> Before anything else, figure out what sets your dog off and how close or intense it has to be. Anxiety is far more treatable when you know its shape, and a log of when episodes happen often reveals patterns you'd otherwise miss.</p>
+<p><strong>Don't punish it.</strong> Correcting an anxious dog confirms their fear that the situation is dangerous and damages the trust you need to help them. Comforting a scared dog, contrary to an old myth, does not "reinforce" fear - fear is an emotion, not a behavior, and you can't reward an emotion into being stronger. A calm, reassuring presence is a help, not a hindrance.</p>
+<p><strong>Build a safe space.</strong> A predictable retreat - a crate draped with a blanket, a quiet room - gives an anxious dog somewhere to self-soothe. Many dogs calm faster when they have a den to choose.</p>
+<p><strong>Work the foundations: exercise and enrichment.</strong> Physical activity and mental work both burn anxious energy and build the calm confidence that buffers against stress. A well-exercised, mentally engaged dog has more resilience in the tank.</p>
+<p><strong>Desensitize and counter-condition.</strong> The core behavioral approach for fear: expose your dog to the trigger at a low enough intensity that they stay calm, pair it with something wonderful, and very gradually increase intensity as they stay relaxed. Over time, "scary thing" becomes "predictor of good things." It's the same engine that fixes leash reactivity, applied to whatever your dog fears. Patience and staying under threshold are everything.</p>
+
+<h2>When to bring in help</h2>
+<p>Mild anxiety often improves with the foundations above. But if your dog's anxiety is severe, escalating, causing self-harm, or not responding to consistent effort, it's time for professional support. A certified trainer or veterinary behaviorist can build a tailored plan, and your vet can assess whether medication would help.</p>
+<p>That last point deserves emphasis: for some dogs, anxiety is intense enough that medication isn't a last resort or an admission of failure - it's what lowers the internal alarm enough that the behavioral work can actually land. Used appropriately and under veterinary guidance, it's a humane and effective tool, often alongside training rather than instead of it.</p>
+
+<h2>The bottom line</h2>
+<p>Anxiety isn't a behavior problem to be corrected - it's an emotional state to be understood and gently reshaped. Find the triggers, stop punishing the symptoms, build safety and routine, and use desensitization to change how your dog feels about what scares them. For tougher cases, lean on professionals and don't rule out medication. Most anxious dogs can learn to feel safer than they do today, and helping them get there is one of the kindest things you'll ever do for your dog.</p>
+`;
+
+// 11 - Separation Anxiety 101 (Health, 6 min)
+postBodies[11] = `
+<p class="lead">You leave for work and come home to a shredded couch cushion, a complaint from the neighbors about hours of howling, or a puddle by the door from a fully house-trained dog. That's not spite or boredom - it's very likely separation anxiety, one of the most common and most misunderstood behavior problems in dogs.</p>
+
+<h2>Boredom or genuine panic?</h2>
+<p>First, a crucial distinction. A bored dog left alone might chew a shoe or get into the trash - mischief from under-stimulation. A dog with true separation anxiety experiences something closer to a panic attack the moment they're left alone. The behaviors look similar but the internal experience is worlds apart, and so is the fix.</p>
+<p>Tells that point to genuine anxiety rather than boredom: the distress starts within minutes of your departure, it happens every time you leave regardless of how tired or exercised the dog is, and there's often a frantic, anxious quality - destruction focused on exits and doorways, drooling, or house-soiling in an otherwise reliable dog. Setting up a camera to watch the first thirty minutes after you leave is the single most clarifying thing you can do.</p>
+
+<h2>What's actually happening</h2>
+<p>A dog with separation anxiety is genuinely terrified of being alone. The destruction isn't a protest - a dog clawing at a door is often trying desperately to reunite with you, and the soiling is a stress response, not a statement. Understanding this reframes the whole problem: you're not dealing with a badly behaved dog, you're dealing with a panicking one. That's why punishment is both cruel and useless here - you can't discipline away terror.</p>
+
+<h2>The approach that works</h2>
+<p>The core of treating separation anxiety is gradual desensitization: teaching your dog, in tiny increments, that being alone is safe and that you always come back. It's a patient process, but it's a proven one.</p>
+<p><strong>Start below the panic point.</strong> The key is never to push your dog into full distress during training. That might mean starting with absences of mere seconds - stepping out and immediately returning - and very slowly extending the duration only as your dog stays calm. Going too fast and triggering panic sets you back, so this is genuinely measured in small steps over weeks.</p>
+<p><strong>Defuse the departure cues.</strong> Dogs learn to dread the signs you're leaving - keys, shoes, the coat, the bag. You can blunt these by picking up your keys and then <em>not</em> leaving, putting on your shoes and sitting down, until those cues stop predicting departure and lose their power to spark anxiety.</p>
+<p><strong>Keep arrivals and departures boring.</strong> Big emotional goodbyes and ecstatic reunions amplify the contrast between "you're here" and "you're gone." Low-key comings and goings teach your dog that your leaving is no big deal.</p>
+<p><strong>Create positive associations.</strong> A special long-lasting treat or food puzzle offered only when you leave can help some dogs build a better association with alone-time. For dogs with milder anxiety, it can shift "you're leaving" toward "the good chew appears." For severe cases, it's a supporting player, not a cure.</p>
+
+<h2>What doesn't work</h2>
+<p><strong>Punishment.</strong> Coming home to a mess and scolding your dog only adds fear of your return to the fear of your absence. The dog can't connect the correction to something they did hours ago anyway - they just learn that you sometimes come home angry.</p>
+<p><strong>Getting another dog as a fix.</strong> It occasionally helps, but separation anxiety is usually about <em>you</em> specifically, not just company, so a second dog frequently changes nothing - and now you have two dogs.</p>
+<p><strong>Flooding.</strong> Leaving an anxious dog alone for long stretches to "get used to it" doesn't build tolerance - it traps them in panic and typically makes things worse.</p>
+
+<h2>When to get help</h2>
+<p>Separation anxiety can be stubborn, and severe cases genuinely benefit from professional guidance. A certified trainer or veterinary behaviorist can build a structured desensitization plan, and a vet can evaluate whether anti-anxiety medication would help. For significant cases, medication paired with behavior work is often what makes progress possible - it lowers the panic enough for the training to take hold. That's not giving up; it's giving your dog a real chance to learn that alone can be okay.</p>
+
+<h2>The bottom line</h2>
+<p>Separation anxiety is panic, not misbehavior, and it responds to patience rather than punishment. Confirm what you're dealing with (a camera helps), then desensitize in small steps, defuse your departure cues, keep your comings and goings low-key, and build better associations with alone-time. For tougher cases, bring in a pro and talk to your vet. With consistent, compassionate work, the vast majority of dogs can learn that being alone isn't the end of the world - and you can finally stop dreading what you'll find when you get home.</p>
+`;
+
+function openPost(idx){
+  const p=blogPosts[idx];
+  const body=postBodies[idx]||'<p>This article is coming soon.</p>';
+  document.getElementById('articleHero').innerHTML=
+    `<span class="badge article-badge" style="background:${p.tc};color:${p.tt};border-color:var(--dark)">${p.tag}</span>`+
+    `<img src="images/${p.ic.replace('blog-img-','')}.jpg" alt="${p.title}">`;
+  document.getElementById('articleTitle').textContent=p.title;
+  document.getElementById('articleMeta').innerHTML=
+    `<span>${p.date}</span><span>•</span><span>${p.read}</span><span>•</span><span>${p.tag}</span>`;
+  document.getElementById('articleBody').innerHTML=body;
+  // related: up to 3 other posts, prefer same tag
+  const others=blogPosts.map((x,i)=>({x,i})).filter(o=>o.i!==idx);
+  others.sort((a,b)=>(b.x.tag===p.tag)-(a.x.tag===p.tag));
+  document.getElementById('articleRelated').innerHTML=others.slice(0,3).map(o=>blogCard(o.x)).join('');
+  navigateTo('article');
+}
 
 function subscribeEmail(){
   const input=document.getElementById('emailInput');
