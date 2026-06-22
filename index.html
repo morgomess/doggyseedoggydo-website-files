@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Doggy See, Doggy Do — Dog Parenting Resource Hub</title>
+<title>Doggy See, Doggy Do - Dog Parenting Resource Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,8 +28,9 @@ body {
   font-family: var(--font-body);
   background: var(--offwhite);
   color: var(--dark);
-  line-height: 1.6;
+  line-height: 1.65;
   font-weight: 600;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; text-decoration: none; }
@@ -40,7 +41,8 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 .nav {
   position: sticky; top: 0; z-index: 1000;
   background: var(--yellow);
-  border-bottom: var(--border);
+  border-bottom: 4px solid var(--dark);
+  box-shadow: 0 3px 0 var(--orange);
   padding: 0 24px;
 }
 .nav-inner {
@@ -134,13 +136,14 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 }
 .hero-badge .star { color: var(--yellow); }
 .hero-home h1 { font-size: 3.4rem; line-height: 1.0; margin-bottom: 14px; }
-.hero-home p { font-size: 0.92rem; margin-bottom: 22px; max-width: 420px; line-height: 1.65; }
+.hero-home p { font-size: 1rem; margin-bottom: 22px; max-width: 440px; line-height: 1.65; }
 .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
 .hero-img-box {
-  background: #fff; border: var(--border); border-radius: var(--radius);
-  box-shadow: var(--shadow); display: flex; align-items: center; justify-content: center;
-  min-height: 280px; font-size: 9rem;
+  border: var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden; background: #fff;
+  min-height: 300px;
 }
+.hero-img-box img { width: 100%; height: 100%; min-height: 300px; object-fit: cover; display: block; }
 
 /* WHAT WE COVER */
 .cover-section { text-align: center; }
@@ -182,8 +185,13 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 
 /* BLOG CARDS */
 .blog-card .card-img {
-  height: 170px; display: flex; align-items: center; justify-content: center;
-  font-size: 3.5rem; border-bottom: var(--border); position: relative;
+  height: 180px; display: flex; align-items: flex-start; justify-content: flex-start;
+  border-bottom: var(--border); position: relative;
+  background-size: cover; background-position: center;
+}
+.blog-card .card-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.22) 100%);
 }
 .blog-card .card-img .badge {
   position: absolute; top: 10px; left: 10px; font-size: 0.68rem; padding: 3px 10px;
@@ -345,12 +353,13 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
   transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--dark);
 }
 .blog-grid { max-width: 1200px; margin: 0 auto; padding: 20px 24px 72px; }
-.blog-img-training { background: linear-gradient(135deg, #FFE082, #FFD600); }
-.blog-img-nutrition { background: linear-gradient(135deg, #FFAB91, #FF5C00); }
-.blog-img-health { background: linear-gradient(135deg, #EF9A9A, #FF3B3B); }
-.blog-img-puppies { background: linear-gradient(135deg, #A5D6A7, #2ECC71); }
-.blog-img-seniors { background: linear-gradient(135deg, #CE93D8, #9B59B6); }
-.blog-img-gear { background: linear-gradient(135deg, #90CAF9, #00C2FF); }
+.blog-img-training { background-image: url('images/training.jpg'); }
+.blog-img-nutrition { background-image: url('images/nutrition.jpg'); }
+.blog-img-health { background-image: url('images/health.jpg'); }
+.blog-img-puppies { background-image: url('images/puppies.jpg'); }
+.blog-img-seniors { background-image: url('images/seniors.jpg'); }
+.blog-img-gear { background-image: url('images/gear.jpg'); }
+.blog-img-grooming { background-image: url('images/grooming.jpg'); }
 .blog-img-behavior { background: linear-gradient(135deg, #FFCC80, #FF9800); }
 
 /* RESOURCES PAGE */
@@ -460,13 +469,13 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
       <div>
         <div class="hero-badge"><span class="star">⭐</span> Rated #1 by Good Boys &amp; Girls</div>
         <h1>Welcome to<br>The Pack.</h1>
-        <p>Your ultimate guide to dog parenting — from first-time puppy panic to senior dog wisdom. Real answers. Deep dives. Zero fluff.</p>
+        <p>Straight answers to every dog question, from first-night puppy panic to senior-dog care. No filler, no fearmongering, no upsells. Just what works.</p>
         <div class="hero-btns">
           <button class="pill-btn dark" onclick="navigateTo('faq')">How Do I...?</button>
           <button class="pill-btn outline" onclick="navigateTo('blog')">Read the Blog</button>
         </div>
       </div>
-      <div class="hero-img-box">🐕</div>
+      <div class="hero-img-box"><img src="images/hero.jpg" alt="A golden retriever and a border collie resting together in a sunny backyard"></div>
     </div>
   </section>
 
@@ -480,7 +489,7 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
         <div class="card cover-card"><div class="cover-icon" style="background:var(--red)">❤️</div><h3>Health &amp; Vet Care</h3><p>Know the signs before it becomes an emergency.</p></div>
         <div class="card cover-card"><div class="cover-icon" style="background:#ddd">✂️</div><h3>Grooming &amp; Hygiene</h3><p>Yes, you do need to brush their teeth.</p></div>
         <div class="card cover-card"><div class="cover-icon" style="background:var(--green)">🧠</div><h3>Mental Stimulation</h3><p>A bored dog is a destructive dog. Let's fix that.</p></div>
-        <div class="card cover-card red-card"><div class="cover-icon" style="background:#fff">🐾</div><h3>Life Stages</h3><p>Puppies, adults, seniors — every phase covered.</p></div>
+        <div class="card cover-card red-card"><div class="cover-icon" style="background:#fff">🐾</div><h3>Life Stages</h3><p>Puppies, adults, seniors - every phase covered.</p></div>
       </div>
     </div>
   </section>
@@ -490,9 +499,9 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
       <h2>Because Google doesn't have a dog.</h2>
       <p class="sub">Real advice from people who've cleaned up the messes.</p>
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-emoji">📝</div><div class="num">1,000+</div><p>Questions Answered</p></div>
-        <div class="stat-card"><div class="stat-emoji">🐾</div><div class="num">200+</div><p>Deep-Dive Blog Posts</p></div>
-        <div class="stat-card"><div class="stat-emoji">❤️</div><div class="num">50+</div><p>Vetted Resource Links</p></div>
+        <div class="stat-card"><div class="stat-emoji">📝</div><div class="num">60+</div><p>Questions Answered</p></div>
+        <div class="stat-card"><div class="stat-emoji">🐾</div><div class="num">12</div><p>Deep-Dive Guides</p></div>
+        <div class="stat-card"><div class="stat-emoji">❤️</div><div class="num">18</div><p>Vetted Resources</p></div>
       </div>
     </div>
   </section>
@@ -513,11 +522,11 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
       <h2>Join the Pack. It's Free.</h2>
       <p>Get the best dog advice delivered straight to your inbox every week.</p>
       <div class="email-form">
-        <input type="email" placeholder="Enter your email address">
+        <input type="email" id="emailInput" placeholder="Enter your email address">
         <span class="mail-ico">📬</span>
-        <button>Subscribe</button>
+        <button onclick="subscribeEmail()">Subscribe</button>
       </div>
-      <p class="email-fine">No spam. Unsubscribe anytime. We're dog people, not monsters.</p>
+      <p class="email-fine" id="emailFine">No spam. Unsubscribe anytime. We're dog people, not monsters.</p>
     </div>
   </section>
 </div>
@@ -583,44 +592,44 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
     </div>
   </div>
   <div class="footer-bottom">
-    <span>&copy; 2025 Doggy See, Doggy Do. Made with <span style="color:var(--red)">❤️</span> for dog people.</span>
+    <span>&copy; 2026 Doggy See, Doggy Do. Made with <span style="color:var(--red)">❤️</span> for dog people.</span>
     <span class="footer-bottom-links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></span>
   </div>
 </footer>
 
 <script>
 const blogPosts=[
-{tag:"Training",tc:"#FFD600",tt:"#1a1a1a",ic:"blog-img-training",title:"The Real Reason Positive Reinforcement Works (And Why Punishment Backfires)",excerpt:"Science shows that punishment doesn't just fail to work — it actually backfires by increasing fear and anxiety. Here's what the research actually says about training.",date:"Mar 15, 2025",read:"7 min read",emoji:"🎓"},
+{tag:"Training",tc:"#FFD600",tt:"#1a1a1a",ic:"blog-img-training",title:"The Real Reason Positive Reinforcement Works (And Why Punishment Backfires)",excerpt:"Science shows that punishment doesn't just fail to work - it actually backfires by increasing fear and anxiety. Here's what the research actually says about training.",date:"Mar 15, 2025",read:"7 min read",emoji:"🎓"},
 {tag:"Nutrition",tc:"#FF5C00",tt:"#fff",ic:"blog-img-nutrition",title:"Raw vs. Kibble vs. Fresh: We Broke Down the Research So You Don't Have To",excerpt:"We analyzed dozens of studies so you don't have to. The answer is more nuanced than the internet would have you believe, and it depends heavily on your individual dog.",date:"Mar 10, 2025",read:"9 min read",emoji:"🍖"},
 {tag:"Health",tc:"#FF3B3B",tt:"#fff",ic:"blog-img-health",title:"10 Signs Your Dog Is Trying to Tell You They're Sick",excerpt:"Dogs can't tell you they're hurting, but their bodies send signals. Learn to read the subtle signs before a problem becomes a crisis.",date:"Mar 5, 2025",read:"6 min read",emoji:"🩺"},
-{tag:"Training",tc:"#FFD600",tt:"#1a1a1a",ic:"blog-img-training",title:"Why Your Dog is Leash Reactive — And a 4-Week Plan to Fix It",excerpt:"Leash reactivity isn't aggression — it's frustration and anxiety. Understanding why is the first step to a calmer walk.",date:"Feb 28, 2025",read:"11 min read",emoji:"🦮"},
-{tag:"Puppies",tc:"#2ECC71",tt:"#fff",ic:"blog-img-puppies",title:"The First 30 Days With a New Puppy: A Realistic Week-by-Week Guide",excerpt:"Nobody tells you just how exhausting those first weeks are. We did — and also gave you a realistic roadmap to get through them.",date:"Feb 20, 2025",read:"8 min read",emoji:"🐶"},
+{tag:"Training",tc:"#FFD600",tt:"#1a1a1a",ic:"blog-img-training",title:"Why Your Dog is Leash Reactive - And a 4-Week Plan to Fix It",excerpt:"Leash reactivity isn't aggression - it's frustration and anxiety. Understanding why is the first step to a calmer walk.",date:"Feb 28, 2025",read:"11 min read",emoji:"🦮"},
+{tag:"Puppies",tc:"#2ECC71",tt:"#fff",ic:"blog-img-puppies",title:"The First 30 Days With a New Puppy: A Realistic Week-by-Week Guide",excerpt:"Nobody tells you just how exhausting those first weeks are. We did - and also gave you a realistic roadmap to get through them.",date:"Feb 20, 2025",read:"8 min read",emoji:"🐶"},
 {tag:"Health",tc:"#FF3B3B",tt:"#fff",ic:"blog-img-health",title:"Everything You Need to Know About Brushing Your Dog's Teeth",excerpt:"Dental affects 80% of dogs by age 3. The good news: it's almost entirely preventable with the right routine.",date:"Feb 15, 2025",read:"6 min read",emoji:"🪥"},
 {tag:"Training",tc:"#FFD600",tt:"#1a1a1a",ic:"blog-img-training",title:"How to Teach 'Leave It' (Even If Your Dog Is Food-Obsessed)",excerpt:"Leave it might be the single most important cue you can teach. Here's a step-by-step method that works even for the most treat-motivated dogs.",date:"Feb 10, 2025",read:"8 min read",emoji:"🦴"},
 {tag:"Seniors",tc:"#9B59B6",tt:"#fff",ic:"blog-img-seniors",title:"Aging Gracefully: How to Support Your Senior Dog's Quality of Life",excerpt:"The senior years can be your dog's best years with the right support. Here's how to help them thrive through every stage of aging.",date:"Feb 1, 2025",read:"7 min read",emoji:"🐕‍🦺"},
-{tag:"Nutrition",tc:"#FF5C00",tt:"#fff",ic:"blog-img-nutrition",title:"The Dog Food Label Decoder: What Every Ingredient Actually Means",excerpt:"Chicken meal, by-products, desiccated — what does it all mean? We decode the cryptic language of dog food labels.",date:"Jan 25, 2025",read:"6 min read",emoji:"🏷️"},
+{tag:"Nutrition",tc:"#FF5C00",tt:"#fff",ic:"blog-img-nutrition",title:"The Dog Food Label Decoder: What Every Ingredient Actually Means",excerpt:"Chicken meal, by-products, desiccated - what does it all mean? We decode the cryptic language of dog food labels.",date:"Jan 25, 2025",read:"6 min read",emoji:"🏷️"},
 {tag:"Gear",tc:"#00C2FF",tt:"#1a1a1a",ic:"blog-img-gear",title:"The Only Dog Gear You Actually Need (And What's a Waste of Money)",excerpt:"We tested dozens of products so you don't waste your money. Here's what actually makes a difference.",date:"Jan 19, 2025",read:"8 min read",emoji:"🎒"},
 {tag:"Behavior",tc:"#FF9800",tt:"#fff",ic:"blog-img-behavior",title:"Anxiety in Dogs: Causes, Signs, and What Actually Helps",excerpt:"Dog anxiety is more common than you think. Understanding the root causes is the first step to helping your pup feel safe.",date:"Jan 15, 2025",read:"8 min read",emoji:"😰"},
-{tag:"Health",tc:"#FF3B3B",tt:"#fff",ic:"blog-img-health",title:"Separation Anxiety 101: A Complete Guide for Dog Parents",excerpt:"Separation anxiety is one of the most common behavioral issues. Here's what works — and what definitely doesn't.",date:"Jan 12, 2025",read:"6 min read",emoji:"🏠"}
+{tag:"Health",tc:"#FF3B3B",tt:"#fff",ic:"blog-img-health",title:"Separation Anxiety 101: A Complete Guide for Dog Parents",excerpt:"Separation anxiety is one of the most common behavioral issues. Here's what works - and what definitely doesn't.",date:"Jan 12, 2025",read:"6 min read",emoji:"🏠"}
 ];
 
 const faqData=[
 {category:"Training",color:"#00C2FF",questions:[
 {q:"How do I teach my dog to sit?",a:"Start by holding a treat above your dog's nose and slowly moving it back over their head. As their bottom naturally lowers, say 'sit' and reward immediately. Practice in short sessions of 5 minutes, several times a day."},
-{q:"How do I stop my dog from jumping on people?",a:"Turn away and ignore your dog when they jump. Only give attention when all four paws are on the ground. Ask guests to do the same. Consistency is key — everyone in the household needs to follow the same rule."},
+{q:"How do I stop my dog from jumping on people?",a:"Turn away and ignore your dog when they jump. Only give attention when all four paws are on the ground. Ask guests to do the same. Consistency is key - everyone in the household needs to follow the same rule."},
 {q:"How do I crate train my dog?",a:"Make the crate a positive space by placing treats and toys inside. Start with the door open, then gradually close it for short periods. Never use the crate as punishment. Build up duration slowly over days and weeks."},
 {q:"How do I stop my dog from pulling on the leash?",a:"Stop walking the moment the leash goes taut. Only move forward when there's slack. A front-clip harness can also help. Practice in low-distraction environments first before hitting the busy sidewalk."},
 {q:'How do I teach "leave it"?',a:"Hold a treat in a closed fist. When your dog stops trying to get it, reward with a different treat. Gradually increase difficulty by placing the treat on the floor. This builds impulse control over time."},
-{q:"How do I stop my dog from barking at everything?",a:"Identify the trigger — is it boredom, fear, or alerting? Address the root cause. For attention barking, ignore it completely. Reward quiet moments. Consider enrichment toys to reduce boredom-based barking."},
-{q:"How do I train an older dog?",a:"Old dogs absolutely can learn new tricks. Use high-value rewards and keep sessions short (5-10 minutes). Be patient — older dogs may take longer to build new habits, but they're often calmer and more focused."},
+{q:"How do I stop my dog from barking at everything?",a:"Identify the trigger - is it boredom, fear, or alerting? Address the root cause. For attention barking, ignore it completely. Reward quiet moments. Consider enrichment toys to reduce boredom-based barking."},
+{q:"How do I train an older dog?",a:"Old dogs absolutely can learn new tricks. Use high-value rewards and keep sessions short (5-10 minutes). Be patient - older dogs may take longer to build new habits, but they're often calmer and more focused."},
 {q:"How do I teach my dog to come when called?",a:"Start indoors with minimal distractions. Say their name + 'come' in an excited voice. Reward generously when they arrive. Never call your dog to you for something unpleasant. Build up to outdoor recall gradually."},
-{q:"How do I stop my dog from biting or nipping?",a:"When your dog nips, let out a yelp and stop play immediately. Redirect to a chew toy. For puppies, this is normal teething behavior — provide appropriate outlets. If biting is aggressive, consult a professional."},
-{q:"How do I use positive reinforcement correctly?",a:"Timing is everything — reward within 1-2 seconds of the desired behavior. Use a marker word ('yes!') or clicker. Vary your rewards between treats, praise, and play. Gradually phase out treats as the behavior becomes reliable."}
+{q:"How do I stop my dog from biting or nipping?",a:"When your dog nips, let out a yelp and stop play immediately. Redirect to a chew toy. For puppies, this is normal teething behavior - provide appropriate outlets. If biting is aggressive, consult a professional."},
+{q:"How do I use positive reinforcement correctly?",a:"Timing is everything - reward within 1-2 seconds of the desired behavior. Use a marker word ('yes!') or clicker. Vary your rewards between treats, praise, and play. Gradually phase out treats as the behavior becomes reliable."}
 ]},
 {category:"Feeding",color:"#FF5C00",questions:[
 {q:"How do I know how much to feed my dog?",a:"Portion size depends on your dog's weight, age, activity level, and the food's calorie density. Follow the guidelines on the packaging as a starting point, then adjust based on your vet's recommendation and body condition."},
 {q:"How do I switch my dog's food safely?",a:"Transition gradually over 7-10 days. Start with 75% old food / 25% new, then shift the ratio every few days. This prevents digestive upset. Watch for loose stools or vomiting during the transition."},
-{q:"How do I know if my dog has a food allergy?",a:"Common signs include itchy skin, ear infections, and digestive issues. Your vet may recommend an elimination diet — feeding a novel protein for 8-12 weeks to identify the culprit. Don't self-diagnose; work with your vet."},
+{q:"How do I know if my dog has a food allergy?",a:"Common signs include itchy skin, ear infections, and digestive issues. Your vet may recommend an elimination diet - feeding a novel protein for 8-12 weeks to identify the culprit. Don't self-diagnose; work with your vet."},
 {q:"How do I read a dog food label?",a:"Ingredients are listed by weight. Look for a named protein source first. Check the AAFCO statement to ensure it meets nutritional standards. Fewer ingredients isn't always better."},
 {q:"How do I feed a raw diet safely?",a:"Raw feeding requires careful planning to ensure nutritional balance. Consult a veterinary nutritionist. Handle raw food with the same hygiene precautions as raw meat for humans."},
 {q:"How do I stop my dog from eating too fast?",a:"Use a slow-feeder bowl, puzzle feeder, or scatter food on a snuffle mat. Eating too fast can cause bloat, especially in deep-chested breeds, so it's worth addressing."},
@@ -644,17 +653,17 @@ const faqData=[
 {q:"How do I bathe my dog at home?",a:"Use lukewarm water and dog-specific shampoo. Lather from neck to tail (avoid eyes and ears), rinse completely. Most dogs only need baths every 4-6 weeks."},
 {q:"How do I cut my dog's nails safely?",a:"Use sharp clippers and trim small amounts. Avoid the quick (pink area). For dark nails, trim conservatively and look for a chalky ring. Keep styptic powder handy."},
 {q:"How do I brush a dog that hates being brushed?",a:"Start with very short sessions and lots of treats. Use a gentle brush for your dog's coat type. Gradually increase duration. Make it positive, not a battle."},
-{q:"How do I deal with dog shedding?",a:"Regular brushing is the best defense — daily for heavy shedders. A deshedding tool helps. Ensure a healthy diet with omega fatty acids."},
+{q:"How do I deal with dog shedding?",a:"Regular brushing is the best defense - daily for heavy shedders. A deshedding tool helps. Ensure a healthy diet with omega fatty acids."},
 {q:"How do I clean my dog's paws after walks?",a:"Keep a towel and shallow basin by the door. A quick rinse removes salt, chemicals, and allergens. In winter, check between toes for ice balls."},
 {q:"How often should I groom my dog?",a:"It depends on breed and coat type. Short-haired dogs: brush once a week. Long-haired breeds: daily grooming. Professional grooming every 4-8 weeks for breeds that need haircuts."}
 ]},
 {category:"Puppy Life",color:"#2ECC71",questions:[
 {q:"How do I potty train a puppy?",a:"Take your puppy outside first thing in the morning, after meals, after naps, and before bed. Praise and treat immediately when they go outside. Puppies can hold it roughly 1 hour per month of age."},
-{q:"How do I socialize a puppy?",a:"Expose your puppy to people, sounds, surfaces, and experiences between 3-14 weeks. Keep experiences positive — never force interactions. Puppy classes are great for socialization."},
+{q:"How do I socialize a puppy?",a:"Expose your puppy to people, sounds, surfaces, and experiences between 3-14 weeks. Keep experiences positive - never force interactions. Puppy classes are great for socialization."},
 {q:"How do I stop puppy biting?",a:"Redirect to chew toys. If they nip, yelp and disengage briefly. Provide plenty of teething toys. This phase improves significantly by 6 months."},
 {q:"How do I set up a puppy schedule?",a:"Schedule regular meals, potty breaks, play, training, and naps. Young puppies need 18-20 hours of sleep. A consistent schedule accelerates potty training."},
 {q:"How do I introduce a puppy to other pets?",a:"Go slow and supervise. Let them sniff through a barrier first. Keep meetings short and positive. Never leave a puppy unsupervised with existing pets initially."},
-{q:"When does a puppy sleep through the night?",a:"Most puppies sleep through by 4-6 months. Until then, expect one or two nighttime potty breaks. Keep nighttime trips boring — no play, minimal light."},
+{q:"When does a puppy sleep through the night?",a:"Most puppies sleep through by 4-6 months. Until then, expect one or two nighttime potty breaks. Keep nighttime trips boring - no play, minimal light."},
 {q:"How do I puppy-proof my home?",a:"Secure electrical cords, move toxic plants, lock cabinets, pick up small objects, block unsafe areas with baby gates. Assume everything is a chew toy."},
 {q:"What vaccinations does my puppy need?",a:"Core vaccines: distemper, parvovirus, adenovirus, and rabies. Boosters every 3-4 weeks until ~16 weeks. Non-core vaccines depend on your area and lifestyle."},
 {q:"How do I get a puppy used to being alone?",a:"Practice short absences first. Gradually increase duration. Leave a Kong or puzzle toy to create a positive association. Avoid dramatic departures and returns."},
@@ -712,7 +721,7 @@ function closeMobile(){document.getElementById('mobileMenu').classList.remove('o
 
 function blogCard(p){
   return`<div class="card blog-card" data-tag="${p.tag}">
-    <div class="card-img ${p.ic}"><span class="badge" style="background:${p.tc};color:${p.tt};border-color:var(--dark)">${p.tag}</span><span style="font-size:3.2rem;opacity:0.35">${p.emoji}</span></div>
+    <div class="card-img ${p.ic}"><span class="badge" style="position:relative;z-index:1;margin:10px;background:${p.tc};color:${p.tt};border-color:var(--dark)">${p.tag}</span></div>
     <div class="card-body"><div class="card-meta"><span>${p.date}</span><span>${p.read}</span></div><h3>${p.title}</h3><p class="card-excerpt">${p.excerpt}</p><a href="#" class="read-more">Read Full Article →</a></div></div>`;
 }
 document.getElementById('homeBlogPreview').innerHTML=blogPosts.slice(0,3).map(blogCard).join('');
@@ -741,7 +750,11 @@ function toggleFAQ(el){const i=el.parentElement,a=i.querySelector('.faq-ans');i.
 function filterFAQ(){
   const q=document.getElementById('faqSearch').value.toLowerCase();
   document.querySelectorAll('.faq-item').forEach(i=>i.style.display=i.dataset.q.includes(q)?'':'none');
-  document.querySelectorAll('.faq-category').forEach(c=>{const v=c.querySelectorAll('.faq-item:not([style*="display: none"])');c.style.display=v.length?'':'none';});
+  let anyVisible=false;
+  document.querySelectorAll('.faq-category').forEach(c=>{const v=c.querySelectorAll('.faq-item:not([style*="display: none"])');if(v.length)anyVisible=true;c.style.display=v.length?'':'none';});
+  let nr=document.getElementById('faqNoResults');
+  if(!nr){nr=document.createElement('div');nr.id='faqNoResults';nr.style.cssText='display:none;padding:32px 4px;font-weight:700;color:#888;font-size:0.95rem;';nr.innerHTML='🐾 No questions match that yet. Try a simpler word like &ldquo;crate&rdquo; or &ldquo;barking&rdquo; - or <a href="#" onclick="scrollToEmail();return false;" style="color:var(--orange);text-decoration:underline;">ask us to cover it</a>.';document.getElementById('faqContent').appendChild(nr);}
+  nr.style.display=(q&&!anyVisible)?'block':'none';
 }
 
 let rH='';
@@ -755,6 +768,16 @@ rH+=`<div class="resource-section"><div class="product-wrap"><h2><span class="re
 resProducts.forEach(i=>rH+=`<div class="card resource-card product-card"><span class="star-b">⭐</span><h3>${i.n}</h3><p>${i.d}</p><button class="shop-btn">Shop Gear →</button></div>`);
 rH+='</div></div></div>';
 document.getElementById('resourcesContent').innerHTML=rH;
+
+function subscribeEmail(){
+  const input=document.getElementById('emailInput');
+  const fine=document.getElementById('emailFine');
+  const val=input.value.trim();
+  const ok=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val);
+  if(!ok){fine.textContent="Hmm, that email doesn't look right. Mind checking it?";fine.style.color='#fff';fine.style.opacity='1';return;}
+  input.value='';input.placeholder="You're in! 🎉";
+  fine.textContent='Welcome to the pack. Check your inbox to confirm.';fine.style.opacity='1';
+}
 </script>
 </body>
 </html>
