@@ -118,7 +118,7 @@ const footer = () => `<footer class="footer">
   </div>
 </footer>`;
 
-function page({ title, desc, canonical, active, content, jsonld = '', bodyJs = '' }) {
+function page({ title, desc, canonical, active, content, jsonld = '', bodyJs = '', extraHead = '' }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,15 +127,18 @@ function page({ title, desc, canonical, active, content, jsonld = '', bodyJs = '
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${SITE}${canonical}">
+<meta name="theme-color" content="#FFD600">
 <meta property="og:type" content="website">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${SITE}${canonical}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="/styles.css">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-${CLARITY}${jsonld ? '\n' + jsonld : ''}
+${extraHead ? extraHead + '\n' : ''}${CLARITY}${jsonld ? '\n' + jsonld : ''}
 </head>
 <body>
 ${nav(active)}
@@ -169,7 +172,7 @@ function buildHome() {
           <a class="pill-btn outline" href="/blog/">Read the Blog</a>
         </div>
       </div>
-      <div class="hero-img-box"><img src="/images/hero.jpg" alt="A golden retriever and a border collie resting together in a sunny backyard"></div>
+      <div class="hero-img-box"><img src="/images/hero.jpg" alt="A golden retriever and a border collie resting together in a sunny backyard" width="1600" height="800" fetchpriority="high" decoding="async"></div>
     </div>
   </section>
 
@@ -217,6 +220,7 @@ function buildHome() {
     title: 'Doggy See, Doggy Do - Dog Parenting Resource Hub',
     desc: 'Straight answers to every dog question — from puppy training and nutrition to health, grooming, and senior care. Practical dog advice that actually works.',
     canonical: '/', active: 'home', content, jsonld,
+    extraHead: '<link rel="preload" as="image" href="/images/hero.jpg" fetchpriority="high">',
   });
 }
 
@@ -252,7 +256,7 @@ function buildArticle(i) {
     .slice(0, 3).map(blogCard).join('\n');
   const content = `<div class="hero-article">
     <span class="badge article-badge" style="background:${p.tc};color:${p.tt};border-color:var(--dark)">${p.tag}</span>
-    <img src="${imgFor(p)}" alt="${esc(p.title)}">
+    <img src="${imgFor(p)}" alt="${esc(p.title)}" width="1000" height="562" fetchpriority="high" decoding="async">
   </div>
   <div class="article-wrap">
     <a class="article-back" href="/blog/">← Back to all posts</a>
@@ -277,6 +281,7 @@ function buildArticle(i) {
   return page({
     title: `${p.title} | Doggy See, Doggy Do`,
     desc: p.excerpt, canonical: urlFor(i), active: 'blog', content, jsonld,
+    extraHead: `<link rel="preload" as="image" href="${imgFor(p)}" fetchpriority="high">`,
   });
 }
 
@@ -348,6 +353,24 @@ function buildResources() {
   });
 }
 
+function buildNotFound() {
+  const content = `<section class="notfound">
+    <div class="nf-emoji">🐕‍🦺</div>
+    <h1>This page ran off.</h1>
+    <p>We looked under the couch and behind the treat jar — no luck. The page you're after doesn't exist (or has moved). Let's get you back on the trail.</p>
+    <div class="hero-btns">
+      <a class="pill-btn dark" href="/">Back Home</a>
+      <a class="pill-btn outline" href="/blog/">Read the Blog</a>
+    </div>
+  </section>`;
+  return page({
+    title: 'Page Not Found | Doggy See, Doggy Do',
+    desc: 'The page you were looking for could not be found.',
+    canonical: '/', active: '', content,
+    extraHead: '<meta name="robots" content="noindex">',
+  });
+}
+
 // ---------- 4. Write everything ----------
 function write(rel, contents) {
   const full = path.join(ROOT, rel);
@@ -365,12 +388,21 @@ a.pill-btn{text-decoration:none;display:inline-flex;align-items:center;justify-c
 a.article-back{text-decoration:none;display:inline-block;}
 .footer-h{font-size:1rem;margin-bottom:12px;}
 .related-h{margin-bottom:18px;}
+/* perf: let offscreen cards skip layout/paint until near the viewport (card images are CSS backgrounds) */
+.blog-card{content-visibility:auto;contain-intrinsic-size:auto 420px;}
+/* 404 */
+.notfound{text-align:center;padding:90px 20px 110px;}
+.notfound .nf-emoji{font-size:5rem;margin-bottom:10px;}
+.notfound h1{font-size:2.6rem;margin-bottom:12px;}
+.notfound p{max-width:460px;margin:0 auto 26px;line-height:1.6;color:#444;}
+.notfound .hero-btns{justify-content:center;}
 `);
 write('index.html', buildHome());
 write('blog/index.html', buildBlogIndex());
 data.blogPosts.forEach((_, i) => write(`blog/${SLUGS[i]}/index.html`, buildArticle(i)));
 write('faq/index.html', buildFaq());
 write('resources/index.html', buildResources());
+write('404.html', buildNotFound());
 
 // sitemap + robots
 const urls = ['/', '/blog/', '/faq/', '/resources/', ...SLUGS.map(s => `/blog/${s}/`)];
