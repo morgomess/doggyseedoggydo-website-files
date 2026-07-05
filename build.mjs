@@ -166,7 +166,7 @@ function buildHome() {
       <div>
         <div class="hero-badge"><span class="star">⭐</span> Rated #1 by Good Boys &amp; Girls</div>
         <h1>Every Dog Question,<br>Answered.</h1>
-        <p>Straight answers to every dog question, from first-night puppy panic to senior-dog care. No filler, no fearmongering, no upsells. Just what works.</p>
+        <p>Straight answers to every dog question. Training, food, health and puppy tips that actually work. Because Google (and ChatGPT) doesn't have a dog. 🐾</p>
         <div class="hero-btns">
           <a class="pill-btn dark" href="/faq/">How Do I...?</a>
           <a class="pill-btn outline" href="/blog/">Read the Blog</a>
