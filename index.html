@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Doggy See, Doggy Do - Dog Parenting Resource Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xhu42tzbp5");
+</script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -466,7 +474,7 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .nav-links, .nav-cta-wrap { display: none; }
+  .nav-links { display: none; }
   .mobile-toggle { display: block; }
   .hero-home-inner { grid-template-columns: 1fr; text-align: center; }
   .hero-home h1 { font-size: 2.5rem; }
@@ -509,7 +517,6 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
       <li><a href="#" data-page="blog" onclick="navigateTo('blog')">Blog</a></li>
       <li><a href="#" data-page="resources" onclick="navigateTo('resources')">Resources</a></li>
     </ul>
-    <div class="nav-cta-wrap"><button class="nav-cta" onclick="scrollToEmail()">Join Our Pack</button></div>
     <button class="mobile-toggle" onclick="toggleMobileMenu()">☰</button>
   </div>
 </nav>
@@ -518,7 +525,6 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
   <a href="#" data-page="faq" onclick="navigateTo('faq');closeMobile()">How Do I...?</a>
   <a href="#" data-page="blog" onclick="navigateTo('blog');closeMobile()">Blog</a>
   <a href="#" data-page="resources" onclick="navigateTo('resources');closeMobile()">Resources</a>
-  <button class="nav-cta" onclick="scrollToEmail();closeMobile()" style="margin-top:12px;">Join Our Pack</button>
 </div>
 
 <!-- HOME -->
@@ -575,19 +581,7 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
     </div>
   </section>
 
-  <section class="email-cta" id="emailCta">
-    <div class="container">
-      <div class="email-dog">🐶</div>
-      <h2>Join the Pack. It's Free.</h2>
-      <p>Get the best dog advice delivered straight to your inbox every week.</p>
-      <div class="email-form">
-        <input type="email" id="emailInput" placeholder="Enter your email address">
-        <span class="mail-ico">📬</span>
-        <button onclick="subscribeEmail()">Subscribe</button>
-      </div>
-      <p class="email-fine" id="emailFine">No spam. Unsubscribe anytime. We're dog people, not monsters.</p>
-    </div>
-  </section>
+  <!-- EMAIL CTA temporarily removed - subscription not live yet -->
 </div>
 
 <!-- FAQ -->
@@ -635,11 +629,6 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
       <div class="article-meta" id="articleMeta"></div>
     </div>
     <div class="article-body" id="articleBody"></div>
-    <div class="article-cta">
-      <h3>Liked this? Join the pack.</h3>
-      <p>New guides like this one, straight to your inbox.</p>
-      <button class="pill-btn orange" onclick="scrollToEmail()">Join the Pack</button>
-    </div>
     <div class="article-related">
       <h3>Keep reading</h3>
       <div class="grid-3" id="articleRelated"></div>
@@ -795,7 +784,6 @@ function navigateTo(p){
   window.scrollTo({top:0,behavior:'instant'});
   const el=document.getElementById('page-'+p);el.style.animation='none';el.offsetHeight;el.style.animation='';
 }
-function scrollToEmail(){navigateTo('home');setTimeout(()=>document.getElementById('emailCta').scrollIntoView({behavior:'smooth'}),100);}
 function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
 function closeMobile(){document.getElementById('mobileMenu').classList.remove('open');}
 
@@ -834,7 +822,7 @@ function filterFAQ(){
   let anyVisible=false;
   document.querySelectorAll('.faq-category').forEach(c=>{const v=c.querySelectorAll('.faq-item:not([style*="display: none"])');if(v.length)anyVisible=true;c.style.display=v.length?'':'none';});
   let nr=document.getElementById('faqNoResults');
-  if(!nr){nr=document.createElement('div');nr.id='faqNoResults';nr.style.cssText='display:none;padding:32px 4px;font-weight:700;color:#888;font-size:0.95rem;';nr.innerHTML='🐾 No questions match that yet. Try a simpler word like &ldquo;crate&rdquo; or &ldquo;barking&rdquo; - or <a href="#" onclick="scrollToEmail();return false;" style="color:var(--orange);text-decoration:underline;">ask us to cover it</a>.';document.getElementById('faqContent').appendChild(nr);}
+  if(!nr){nr=document.createElement('div');nr.id='faqNoResults';nr.style.cssText='display:none;padding:32px 4px;font-weight:700;color:#888;font-size:0.95rem;';nr.innerHTML='🐾 No questions match that yet. Try a simpler word like &ldquo;crate&rdquo; or &ldquo;barking&rdquo;.';document.getElementById('faqContent').appendChild(nr);}
   nr.style.display=(q&&!anyVisible)?'block':'none';
 }
 
@@ -1242,15 +1230,6 @@ function openPost(idx){
   navigateTo('article');
 }
 
-function subscribeEmail(){
-  const input=document.getElementById('emailInput');
-  const fine=document.getElementById('emailFine');
-  const val=input.value.trim();
-  const ok=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val);
-  if(!ok){fine.textContent="Hmm, that email doesn't look right. Mind checking it?";fine.style.color='#fff';fine.style.opacity='1';return;}
-  input.value='';input.placeholder="You're in! 🎉";
-  fine.textContent='Welcome to the pack. Check your inbox to confirm.';fine.style.opacity='1';
-}
 </script>
 </body>
 </html>
