@@ -54,6 +54,7 @@ const SLUGS = [
   'crate-training-101',
   'beat-dog-boredom',
   'how-to-stop-puppy-biting',
+  'how-to-train-a-reliable-recall',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
