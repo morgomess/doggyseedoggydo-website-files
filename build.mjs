@@ -51,13 +51,22 @@ const SLUGS = [
   'dog-food-label-decoder',
   'essential-dog-gear-guide',
   'dog-separation-anxiety-guide',
+  'crate-training-101',
+  'beat-dog-boredom',
+  'how-to-stop-puppy-biting',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
+// display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
+const byDate = data.blogPosts.map((_, i) => i).sort((a, b) => new Date(data.blogPosts[b].date) - new Date(data.blogPosts[a].date));
 const imgFor = p => '/images/' + p.ic.replace('blog-img-', '') + '.jpg';
 
 // ---------- 2. Shared helpers ----------
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const isoDate = d => { const t = new Date(d); return isNaN(t) ? '' : t.toISOString().slice(0, 10); };
+// stable per-question anchor id, shared by the home cover cards and the FAQ page
+const qSlug = t => 'q-' + t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const allFaqQs = data.faqData.flatMap(c => c.questions.map(q => q.q));
+const findQ = t => { if (!allFaqQs.includes(t)) throw new Error('Cover question not found in faqData: ' + t); return t; };
 
 const CLARITY = `<script type="text/javascript">
     (function(c,l,a,r,i,t,y){
@@ -160,7 +169,27 @@ function blogCard(i) {
 
 // ---------- 3. Page builders ----------
 function buildHome() {
-  const preview = [0, 1, 2].map(blogCard).join('\n');
+  const preview = byDate.slice(0, 3).map(blogCard).join('\n');
+  // Interactive "What We Cover" cards → each opens a drawer of real FAQ question links (deep-linked to the answer)
+  const COVERS = [
+    { title: 'Training &amp; Behavior', cls: '', icon: '🐕', bg: 'var(--yellow)', blurb: 'From sit to stay to stop eating my shoes.', all: '/faq/#faq-training',
+      qs: ["How do I stop my dog from pulling on the leash?", "How do I stop my dog from jumping on people?", "How do I teach \"leave it\"?", "How do I stop my dog from barking at everything?", "How do I use positive reinforcement correctly?"] },
+    { title: 'Food &amp; Diet', cls: ' blue-card', icon: '🥩', bg: 'var(--blue)', blurb: 'What&#39;s actually in that bag? We break it down.', all: '/faq/#faq-feeding',
+      qs: ["How do I know how much to feed my dog?", "How do I switch my dog's food safely?", "How do I read a dog food label?", "How do I know if my dog is a healthy weight?", "How do I feed a raw diet safely?"] },
+    { title: 'Health &amp; Vet Care', cls: '', icon: '❤️', bg: 'var(--red)', blurb: 'Know the signs before it becomes an emergency.', all: '/faq/#faq-health',
+      qs: ["How do I know if my dog is sick?", "How do I know if my dog is in pain?", "How do I check my dog for ticks?", "How often does my dog need to go to the vet?", "How do I handle my dog's allergies?"] },
+    { title: 'Grooming &amp; Hygiene', cls: '', icon: '✂️', bg: '#ddd', blurb: 'Yes, you do need to brush their teeth.', all: '/faq/#faq-grooming',
+      qs: ["How do I cut my dog's nails safely?", "How do I bathe my dog at home?", "How do I deal with dog shedding?", "How do I brush a dog that hates being brushed?", "How often should I groom my dog?"] },
+    { title: 'Mental Stimulation', cls: '', icon: '🧠', bg: 'var(--green)', blurb: 'A bored dog is a destructive dog. Let&#39;s fix that.', all: '/faq/',
+      qs: ["How do I stop my dog from barking at everything?", "How do I help my dog with anxiety?", "How do I get a puppy used to being alone?", "How do I keep a senior dog mentally stimulated?", "How do I socialize a puppy?"] },
+    { title: 'Life Stages', cls: ' red-card', icon: '🐾', bg: '#fff', blurb: 'Puppies, adults, seniors - every phase covered.', all: '/faq/',
+      qs: ["How do I set up a puppy schedule?", "How do I potty train a puppy?", "How do I know my dog is entering senior years?", "How do I adjust my senior dog's diet?", "How do I manage arthritis in my dog?"] },
+  ];
+  const coverCards = COVERS.map((c, i) => `<button type="button" class="card cover-card${c.cls}" data-cover="${i}" aria-expanded="false" aria-controls="cover-panel-${i}"><div class="cover-icon" style="background:${c.bg}">${c.icon}</div><h3>${c.title}</h3><p>${c.blurb}</p><span class="cover-chev" aria-hidden="true">▾</span></button>`).join('\n        ');
+  const coverPanels = COVERS.map((c, i) => {
+    const items = c.qs.map(t => `<li><a href="/faq/#${qSlug(findQ(t))}">${esc(t)}</a></li>`).join('');
+    return `<div class="cover-panel" id="cover-panel-${i}" data-panel="${i}" hidden><div class="cover-panel-head"><h3>${c.title} questions</h3><a class="cover-all" href="${c.all}">See all &rarr;</a></div><ul class="cover-qlist">${items}</ul></div>`;
+  }).join('\n      ');
   const content = `<section class="hero-home">
     <div class="hero-home-inner">
       <div>
@@ -179,14 +208,12 @@ function buildHome() {
   <section class="section cover-section">
     <div class="container">
       <h2>What We Cover</h2>
-      <p class="sub">Everything you need to raise a healthy, happy, well-adjusted best friend.</p>
+      <p class="sub">Tap a topic to see the real questions we answer, then jump straight to the answer.</p>
       <div class="cover-grid">
-        <div class="card cover-card"><div class="cover-icon" style="background:var(--yellow)">🐕</div><h3>Training &amp; Behavior</h3><p>From sit to stay to stop eating my shoes.</p></div>
-        <div class="card cover-card blue-card"><div class="cover-icon" style="background:var(--blue)">🥩</div><h3>Food &amp; Diet</h3><p>What's actually in that bag? We break it down.</p></div>
-        <div class="card cover-card"><div class="cover-icon" style="background:var(--red)">❤️</div><h3>Health &amp; Vet Care</h3><p>Know the signs before it becomes an emergency.</p></div>
-        <div class="card cover-card"><div class="cover-icon" style="background:#ddd">✂️</div><h3>Grooming &amp; Hygiene</h3><p>Yes, you do need to brush their teeth.</p></div>
-        <div class="card cover-card"><div class="cover-icon" style="background:var(--green)">🧠</div><h3>Mental Stimulation</h3><p>A bored dog is a destructive dog. Let's fix that.</p></div>
-        <div class="card cover-card red-card"><div class="cover-icon" style="background:#fff">🐾</div><h3>Life Stages</h3><p>Puppies, adults, seniors - every phase covered.</p></div>
+        ${coverCards}
+      </div>
+      <div class="cover-drawer" id="coverDrawer" hidden>
+      ${coverPanels}
       </div>
     </div>
   </section>
@@ -216,10 +243,27 @@ function buildHome() {
     '@context': 'https://schema.org', '@type': 'WebSite', name: 'Doggy See, Doggy Do',
     url: SITE + '/', description: 'Straight answers to every dog question — training, nutrition, health, grooming, and senior care.'
   })}</script>`;
+  const bodyJs = `<script>
+(function(){
+  var grid=document.querySelector('.cover-grid'),drawer=document.getElementById('coverDrawer');
+  if(!grid||!drawer)return;
+  var cards=[].slice.call(grid.querySelectorAll('.cover-card')),panels=[].slice.call(drawer.querySelectorAll('.cover-panel'));
+  function closeAll(){cards.forEach(function(c){c.classList.remove('active');c.setAttribute('aria-expanded','false');});panels.forEach(function(p){p.hidden=true;});drawer.hidden=true;}
+  cards.forEach(function(card){card.addEventListener('click',function(){
+    var i=card.getAttribute('data-cover'),wasActive=card.classList.contains('active');
+    closeAll();
+    if(!wasActive){
+      card.classList.add('active');card.setAttribute('aria-expanded','true');
+      var panel=panels.filter(function(p){return p.getAttribute('data-panel')===i;})[0];
+      if(panel){panel.hidden=false;drawer.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+    }
+  });});
+})();
+</script>`;
   return page({
     title: 'Doggy See, Doggy Do - Dog Parenting Resource Hub',
     desc: 'Straight answers to every dog question — from puppy training and nutrition to health, grooming, and senior care. Practical dog advice that actually works.',
-    canonical: '/', active: 'home', content, jsonld,
+    canonical: '/', active: 'home', content, jsonld, bodyJs,
     extraHead: '<link rel="preload" as="image" href="/images/hero.jpg" fetchpriority="high">',
   });
 }
@@ -227,7 +271,7 @@ function buildHome() {
 function buildBlogIndex() {
   const tags = ['All', ...new Set(data.blogPosts.map(p => p.tag))];
   const filters = tags.map((t, i) => `<button class="filter-btn${i === 0 ? ' active' : ''}" data-tag="${t}" onclick="filterBlog('${t}',this)">${t}</button>`).join('');
-  const grid = data.blogPosts.map((_, i) => blogCard(i)).join('\n');
+  const grid = byDate.map(i => blogCard(i)).join('\n');
   const content = `<section class="hero-blog">
     <div class="bugle">📰 The Doggy Bugle</div>
     <h1>Deep Dives for<br>Dog People.</h1>
@@ -293,7 +337,7 @@ function buildFaq() {
     sidebar += `<a href="#faq-${id}">${c.category}</a>`;
     body += `<div class="faq-category" id="faq-${id}"><div class="faq-cat-header"><div class="faq-cat-hl" style="background:${c.color}"></div><span class="faq-cat-label">${c.category}</span></div>`;
     c.questions.forEach(q => {
-      body += `<div class="faq-item" data-q="${esc(q.q.toLowerCase())}"><div class="faq-q" onclick="toggleFAQ(this)"><span>${esc(q.q)}</span><span class="faq-chev">▾</span></div><div class="faq-ans"><div class="faq-ans-inner">${q.a}</div></div></div>`;
+      body += `<div class="faq-item" id="${qSlug(q.q)}" data-q="${esc(q.q.toLowerCase())}"><div class="faq-q" onclick="toggleFAQ(this)"><span>${esc(q.q)}</span><span class="faq-chev">▾</span></div><div class="faq-ans"><div class="faq-ans-inner">${q.a}</div></div></div>`;
     });
     body += '</div>';
   });
@@ -324,6 +368,19 @@ function filterFAQ(){
   document.querySelectorAll('.faq-category').forEach(cat=>{const any=[...cat.querySelectorAll('.faq-item')].some(i=>i.style.display!=='none');cat.style.display=any?'':'none';});
 }
 document.querySelectorAll('.faq-sidebar a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});}));
+// deep-link: open + scroll to a specific question when arriving via #q-... (e.g. from the homepage cover cards)
+function openFromHash(){
+  var h=location.hash; if(!h) return;
+  var el; try{ el=document.querySelector(h); }catch(e){ return; }
+  if(!el) return;
+  if(el.classList.contains('faq-item')){
+    var q=el.querySelector('.faq-q');
+    if(q && !el.classList.contains('open')) toggleFAQ(q);
+    setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'center'}); },60);
+  } else { el.scrollIntoView({behavior:'smooth'}); }
+}
+window.addEventListener('load',openFromHash);
+window.addEventListener('hashchange',openFromHash);
 </script>`;
   return page({
     title: 'How Do I...? Common Dog Questions Answered | Doggy See, Doggy Do',
@@ -390,6 +447,21 @@ a.article-back{text-decoration:none;display:inline-block;}
 .related-h{margin-bottom:18px;}
 /* perf: let offscreen cards skip layout/paint until near the viewport (card images are CSS backgrounds) */
 .blog-card{content-visibility:auto;contain-intrinsic-size:auto 420px;}
+/* interactive "What We Cover" cards + FAQ drawer */
+button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;appearance:none;position:relative;cursor:pointer;}
+.cover-card .cover-chev{position:absolute;top:14px;right:16px;font-size:1rem;opacity:.45;transition:transform .2s,opacity .2s;}
+.cover-card.active .cover-chev{transform:rotate(180deg);opacity:1;}
+.cover-card.active{outline:3px solid var(--orange);outline-offset:-3px;box-shadow:var(--shadow-hover);}
+.cover-drawer{margin-top:22px;text-align:left;}
+.cover-panel{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;animation:fadeUp .2s ease;}
+.cover-panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.cover-panel-head h3{font-family:var(--font-body,inherit);font-size:1.1rem;}
+.cover-all{color:var(--orange);font-weight:800;text-decoration:none;white-space:nowrap;}
+.cover-all:hover{text-decoration:underline;}
+.cover-qlist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;}
+.cover-qlist li a{display:block;text-decoration:none;color:var(--dark);font-weight:600;font-size:0.9rem;padding:9px 13px;border-radius:10px;border:1px solid #ececec;transition:background .15s,border-color .15s,transform .15s;}
+.cover-qlist li a:hover{background:#fffdf5;border-color:var(--orange);transform:translateX(3px);}
+@media(max-width:640px){.cover-qlist{grid-template-columns:1fr;}}
 /* 404 */
 .notfound{text-align:center;padding:90px 20px 110px;}
 .notfound .nf-emoji{font-size:5rem;margin-bottom:10px;}

@@ -357,6 +357,9 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 .blog-img-teeth { background-image: url('images/teeth.jpg'); }
 .blog-img-nutrition-labels { background-image: url('images/nutrition-labels.jpg'); }
 .blog-img-separation { background-image: url('images/separation.jpg'); }
+.blog-img-crate { background-image: url('images/crate.jpg'); }
+.blog-img-boredom { background-image: url('images/boredom.jpg'); }
+.blog-img-puppy-biting { background-image: url('images/puppy-biting.jpg'); }
 
 /* RESOURCES PAGE */
 .hero-resources {
@@ -498,6 +501,21 @@ a.article-back{text-decoration:none;display:inline-block;}
 .related-h{margin-bottom:18px;}
 /* perf: let offscreen cards skip layout/paint until near the viewport (card images are CSS backgrounds) */
 .blog-card{content-visibility:auto;contain-intrinsic-size:auto 420px;}
+/* interactive "What We Cover" cards + FAQ drawer */
+button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;appearance:none;position:relative;cursor:pointer;}
+.cover-card .cover-chev{position:absolute;top:14px;right:16px;font-size:1rem;opacity:.45;transition:transform .2s,opacity .2s;}
+.cover-card.active .cover-chev{transform:rotate(180deg);opacity:1;}
+.cover-card.active{outline:3px solid var(--orange);outline-offset:-3px;box-shadow:var(--shadow-hover);}
+.cover-drawer{margin-top:22px;text-align:left;}
+.cover-panel{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;animation:fadeUp .2s ease;}
+.cover-panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.cover-panel-head h3{font-family:var(--font-body,inherit);font-size:1.1rem;}
+.cover-all{color:var(--orange);font-weight:800;text-decoration:none;white-space:nowrap;}
+.cover-all:hover{text-decoration:underline;}
+.cover-qlist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;}
+.cover-qlist li a{display:block;text-decoration:none;color:var(--dark);font-weight:600;font-size:0.9rem;padding:9px 13px;border-radius:10px;border:1px solid #ececec;transition:background .15s,border-color .15s,transform .15s;}
+.cover-qlist li a:hover{background:#fffdf5;border-color:var(--orange);transform:translateX(3px);}
+@media(max-width:640px){.cover-qlist{grid-template-columns:1fr;}}
 /* 404 */
 .notfound{text-align:center;padding:90px 20px 110px;}
 .notfound .nf-emoji{font-size:5rem;margin-bottom:10px;}
