@@ -505,16 +505,19 @@ a.article-back{text-decoration:none;display:inline-block;}
 button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;appearance:none;position:relative;cursor:pointer;}
 .cover-card .cover-chev{position:absolute;top:14px;right:16px;font-size:1rem;opacity:.45;transition:transform .2s,opacity .2s;}
 .cover-card.active .cover-chev{transform:rotate(180deg);opacity:1;}
-.cover-card.active{outline:3px solid var(--orange);outline-offset:-3px;box-shadow:var(--shadow-hover);}
-.cover-drawer{margin-top:22px;text-align:left;}
-.cover-panel{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;animation:fadeUp .2s ease;}
-.cover-panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
-.cover-panel-head h3{font-family:var(--font-body,inherit);font-size:1.1rem;}
-.cover-all{color:var(--orange);font-weight:800;text-decoration:none;white-space:nowrap;}
-.cover-all:hover{text-decoration:underline;}
-.cover-qlist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;}
-.cover-qlist li a{display:block;text-decoration:none;color:var(--dark);font-weight:600;font-size:0.9rem;padding:9px 13px;border-radius:10px;border:1px solid #ececec;transition:background .15s,border-color .15s,transform .15s;}
-.cover-qlist li a:hover{background:#fffdf5;border-color:var(--orange);transform:translateX(3px);}
+.cover-card.active{outline:3px solid var(--dark);outline-offset:-3px;box-shadow:var(--shadow-hover);}
+/* dense flow so an open full-width panel doesn't leave a hole in the card row */
+.cover-grid{grid-auto-flow:dense;}
+/* the dropdown: spans the row directly under the cards, themed to the topic color via --c */
+.cover-panel{grid-column:1 / -1;text-align:left;padding:20px 22px;border:var(--border);border-color:var(--c,var(--dark));border-radius:var(--radius);box-shadow:var(--shadow);background:#fff8e6;background:color-mix(in srgb, var(--c,#FF5C00) 16%, #fff);animation:coverDrop .22s ease;}
+@keyframes coverDrop{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.cover-panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.cover-panel-head h3{font-family:var(--font-body,inherit);font-size:1.05rem;}
+.cover-all{color:var(--dark);font-weight:800;text-decoration:none;white-space:nowrap;background:#fff;border:2px solid var(--dark);border-radius:999px;padding:4px 13px;font-size:0.78rem;}
+.cover-all:hover{background:var(--dark);color:#fff;}
+.cover-qlist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;}
+.cover-qlist li a{display:block;text-decoration:none;color:var(--dark);font-weight:700;font-size:0.9rem;padding:10px 14px;border-radius:10px;background:#fff;border:2px solid var(--dark);box-shadow:2px 2px 0 rgba(0,0,0,0.18);transition:transform .12s,box-shadow .12s;}
+.cover-qlist li a:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--dark);}
 @media(max-width:640px){.cover-qlist{grid-template-columns:1fr;}}
 /* 404 */
 .notfound{text-align:center;padding:90px 20px 110px;}

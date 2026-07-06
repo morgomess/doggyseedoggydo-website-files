@@ -172,24 +172,26 @@ function buildHome() {
   const preview = byDate.slice(0, 3).map(blogCard).join('\n');
   // Interactive "What We Cover" cards → each opens a drawer of real FAQ question links (deep-linked to the answer)
   const COVERS = [
-    { title: 'Training &amp; Behavior', cls: '', icon: '🐕', bg: 'var(--yellow)', blurb: 'From sit to stay to stop eating my shoes.', all: '/faq/#faq-training',
+    { title: 'Training &amp; Behavior', cls: '', icon: '🐕', bg: 'var(--yellow)', color: '#FFD600', blurb: 'From sit to stay to stop eating my shoes.', all: '/faq/#faq-training',
       qs: ["How do I stop my dog from pulling on the leash?", "How do I stop my dog from jumping on people?", "How do I teach \"leave it\"?", "How do I stop my dog from barking at everything?", "How do I use positive reinforcement correctly?"] },
-    { title: 'Food &amp; Diet', cls: ' blue-card', icon: '🥩', bg: 'var(--blue)', blurb: 'What&#39;s actually in that bag? We break it down.', all: '/faq/#faq-feeding',
+    { title: 'Food &amp; Diet', cls: ' blue-card', icon: '🥩', bg: 'var(--blue)', color: '#00C2FF', blurb: 'What&#39;s actually in that bag? We break it down.', all: '/faq/#faq-feeding',
       qs: ["How do I know how much to feed my dog?", "How do I switch my dog's food safely?", "How do I read a dog food label?", "How do I know if my dog is a healthy weight?", "How do I feed a raw diet safely?"] },
-    { title: 'Health &amp; Vet Care', cls: '', icon: '❤️', bg: 'var(--red)', blurb: 'Know the signs before it becomes an emergency.', all: '/faq/#faq-health',
+    { title: 'Health &amp; Vet Care', cls: '', icon: '❤️', bg: 'var(--red)', color: '#FF3B3B', blurb: 'Know the signs before it becomes an emergency.', all: '/faq/#faq-health',
       qs: ["How do I know if my dog is sick?", "How do I know if my dog is in pain?", "How do I check my dog for ticks?", "How often does my dog need to go to the vet?", "How do I handle my dog's allergies?"] },
-    { title: 'Grooming &amp; Hygiene', cls: '', icon: '✂️', bg: '#ddd', blurb: 'Yes, you do need to brush their teeth.', all: '/faq/#faq-grooming',
+    { title: 'Grooming &amp; Hygiene', cls: '', icon: '✂️', bg: '#ddd', color: '#2ECC71', blurb: 'Yes, you do need to brush their teeth.', all: '/faq/#faq-grooming',
       qs: ["How do I cut my dog's nails safely?", "How do I bathe my dog at home?", "How do I deal with dog shedding?", "How do I brush a dog that hates being brushed?", "How often should I groom my dog?"] },
-    { title: 'Mental Stimulation', cls: '', icon: '🧠', bg: 'var(--green)', blurb: 'A bored dog is a destructive dog. Let&#39;s fix that.', all: '/faq/',
+    { title: 'Mental Stimulation', cls: '', icon: '🧠', bg: 'var(--green)', color: '#FF5C00', blurb: 'A bored dog is a destructive dog. Let&#39;s fix that.', all: '/faq/',
       qs: ["How do I stop my dog from barking at everything?", "How do I help my dog with anxiety?", "How do I get a puppy used to being alone?", "How do I keep a senior dog mentally stimulated?", "How do I socialize a puppy?"] },
-    { title: 'Life Stages', cls: ' red-card', icon: '🐾', bg: '#fff', blurb: 'Puppies, adults, seniors - every phase covered.', all: '/faq/',
+    { title: 'Life Stages', cls: ' red-card', icon: '🐾', bg: '#fff', color: '#00C2FF', blurb: 'Puppies, adults, seniors - every phase covered.', all: '/faq/',
       qs: ["How do I set up a puppy schedule?", "How do I potty train a puppy?", "How do I know my dog is entering senior years?", "How do I adjust my senior dog's diet?", "How do I manage arthritis in my dog?"] },
   ];
-  const coverCards = COVERS.map((c, i) => `<button type="button" class="card cover-card${c.cls}" data-cover="${i}" aria-expanded="false" aria-controls="cover-panel-${i}"><div class="cover-icon" style="background:${c.bg}">${c.icon}</div><h3>${c.title}</h3><p>${c.blurb}</p><span class="cover-chev" aria-hidden="true">▾</span></button>`).join('\n        ');
-  const coverPanels = COVERS.map((c, i) => {
+  // card immediately followed by its (hidden) panel, all inside .cover-grid, so the dropdown opens directly under the row
+  const coverItems = COVERS.map((c, i) => {
+    const card = `<button type="button" class="card cover-card${c.cls}" data-cover="${i}" aria-expanded="false" aria-controls="cover-panel-${i}"><div class="cover-icon" style="background:${c.bg}">${c.icon}</div><h3>${c.title}</h3><p>${c.blurb}</p><span class="cover-chev" aria-hidden="true">▾</span></button>`;
     const items = c.qs.map(t => `<li><a href="/faq/#${qSlug(findQ(t))}">${esc(t)}</a></li>`).join('');
-    return `<div class="cover-panel" id="cover-panel-${i}" data-panel="${i}" hidden><div class="cover-panel-head"><h3>${c.title} questions</h3><a class="cover-all" href="${c.all}">See all &rarr;</a></div><ul class="cover-qlist">${items}</ul></div>`;
-  }).join('\n      ');
+    const panel = `<div class="cover-panel" id="cover-panel-${i}" data-panel="${i}" style="--c:${c.color}" hidden><div class="cover-panel-head"><h3>${c.title} questions</h3><a class="cover-all" href="${c.all}">See all &rarr;</a></div><ul class="cover-qlist">${items}</ul></div>`;
+    return card + '\n        ' + panel;
+  }).join('\n        ');
   const content = `<section class="hero-home">
     <div class="hero-home-inner">
       <div>
@@ -210,10 +212,7 @@ function buildHome() {
       <h2>What We Cover</h2>
       <p class="sub">Tap a topic to see the real questions we answer, then jump straight to the answer.</p>
       <div class="cover-grid">
-        ${coverCards}
-      </div>
-      <div class="cover-drawer" id="coverDrawer" hidden>
-      ${coverPanels}
+        ${coverItems}
       </div>
     </div>
   </section>
@@ -245,17 +244,17 @@ function buildHome() {
   })}</script>`;
   const bodyJs = `<script>
 (function(){
-  var grid=document.querySelector('.cover-grid'),drawer=document.getElementById('coverDrawer');
-  if(!grid||!drawer)return;
-  var cards=[].slice.call(grid.querySelectorAll('.cover-card')),panels=[].slice.call(drawer.querySelectorAll('.cover-panel'));
-  function closeAll(){cards.forEach(function(c){c.classList.remove('active');c.setAttribute('aria-expanded','false');});panels.forEach(function(p){p.hidden=true;});drawer.hidden=true;}
+  var grid=document.querySelector('.cover-grid');
+  if(!grid)return;
+  var cards=[].slice.call(grid.querySelectorAll('.cover-card')),panels=[].slice.call(grid.querySelectorAll('.cover-panel'));
+  function closeAll(){cards.forEach(function(c){c.classList.remove('active');c.setAttribute('aria-expanded','false');});panels.forEach(function(p){p.hidden=true;});}
   cards.forEach(function(card){card.addEventListener('click',function(){
     var i=card.getAttribute('data-cover'),wasActive=card.classList.contains('active');
     closeAll();
     if(!wasActive){
       card.classList.add('active');card.setAttribute('aria-expanded','true');
       var panel=panels.filter(function(p){return p.getAttribute('data-panel')===i;})[0];
-      if(panel){panel.hidden=false;drawer.hidden=false;panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+      if(panel){panel.hidden=false;}
     }
   });});
 })();
@@ -451,16 +450,19 @@ a.article-back{text-decoration:none;display:inline-block;}
 button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;appearance:none;position:relative;cursor:pointer;}
 .cover-card .cover-chev{position:absolute;top:14px;right:16px;font-size:1rem;opacity:.45;transition:transform .2s,opacity .2s;}
 .cover-card.active .cover-chev{transform:rotate(180deg);opacity:1;}
-.cover-card.active{outline:3px solid var(--orange);outline-offset:-3px;box-shadow:var(--shadow-hover);}
-.cover-drawer{margin-top:22px;text-align:left;}
-.cover-panel{background:#fff;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;animation:fadeUp .2s ease;}
-.cover-panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
-.cover-panel-head h3{font-family:var(--font-body,inherit);font-size:1.1rem;}
-.cover-all{color:var(--orange);font-weight:800;text-decoration:none;white-space:nowrap;}
-.cover-all:hover{text-decoration:underline;}
-.cover-qlist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;}
-.cover-qlist li a{display:block;text-decoration:none;color:var(--dark);font-weight:600;font-size:0.9rem;padding:9px 13px;border-radius:10px;border:1px solid #ececec;transition:background .15s,border-color .15s,transform .15s;}
-.cover-qlist li a:hover{background:#fffdf5;border-color:var(--orange);transform:translateX(3px);}
+.cover-card.active{outline:3px solid var(--dark);outline-offset:-3px;box-shadow:var(--shadow-hover);}
+/* dense flow so an open full-width panel doesn't leave a hole in the card row */
+.cover-grid{grid-auto-flow:dense;}
+/* the dropdown: spans the row directly under the cards, themed to the topic color via --c */
+.cover-panel{grid-column:1 / -1;text-align:left;padding:20px 22px;border:var(--border);border-color:var(--c,var(--dark));border-radius:var(--radius);box-shadow:var(--shadow);background:#fff8e6;background:color-mix(in srgb, var(--c,#FF5C00) 16%, #fff);animation:coverDrop .22s ease;}
+@keyframes coverDrop{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.cover-panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.cover-panel-head h3{font-family:var(--font-body,inherit);font-size:1.05rem;}
+.cover-all{color:var(--dark);font-weight:800;text-decoration:none;white-space:nowrap;background:#fff;border:2px solid var(--dark);border-radius:999px;padding:4px 13px;font-size:0.78rem;}
+.cover-all:hover{background:var(--dark);color:#fff;}
+.cover-qlist{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;}
+.cover-qlist li a{display:block;text-decoration:none;color:var(--dark);font-weight:700;font-size:0.9rem;padding:10px 14px;border-radius:10px;background:#fff;border:2px solid var(--dark);box-shadow:2px 2px 0 rgba(0,0,0,0.18);transition:transform .12s,box-shadow .12s;}
+.cover-qlist li a:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--dark);}
 @media(max-width:640px){.cover-qlist{grid-template-columns:1fr;}}
 /* 404 */
 .notfound{text-align:center;padding:90px 20px 110px;}
