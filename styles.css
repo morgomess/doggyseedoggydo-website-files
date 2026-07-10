@@ -361,6 +361,8 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 .blog-img-boredom { background-image: url('images/boredom.jpg'); }
 .blog-img-puppy-biting { background-image: url('images/puppy-biting.jpg'); }
 .blog-img-recall { background-image: url('images/recall.jpg'); }
+.blog-img-potty-training { background-image: url('images/potty-training.jpg'); }
+.blog-img-summer-safety { background-image: url('images/summer-safety.jpg'); }
 
 /* RESOURCES PAGE */
 .hero-resources {
