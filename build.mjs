@@ -57,6 +57,7 @@ const SLUGS = [
   'how-to-train-a-reliable-recall',
   'puppy-potty-training-no-drama-house-training-guide',
   'dog-summer-safety-heat-pavement-cooling',
+  'puppy-crate-training-separation-anxiety',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned

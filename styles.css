@@ -363,6 +363,7 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 .blog-img-recall { background-image: url('images/recall.jpg'); }
 .blog-img-potty-training { background-image: url('images/potty-training.jpg'); }
 .blog-img-summer-safety { background-image: url('images/summer-safety.jpg'); }
+.blog-img-crate-separation-anxiety { background-image: url('images/crate-separation-anxiety.jpg'); }
 
 /* RESOURCES PAGE */
 .hero-resources {
