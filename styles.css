@@ -365,6 +365,7 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: 1px; }
 .blog-img-summer-safety { background-image: url('images/summer-safety.jpg'); }
 .blog-img-crate-separation-anxiety { background-image: url('images/crate-separation-anxiety.jpg'); }
 .blog-img-loose-leash-walking { background-image: url('images/loose-leash-walking.jpg'); }
+.blog-img-dog-exercise-needs { background-image: url('images/dog-exercise-needs.jpg'); }
 
 /* RESOURCES PAGE */
 .hero-resources {
