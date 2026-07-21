@@ -60,6 +60,7 @@ const SLUGS = [
   'puppy-crate-training-separation-anxiety',
   'how-to-stop-dog-pulling-on-leash-loose-leash-walking',
   'how-much-exercise-does-your-dog-need-by-breed-and-age',
+  'puppy-socialization-guide-first-16-weeks',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
