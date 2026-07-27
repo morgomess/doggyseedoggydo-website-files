@@ -62,6 +62,7 @@ const SLUGS = [
   'how-much-exercise-does-your-dog-need-by-breed-and-age',
   'puppy-socialization-guide-first-16-weeks',
   'dog-body-language-what-your-dog-is-telling-you',
+  'how-to-trim-dog-nails-without-the-struggle',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
