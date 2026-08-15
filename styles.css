@@ -529,6 +529,35 @@ button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;
 .cover-qlist li a{display:block;text-decoration:none;color:var(--dark);font-weight:700;font-size:0.9rem;padding:10px 14px;border-radius:10px;background:#fff;border:2px solid var(--dark);box-shadow:2px 2px 0 rgba(0,0,0,0.18);transition:transform .12s,box-shadow .12s;}
 .cover-qlist li a:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--dark);}
 @media(max-width:640px){.cover-qlist{grid-template-columns:1fr;}}
+/* detail / legal pages */
+.hero-legal{background:var(--dark);border-bottom:var(--border);text-align:center;padding:48px 24px;color:#fff;}
+.hero-legal h1{font-family:var(--font-display);color:var(--yellow);font-size:2.6rem;margin-bottom:8px;line-height:1.05;}
+.hero-legal p{font-size:0.88rem;opacity:0.82;max-width:520px;margin:0 auto;}
+.legal-body{padding-top:26px;}
+.legal-body h2{margin-top:34px;}
+.legal-body ul{margin:0 0 18px 22px;}
+.legal-body li{margin-bottom:8px;}
+.legal-body a{color:var(--dark);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
+.legal-body a:hover{color:var(--orange);}
+.legal-updated{margin-top:38px;padding-top:16px;border-top:2px dashed #ddd;font-size:0.82rem;color:#666;}
+.legal-nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+.legal-nav a{font-size:0.8rem;font-weight:800;color:var(--dark);text-decoration:none;background:#fff;border:2px solid var(--dark);border-radius:999px;padding:5px 14px;}
+.legal-nav a:hover{background:var(--yellow);}
+.legal-nav a.active{background:var(--dark);color:#fff;}
+/* footer: 4th column + sitewide disclosure line */
+.footer-grid{grid-template-columns:1.5fr 1fr 1fr 1fr;}
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.footer-grid{grid-template-columns:1fr;}}
+.footer-disclosure{max-width:1200px;margin:34px auto 0;padding:0 24px;font-size:0.78rem;line-height:1.7;color:#777;}
+.footer-disclosure a{color:#aaa;text-decoration:underline;}
+.footer-disclosure a:hover{color:var(--yellow);}
+.footer-bottom{margin-top:16px;}
+@media(max-width:560px){.footer-bottom{flex-direction:column;gap:8px;text-align:center;}.footer-bottom-links a{margin:0 8px;}}
+/* affiliate disclosure callout on /resources/ */
+.disclosure-box{max-width:1200px;margin:28px auto -12px;padding:16px 20px;background:#fff8e6;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow);font-size:0.86rem;line-height:1.6;}
+@media(max-width:1248px){.disclosure-box{margin-left:24px;margin-right:24px;}}
+.disclosure-box a{color:var(--dark);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
+.disclosure-box a:hover{color:var(--orange);}
 /* 404 */
 .notfound{text-align:center;padding:90px 20px 110px;}
 .notfound .nf-emoji{font-size:5rem;margin-bottom:10px;}
