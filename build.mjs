@@ -68,6 +68,7 @@ const SLUGS = [
   'why-does-my-dog-bark-so-much-causes-and-fixes',
   'dog-road-trip-safety-car-travel-tips',
   'how-to-bathe-and-brush-your-dog-at-home',
+  'back-to-school-dog-separation-anxiety-prep',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
