@@ -72,6 +72,7 @@ const SLUGS = [
   '3-3-3-decompression-guide-rescue-dogs',
   'fleas-ticks-late-summer-prevention-dogs',
   'how-to-stop-dog-jumping-on-guests',
+  'how-to-teach-dog-to-stay-duration-distance-distraction',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
