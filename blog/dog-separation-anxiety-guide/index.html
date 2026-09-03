@@ -36,6 +36,7 @@
       <li><a href="/faq/">How Do I...?</a></li>
       <li><a href="/blog/" class="active">Blog</a></li>
       <li><a href="/resources/">Resources</a></li>
+      <li><button type="button" class="nav-search" data-search-open aria-label="Search dog questions and guides"><span aria-hidden="true">⌕</span> Search</button></li>
     </ul>
     <button type="button" class="mobile-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu"><span aria-hidden="true">☰</span></button>
   </div>
@@ -45,6 +46,23 @@
   <a href="/faq/">How Do I...?</a>
   <a href="/blog/" class="active">Blog</a>
   <a href="/resources/">Resources</a>
+  <button type="button" class="mobile-search" data-search-open><span aria-hidden="true">⌕</span> Search</button>
+</div>
+<div class="site-search" id="siteSearch" role="dialog" aria-modal="true" aria-labelledby="siteSearchTitle" hidden>
+  <button type="button" class="search-backdrop" data-search-close aria-label="Close search"></button>
+  <div class="search-panel">
+    <div class="search-head">
+      <div><p class="search-eyebrow">Find the right answer</p><h2 id="siteSearchTitle">What does your dog need?</h2></div>
+      <button type="button" class="search-close" data-search-close aria-label="Close search">×</button>
+    </div>
+    <form class="site-search-form" role="search">
+      <label class="sr-only" for="siteSearchInput">Search dog questions and guides</label>
+      <span aria-hidden="true">⌕</span>
+      <input id="siteSearchInput" type="search" autocomplete="off" placeholder="Try “puppy biting” or “dog won’t eat”">
+    </form>
+    <p class="search-hint" id="searchHint">Search 55 quick answers and 31 deep-dive guides.</p>
+    <div class="search-results" id="siteSearchResults" aria-live="polite"></div>
+  </div>
 </div>
 <div class="hero-article">
     <span class="badge article-badge" style="background:#FF3B3B;color:#fff;border-color:var(--dark)">Health</span>
@@ -151,6 +169,67 @@
   menu.addEventListener('click',function(event){if(event.target.closest('a'))setOpen(false);});
   document.addEventListener('keydown',function(event){if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true'){setOpen(false);button.focus();}});
   document.addEventListener('click',function(event){if(button.getAttribute('aria-expanded')==='true'&&!menu.contains(event.target)&&!button.contains(event.target))setOpen(false);});
+})();
+</script>
+<script>
+(function(){
+  var dialog=document.getElementById('siteSearch'),input=document.getElementById('siteSearchInput'),results=document.getElementById('siteSearchResults'),hint=document.getElementById('searchHint');
+  if(!dialog||!input||!results)return;
+  var entries=null,loadPromise=null,previousFocus=null;
+  function loadEntries(){
+    if(entries)return Promise.resolve(entries);
+    if(!loadPromise)loadPromise=fetch('/search-index.json',{credentials:'same-origin'}).then(function(response){if(!response.ok)throw new Error('Search index unavailable');return response.json();}).then(function(data){entries=data;return data;});
+    return loadPromise;
+  }
+  function clean(value){return value.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
+  function escapeHtml(value){return String(value).replace(/[&<>"]/g,function(char){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[char];});}
+  function score(entry,query){
+    var title=clean(entry.title),text=clean(entry.text),category=clean(entry.category),tokens=query.split(' ').filter(Boolean),score=0;
+    if(title===query)score+=120; else if(title.indexOf(query)>-1)score+=70;
+    if(text.indexOf(query)>-1)score+=25;
+    tokens.forEach(function(token){if(title.indexOf(token)>-1)score+=18;if(category.indexOf(token)>-1)score+=8;if(text.indexOf(token)>-1)score+=3;});
+    if(tokens.length&&tokens.every(function(token){return (title+' '+text+' '+category).indexOf(token)>-1;}))score+=20;
+    return score;
+  }
+  function card(entry){return '<a class="search-result" href="'+escapeHtml(entry.url)+'"><span class="search-result-type">'+escapeHtml(entry.category)+'</span><strong>'+escapeHtml(entry.title)+'</strong><span>'+escapeHtml(entry.type==='guide'?(entry.meta||entry.text):entry.text)+'</span></a>';}
+  function render(){
+    var query=clean(input.value),url=new URL(window.location.href);
+    if(input.value.trim())url.searchParams.set('q',input.value.trim());else url.searchParams.delete('q');
+    history.replaceState(null,'',url.pathname+url.search+url.hash);
+    if(!query){results.innerHTML='';hint.hidden=false;return;}
+    hint.hidden=true;
+    if(!entries){results.innerHTML='<div class="search-loading">Searching…</div>';return;}
+    var ranked=entries.map(function(entry){return {entry:entry,score:score(entry,query)};}).filter(function(item){return item.score>0;}).sort(function(a,b){return b.score-a.score;});
+    var answers=ranked.filter(function(item){return item.entry.type==='answer';}).slice(0,6),guides=ranked.filter(function(item){return item.entry.type==='guide';}).slice(0,6);
+    if(!answers.length&&!guides.length){results.innerHTML='<div class="search-empty"><strong>No matches yet.</strong><p>Try fewer words, a symptom, or a behavior such as “barking.”</p><a href="/contact/">Tell us what answer is missing →</a></div>';return;}
+    results.innerHTML=(answers.length?'<section><h3>Quick Answers <span>'+answers.length+'</span></h3><div class="search-result-grid">'+answers.map(function(item){return card(item.entry);}).join('')+'</div></section>':'')+(guides.length?'<section><h3>Deep-Dive Guides <span>'+guides.length+'</span></h3><div class="search-result-grid">'+guides.map(function(item){return card(item.entry);}).join('')+'</div></section>':'');
+  }
+  function openSearch(){
+    previousFocus=document.activeElement;
+    var mobileMenu=document.getElementById('mobileMenu'),mobileToggle=document.querySelector('.mobile-toggle');
+    if(previousFocus&&previousFocus.closest&&previousFocus.closest('.mobile-menu'))previousFocus=mobileToggle;
+    if(mobileMenu)mobileMenu.classList.remove('open');
+    if(mobileToggle){mobileToggle.setAttribute('aria-expanded','false');mobileToggle.setAttribute('aria-label','Open navigation');}
+    document.body.classList.remove('menu-open');dialog.hidden=false;document.body.classList.add('search-open');
+    var query=new URL(window.location.href).searchParams.get('q')||'';input.value=query;render();
+    loadEntries().then(render).catch(function(){hint.hidden=true;results.innerHTML='<div class="search-empty"><strong>Search is taking a break.</strong><p>Please try again, or browse the question library.</p><a href="/faq/">Browse all answers →</a></div>';});
+    window.setTimeout(function(){input.focus();},0);
+  }
+  function closeSearch(){
+    dialog.hidden=true;document.body.classList.remove('search-open');
+    var url=new URL(window.location.href);url.searchParams.delete('q');history.replaceState(null,'',url.pathname+url.search+url.hash);
+    if(previousFocus&&previousFocus.focus)previousFocus.focus();
+  }
+  document.querySelectorAll('[data-search-open]').forEach(function(button){button.addEventListener('click',openSearch);});
+  document.querySelectorAll('[data-search-close]').forEach(function(button){button.addEventListener('click',closeSearch);});
+  input.addEventListener('input',render);
+  dialog.querySelector('form').addEventListener('submit',function(event){event.preventDefault();var first=results.querySelector('a');if(first)first.click();});
+  document.addEventListener('keydown',function(event){
+    if(event.key==='/'&&dialog.hidden&&!/input|textarea|select/i.test(document.activeElement.tagName)){event.preventDefault();openSearch();}
+    if(event.key==='Escape'&&!dialog.hidden){event.preventDefault();closeSearch();}
+    if(event.key==='Tab'&&!dialog.hidden){var focusable=[].slice.call(dialog.querySelectorAll('button:not([hidden]),input,a')).filter(function(el){return el.offsetParent!==null;});if(!focusable.length)return;var first=focusable[0],last=focusable[focusable.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}
+  });
+  if(new URL(window.location.href).searchParams.get('q'))openSearch();
 })();
 </script>
 

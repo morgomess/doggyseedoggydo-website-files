@@ -102,17 +102,47 @@ const NAVLINKS = [
   { href: '/resources/', key: 'resources', label: 'Resources' },
 ];
 
+const SEARCH_INDEX = [
+  ...data.faqData.flatMap(category => category.questions.map(item => ({
+    type: 'answer', category: category.category, title: item.q, text: item.a,
+    url: `/faq/#${qSlug(item.q)}`,
+  }))),
+  ...data.blogPosts.map((post, i) => ({
+    type: 'guide', category: post.tag, title: post.title, text: post.excerpt,
+    url: urlFor(i), meta: `${post.read} · ${post.date}`,
+  })),
+];
+
 const nav = active => `<nav class="nav">
   <div class="nav-inner">
     <a class="nav-logo" href="/">🐾 Doggy See, Doggy Do</a>
     <ul class="nav-links">
       ${NAVLINKS.map(l => `<li><a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a></li>`).join('\n      ')}
+      <li><button type="button" class="nav-search" data-search-open aria-label="Search dog questions and guides"><span aria-hidden="true">⌕</span> Search</button></li>
     </ul>
     <button type="button" class="mobile-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu"><span aria-hidden="true">☰</span></button>
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
   ${NAVLINKS.map(l => `<a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a>`).join('\n  ')}
+  <button type="button" class="mobile-search" data-search-open><span aria-hidden="true">⌕</span> Search</button>
+</div>`;
+
+const siteSearch = () => `<div class="site-search" id="siteSearch" role="dialog" aria-modal="true" aria-labelledby="siteSearchTitle" hidden>
+  <button type="button" class="search-backdrop" data-search-close aria-label="Close search"></button>
+  <div class="search-panel">
+    <div class="search-head">
+      <div><p class="search-eyebrow">Find the right answer</p><h2 id="siteSearchTitle">What does your dog need?</h2></div>
+      <button type="button" class="search-close" data-search-close aria-label="Close search">×</button>
+    </div>
+    <form class="site-search-form" role="search">
+      <label class="sr-only" for="siteSearchInput">Search dog questions and guides</label>
+      <span aria-hidden="true">⌕</span>
+      <input id="siteSearchInput" type="search" autocomplete="off" placeholder="Try “puppy biting” or “dog won’t eat”">
+    </form>
+    <p class="search-hint" id="searchHint">Search ${data.faqData.reduce((n, c) => n + c.questions.length, 0)} quick answers and ${data.blogPosts.length} deep-dive guides.</p>
+    <div class="search-results" id="siteSearchResults" aria-live="polite"></div>
+  </div>
 </div>`;
 
 const footer = () => `<footer class="footer">
@@ -180,6 +210,7 @@ ${extraHead ? extraHead + '\n' : ''}${CLARITY}${jsonld ? '\n' + jsonld : ''}
 </head>
 <body>
 ${nav(active)}
+${siteSearch()}
 ${content}
 ${footer()}
 <script>
@@ -196,6 +227,67 @@ ${footer()}
   menu.addEventListener('click',function(event){if(event.target.closest('a'))setOpen(false);});
   document.addEventListener('keydown',function(event){if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true'){setOpen(false);button.focus();}});
   document.addEventListener('click',function(event){if(button.getAttribute('aria-expanded')==='true'&&!menu.contains(event.target)&&!button.contains(event.target))setOpen(false);});
+})();
+</script>
+<script>
+(function(){
+  var dialog=document.getElementById('siteSearch'),input=document.getElementById('siteSearchInput'),results=document.getElementById('siteSearchResults'),hint=document.getElementById('searchHint');
+  if(!dialog||!input||!results)return;
+  var entries=null,loadPromise=null,previousFocus=null;
+  function loadEntries(){
+    if(entries)return Promise.resolve(entries);
+    if(!loadPromise)loadPromise=fetch('/search-index.json',{credentials:'same-origin'}).then(function(response){if(!response.ok)throw new Error('Search index unavailable');return response.json();}).then(function(data){entries=data;return data;});
+    return loadPromise;
+  }
+  function clean(value){return value.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
+  function escapeHtml(value){return String(value).replace(/[&<>\"]/g,function(char){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char];});}
+  function score(entry,query){
+    var title=clean(entry.title),text=clean(entry.text),category=clean(entry.category),tokens=query.split(' ').filter(Boolean),score=0;
+    if(title===query)score+=120; else if(title.indexOf(query)>-1)score+=70;
+    if(text.indexOf(query)>-1)score+=25;
+    tokens.forEach(function(token){if(title.indexOf(token)>-1)score+=18;if(category.indexOf(token)>-1)score+=8;if(text.indexOf(token)>-1)score+=3;});
+    if(tokens.length&&tokens.every(function(token){return (title+' '+text+' '+category).indexOf(token)>-1;}))score+=20;
+    return score;
+  }
+  function card(entry){return '<a class="search-result" href="'+escapeHtml(entry.url)+'"><span class="search-result-type">'+escapeHtml(entry.category)+'</span><strong>'+escapeHtml(entry.title)+'</strong><span>'+escapeHtml(entry.type==='guide'?(entry.meta||entry.text):entry.text)+'</span></a>';}
+  function render(){
+    var query=clean(input.value),url=new URL(window.location.href);
+    if(input.value.trim())url.searchParams.set('q',input.value.trim());else url.searchParams.delete('q');
+    history.replaceState(null,'',url.pathname+url.search+url.hash);
+    if(!query){results.innerHTML='';hint.hidden=false;return;}
+    hint.hidden=true;
+    if(!entries){results.innerHTML='<div class="search-loading">Searching…</div>';return;}
+    var ranked=entries.map(function(entry){return {entry:entry,score:score(entry,query)};}).filter(function(item){return item.score>0;}).sort(function(a,b){return b.score-a.score;});
+    var answers=ranked.filter(function(item){return item.entry.type==='answer';}).slice(0,6),guides=ranked.filter(function(item){return item.entry.type==='guide';}).slice(0,6);
+    if(!answers.length&&!guides.length){results.innerHTML='<div class="search-empty"><strong>No matches yet.</strong><p>Try fewer words, a symptom, or a behavior such as “barking.”</p><a href="/contact/">Tell us what answer is missing →</a></div>';return;}
+    results.innerHTML=(answers.length?'<section><h3>Quick Answers <span>'+answers.length+'</span></h3><div class="search-result-grid">'+answers.map(function(item){return card(item.entry);}).join('')+'</div></section>':'')+(guides.length?'<section><h3>Deep-Dive Guides <span>'+guides.length+'</span></h3><div class="search-result-grid">'+guides.map(function(item){return card(item.entry);}).join('')+'</div></section>':'');
+  }
+  function openSearch(){
+    previousFocus=document.activeElement;
+    var mobileMenu=document.getElementById('mobileMenu'),mobileToggle=document.querySelector('.mobile-toggle');
+    if(previousFocus&&previousFocus.closest&&previousFocus.closest('.mobile-menu'))previousFocus=mobileToggle;
+    if(mobileMenu)mobileMenu.classList.remove('open');
+    if(mobileToggle){mobileToggle.setAttribute('aria-expanded','false');mobileToggle.setAttribute('aria-label','Open navigation');}
+    document.body.classList.remove('menu-open');dialog.hidden=false;document.body.classList.add('search-open');
+    var query=new URL(window.location.href).searchParams.get('q')||'';input.value=query;render();
+    loadEntries().then(render).catch(function(){hint.hidden=true;results.innerHTML='<div class="search-empty"><strong>Search is taking a break.</strong><p>Please try again, or browse the question library.</p><a href="/faq/">Browse all answers →</a></div>';});
+    window.setTimeout(function(){input.focus();},0);
+  }
+  function closeSearch(){
+    dialog.hidden=true;document.body.classList.remove('search-open');
+    var url=new URL(window.location.href);url.searchParams.delete('q');history.replaceState(null,'',url.pathname+url.search+url.hash);
+    if(previousFocus&&previousFocus.focus)previousFocus.focus();
+  }
+  document.querySelectorAll('[data-search-open]').forEach(function(button){button.addEventListener('click',openSearch);});
+  document.querySelectorAll('[data-search-close]').forEach(function(button){button.addEventListener('click',closeSearch);});
+  input.addEventListener('input',render);
+  dialog.querySelector('form').addEventListener('submit',function(event){event.preventDefault();var first=results.querySelector('a');if(first)first.click();});
+  document.addEventListener('keydown',function(event){
+    if(event.key==='/'&&dialog.hidden&&!/input|textarea|select/i.test(document.activeElement.tagName)){event.preventDefault();openSearch();}
+    if(event.key==='Escape'&&!dialog.hidden){event.preventDefault();closeSearch();}
+    if(event.key==='Tab'&&!dialog.hidden){var focusable=[].slice.call(dialog.querySelectorAll('button:not([hidden]),input,a')).filter(function(el){return el.offsetParent!==null;});if(!focusable.length)return;var first=focusable[0],last=focusable[focusable.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}
+  });
+  if(new URL(window.location.href).searchParams.get('q'))openSearch();
 })();
 </script>
 ${bodyJs}
@@ -733,6 +825,7 @@ function write(rel, contents) {
 }
 
 console.log('Generating doggyseedoggydo.com ...');
+write('search-index.json', JSON.stringify(SEARCH_INDEX));
 write('styles.css', data.css.trim() + '\n' + `
 /* --- generated: link/element resets so nav/cards/buttons work as real <a> --- */
 a.nav-logo{text-decoration:none;color:inherit;cursor:pointer;}
@@ -740,9 +833,42 @@ a.blog-card{text-decoration:none;color:inherit;}
 a.pill-btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}
 a.article-back{text-decoration:none;display:inline-block;}
 .mobile-toggle{align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;line-height:1;}
-.mobile-toggle:focus-visible,.nav-links a:focus-visible,.mobile-menu a:focus-visible{outline:3px solid var(--dark);outline-offset:3px;}
+.mobile-toggle:focus-visible,.nav-links a:focus-visible,.mobile-menu a:focus-visible,.nav-search:focus-visible,.mobile-search:focus-visible,.search-close:focus-visible,.site-search-form:focus-within,.search-result:focus-visible{outline:3px solid var(--dark);outline-offset:3px;}
 body.menu-open{overflow:hidden;}
 .footer li a{display:inline-flex;align-items:center;min-height:44px;padding:4px 0;}
+.nav-search,.mobile-search{border:0;background:transparent;font:inherit;font-weight:800;color:inherit;cursor:pointer;}
+.nav-search{padding:5px 12px;border-radius:999px;font-size:.85rem;}
+.nav-search:hover{background:rgba(0,0,0,.06);}
+.mobile-search{font-size:1.2rem;padding:10px 24px;border-radius:999px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.site-search[hidden]{display:none;}
+.site-search{position:fixed;inset:0;z-index:2000;display:grid;place-items:start center;padding:7vh 20px 20px;}
+.search-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:rgba(26,26,26,.72);cursor:pointer;}
+.search-panel{position:relative;width:min(820px,100%);max-height:86vh;overflow:auto;background:var(--offwhite);border:var(--border);border-radius:18px;box-shadow:8px 8px 0 var(--dark);padding:28px;}
+.search-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:18px;}
+.search-head h2{font-size:2rem;line-height:1.05;}
+.search-eyebrow{text-transform:uppercase;letter-spacing:.12em;color:var(--orange);font-size:.72rem;font-weight:900;margin-bottom:4px;}
+.search-close{flex:0 0 44px;width:44px;height:44px;border:var(--border);border-radius:50%;background:#fff;font-size:1.7rem;font-weight:800;line-height:1;cursor:pointer;}
+.site-search-form{display:flex;align-items:center;gap:10px;background:#fff;border:var(--border);border-radius:999px;box-shadow:var(--shadow);padding:0 18px;}
+.site-search-form>span{font-size:1.3rem;font-weight:900;}
+.site-search-form input{width:100%;min-width:0;border:0;outline:0;background:transparent;padding:14px 0;font:inherit;font-size:1rem;color:var(--dark);}
+.search-hint{font-size:.82rem;color:#666;margin:14px 4px 2px;}
+.search-results section{margin-top:24px;}
+.search-results h3{font-family:var(--font-body);font-size:.86rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.search-results h3 span{display:inline-grid;place-items:center;min-width:23px;height:23px;margin-left:5px;background:var(--yellow);border:2px solid var(--dark);border-radius:50%;font-size:.7rem;}
+.search-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.search-result{display:flex;flex-direction:column;gap:3px;background:#fff;border:2px solid var(--dark);border-radius:10px;padding:13px 14px;transition:transform .12s,box-shadow .12s;}
+.search-result:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--dark);}
+.search-result-type{color:var(--orange);font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
+.search-result strong{font-size:.93rem;line-height:1.35;}
+.search-result>span:last-child{color:#666;font-size:.76rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.search-empty{text-align:center;padding:40px 16px 20px;}
+.search-loading{text-align:center;padding:40px 16px;color:#666;font-weight:800;}
+.search-empty strong{font-family:var(--font-display);font-size:1.8rem;}
+.search-empty p{color:#666;margin:4px 0 14px;}
+.search-empty a{font-weight:900;text-decoration:underline;text-decoration-thickness:2px;}
+body.search-open{overflow:hidden;}
+@media(max-width:640px){.site-search{padding:0;}.search-panel{width:100%;height:100%;max-height:none;border:0;border-radius:0;box-shadow:none;padding:20px 16px;}.search-head h2{font-size:1.65rem;}.search-result-grid{grid-template-columns:1fr;}.site-search-form input{font-size:16px;}.search-results section{margin-top:20px;}}
 .footer-h{font-size:1rem;margin-bottom:12px;}
 .related-h{margin-bottom:18px;}
 /* perf: let offscreen cards skip layout/paint until near the viewport (card images are CSS backgrounds) */

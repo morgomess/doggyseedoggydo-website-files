@@ -508,9 +508,42 @@ a.blog-card{text-decoration:none;color:inherit;}
 a.pill-btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}
 a.article-back{text-decoration:none;display:inline-block;}
 .mobile-toggle{align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;line-height:1;}
-.mobile-toggle:focus-visible,.nav-links a:focus-visible,.mobile-menu a:focus-visible{outline:3px solid var(--dark);outline-offset:3px;}
+.mobile-toggle:focus-visible,.nav-links a:focus-visible,.mobile-menu a:focus-visible,.nav-search:focus-visible,.mobile-search:focus-visible,.search-close:focus-visible,.site-search-form:focus-within,.search-result:focus-visible{outline:3px solid var(--dark);outline-offset:3px;}
 body.menu-open{overflow:hidden;}
 .footer li a{display:inline-flex;align-items:center;min-height:44px;padding:4px 0;}
+.nav-search,.mobile-search{border:0;background:transparent;font:inherit;font-weight:800;color:inherit;cursor:pointer;}
+.nav-search{padding:5px 12px;border-radius:999px;font-size:.85rem;}
+.nav-search:hover{background:rgba(0,0,0,.06);}
+.mobile-search{font-size:1.2rem;padding:10px 24px;border-radius:999px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.site-search[hidden]{display:none;}
+.site-search{position:fixed;inset:0;z-index:2000;display:grid;place-items:start center;padding:7vh 20px 20px;}
+.search-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:rgba(26,26,26,.72);cursor:pointer;}
+.search-panel{position:relative;width:min(820px,100%);max-height:86vh;overflow:auto;background:var(--offwhite);border:var(--border);border-radius:18px;box-shadow:8px 8px 0 var(--dark);padding:28px;}
+.search-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:18px;}
+.search-head h2{font-size:2rem;line-height:1.05;}
+.search-eyebrow{text-transform:uppercase;letter-spacing:.12em;color:var(--orange);font-size:.72rem;font-weight:900;margin-bottom:4px;}
+.search-close{flex:0 0 44px;width:44px;height:44px;border:var(--border);border-radius:50%;background:#fff;font-size:1.7rem;font-weight:800;line-height:1;cursor:pointer;}
+.site-search-form{display:flex;align-items:center;gap:10px;background:#fff;border:var(--border);border-radius:999px;box-shadow:var(--shadow);padding:0 18px;}
+.site-search-form>span{font-size:1.3rem;font-weight:900;}
+.site-search-form input{width:100%;min-width:0;border:0;outline:0;background:transparent;padding:14px 0;font:inherit;font-size:1rem;color:var(--dark);}
+.search-hint{font-size:.82rem;color:#666;margin:14px 4px 2px;}
+.search-results section{margin-top:24px;}
+.search-results h3{font-family:var(--font-body);font-size:.86rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.search-results h3 span{display:inline-grid;place-items:center;min-width:23px;height:23px;margin-left:5px;background:var(--yellow);border:2px solid var(--dark);border-radius:50%;font-size:.7rem;}
+.search-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.search-result{display:flex;flex-direction:column;gap:3px;background:#fff;border:2px solid var(--dark);border-radius:10px;padding:13px 14px;transition:transform .12s,box-shadow .12s;}
+.search-result:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--dark);}
+.search-result-type{color:var(--orange);font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
+.search-result strong{font-size:.93rem;line-height:1.35;}
+.search-result>span:last-child{color:#666;font-size:.76rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.search-empty{text-align:center;padding:40px 16px 20px;}
+.search-loading{text-align:center;padding:40px 16px;color:#666;font-weight:800;}
+.search-empty strong{font-family:var(--font-display);font-size:1.8rem;}
+.search-empty p{color:#666;margin:4px 0 14px;}
+.search-empty a{font-weight:900;text-decoration:underline;text-decoration-thickness:2px;}
+body.search-open{overflow:hidden;}
+@media(max-width:640px){.site-search{padding:0;}.search-panel{width:100%;height:100%;max-height:none;border:0;border-radius:0;box-shadow:none;padding:20px 16px;}.search-head h2{font-size:1.65rem;}.search-result-grid{grid-template-columns:1fr;}.site-search-form input{font-size:16px;}.search-results section{margin-top:20px;}}
 .footer-h{font-size:1rem;margin-bottom:12px;}
 .related-h{margin-bottom:18px;}
 /* perf: let offscreen cards skip layout/paint until near the viewport (card images are CSS backgrounds) */
