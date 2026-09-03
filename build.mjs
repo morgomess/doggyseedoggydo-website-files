@@ -19,7 +19,7 @@ import path from 'path';
 const ROOT = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
 const SITE = 'https://doggyseedoggydo.com';
 const EMAIL = 'doggysee.doggydo@yahoo.com';
-const LEGAL_UPDATED = 'August 15, 2026';
+const LEGAL_UPDATED = 'September 3, 2026';
 
 // ---------- 1. Extract content data + CSS from source ----------
 function extractData(srcPath) {
@@ -94,6 +94,13 @@ const CLARITY = `<script type="text/javascript">
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xhu42tzbp5");
 </script>`;
+
+const ORG_LD = `<script type="application/ld+json">${JSON.stringify({
+  '@context': 'https://schema.org', '@type': 'Organization', '@id': SITE + '/#organization',
+  name: 'Doggy See, Doggy Do', url: SITE + '/', logo: SITE + '/favicon.svg',
+  email: EMAIL, publishingPrinciples: SITE + '/editorial-standards/',
+  correctionsPolicy: SITE + '/corrections/',
+})}</script>`;
 
 const NAVLINKS = [
   { href: '/', key: 'home', label: 'Home' },
@@ -173,6 +180,8 @@ const footer = () => `<footer class="footer">
       <h2 class="footer-h">The Details</h2>
       <ul>
         <li><a href="/about/">About</a></li>
+        <li><a href="/editorial-standards/">Editorial Standards</a></li>
+        <li><a href="/corrections/">Corrections</a></li>
         <li><a href="/contact/">Contact</a></li>
         <li><a href="/affiliate-disclosure/">Affiliate Disclosure</a></li>
         <li><a href="/disclaimer/">Disclaimer</a></li>
@@ -206,7 +215,7 @@ function page({ title, desc, canonical, active, content, jsonld = '', bodyJs = '
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="/styles.css">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-${extraHead ? extraHead + '\n' : ''}${CLARITY}${jsonld ? '\n' + jsonld : ''}
+${extraHead ? extraHead + '\n' : ''}${CLARITY}${ORG_LD}${jsonld ? '\n' + jsonld : ''}
 </head>
 <body>
 ${nav(active)}
@@ -443,6 +452,7 @@ function buildArticle(i) {
     <div class="article-head">
       <h1>${esc(p.title)}</h1>
       <div class="article-meta"><span>${p.date}</span><span>•</span><span>${p.read}</span><span>•</span><span>${p.tag}</span></div>
+      <div class="editorial-byline"><span class="editorial-mark" aria-hidden="true">🐾</span><span>By the <strong>Doggy See, Doggy Do Editorial Team</strong><br><a href="/editorial-standards/">How we research and review our content</a></span></div>
     </div>
     <div class="article-body">${body}</div>
     <div class="article-related">
@@ -454,8 +464,8 @@ function buildArticle(i) {
     '@context': 'https://schema.org', '@type': 'BlogPosting',
     headline: p.title, description: p.excerpt, image: SITE + imgFor(p),
     datePublished: isoDate(p.date), dateModified: isoDate(p.date),
-    author: { '@type': 'Organization', name: 'Doggy See, Doggy Do' },
-    publisher: { '@type': 'Organization', name: 'Doggy See, Doggy Do' },
+    author: { '@id': SITE + '/#organization' },
+    publisher: { '@id': SITE + '/#organization' },
     mainEntityOfPage: SITE + urlFor(i),
   })}</script>`;
   return page({
@@ -574,14 +584,14 @@ const LEGAL = [
   {
     slug: 'about',
     label: 'About',
-    title: 'About Doggy See, Doggy Do | Who Writes This Site',
-    desc: 'Who is behind Doggy See, Doggy Do, how our dog care and training content gets written, and the sources we rely on.',
+    title: 'About Doggy See, Doggy Do | How We Publish',
+    desc: 'Why Doggy See, Doggy Do exists, how our faceless editorial brand publishes dog care content, and where our limits are.',
     h1: 'About This Site',
     kicker: 'Straight answers for dog people, without the gatekeeping.',
     body: `<p class="lead">Doggy See, Doggy Do exists because getting a straight answer about your dog online is unreasonably hard. Every search turns into ten tabs, four contradictory opinions, and a forum thread from 2011. We wanted one place where the answer is just there.</p>
 
-<h2>Who runs this</h2>
-<p>This site is published by Morgan Messick, a dog owner who got tired of the runaround. We are not veterinarians and we do not pretend to be. What we are is careful: we read the research, we lean on the people who do have the credentials, and we write it down in language that makes sense at 11pm when your puppy will not stop biting.</p>
+<h2>Who publishes this site</h2>
+<p>Doggy See, Doggy Do is a faceless editorial brand. We keep the focus on useful answers rather than personalities, and we do not use invented expert profiles or borrowed credentials. We are not veterinarians and we do not pretend to be. Our responsibility is to make our process visible: what sources we use, where our limits are, and how we correct the record.</p>
 
 <h2>How the content gets made</h2>
 <ul>
@@ -591,6 +601,7 @@ const LEGAL = [
 <li>Every article carries a publication date so you can judge how current it is.</li>
 <li>When we get something wrong and find out, we fix it rather than quietly leaving it up.</li>
 </ul>
+<p>Read the complete <a href="/editorial-standards/">Editorial Standards</a> and <a href="/corrections/">Corrections Policy</a>.</p>
 
 <h2>What we will not do</h2>
 <p>We will not tell you your dog has a specific condition. We will not talk you out of a vet visit. We will not recommend a product because someone paid us to, and we will not leave a recommendation up once we stop believing in it. If a company wants coverage here, the answer is that coverage is not for sale.</p>
@@ -600,6 +611,77 @@ const LEGAL = [
 
 <h2>Say hello</h2>
 <p>Questions, corrections, and "you got this wrong" emails are all welcome at ${mail}. Corrections especially.</p>`,
+  },
+  {
+    slug: 'editorial-standards',
+    label: 'Editorial Standards',
+    title: 'Editorial Standards | Doggy See, Doggy Do',
+    desc: 'How the Doggy See, Doggy Do editorial team researches, writes, reviews, updates, and labels dog care content.',
+    h1: 'Editorial Standards',
+    kicker: 'The process behind every answer, without fake experts or mystery claims.',
+    body: `<p class="lead">Doggy See, Doggy Do is a faceless editorial brand. That makes transparency about our process more important, not less. These standards explain how we choose topics, evaluate evidence, write recommendations, and handle the limits of general dog-care information.</p>
+
+<h2>Who writes the content</h2>
+<p>Articles are published by the Doggy See, Doggy Do Editorial Team. We do not attach invented biographies, stock-photo experts, or qualifications we do not hold. An editorial-team byline means the work represents this site's process and standards; it does not imply veterinary review.</p>
+
+<h2>Our source hierarchy</h2>
+<p>We prefer the most direct and authoritative source available for a claim. Depending on the topic, that includes peer-reviewed research, veterinary schools, government agencies, veterinary professional associations, credentialed veterinary behaviorists, and established animal-welfare organizations. We use commercial sources for product specifications, not as the sole authority for health or safety claims.</p>
+
+<h2>How an article is made</h2>
+<ol>
+<li><strong>Define the question.</strong> We identify what a dog owner is trying to decide or do.</li>
+<li><strong>Check the evidence.</strong> We compare current authoritative guidance and look for meaningful disagreement or limitations.</li>
+<li><strong>Write for action.</strong> We translate the evidence into practical steps without presenting general information as a diagnosis.</li>
+<li><strong>Check the boundaries.</strong> Health, nutrition, safety, aggression, and severe-anxiety content must identify when professional help is appropriate.</li>
+<li><strong>Publish with context.</strong> Articles show a publication date, topic, scope, and links to these standards.</li>
+</ol>
+
+<h2>Health and veterinary content</h2>
+<p>Our health content is educational. It cannot diagnose, examine, prescribe for, or establish a veterinarian-client-patient relationship with your dog. We distinguish routine care from warning signs and direct readers to a veterinarian when an individual assessment is needed. We never use “medically reviewed” or “vet reviewed” unless a real, appropriately qualified reviewer has reviewed that specific page.</p>
+
+<h2>Training and behavior content</h2>
+<p>We favor humane, evidence-informed training and management. We do not present punishment or fear as shortcuts. Aggression, sudden behavioral change, severe anxiety, and behavior that may be driven by pain should involve a qualified professional and, where appropriate, a veterinarian.</p>
+
+<h2>Products, affiliates, and commercial influence</h2>
+<p>Commercial relationships do not determine coverage or conclusions. Affiliate links are disclosed, sponsored material must be labeled before the content begins, and a company cannot buy a positive editorial recommendation. Our full commercial policy is in the <a href="/affiliate-disclosure/">Affiliate Disclosure</a>.</p>
+
+<h2>Dates, updates, and corrections</h2>
+<p>Publication dates show when an article first appeared. When a substantive review changes or revalidates the guidance, we add an updated date. Material errors are corrected and disclosed according to our <a href="/corrections/">Corrections Policy</a>.</p>
+
+<h2>Contact the editorial team</h2>
+<p>Questions about a source, claim, recommendation, or possible error can be sent to ${mail}. Include the page URL and the passage you are asking about so we can investigate it efficiently.</p>`,
+  },
+  {
+    slug: 'corrections',
+    label: 'Corrections',
+    title: 'Corrections Policy | Doggy See, Doggy Do',
+    desc: 'How to report an error and how Doggy See, Doggy Do investigates, corrects, and discloses changes to published content.',
+    h1: 'Corrections Policy',
+    kicker: 'If the record is wrong, we fix the record.',
+    body: `<p class="lead">Accuracy matters more than defending old copy. We welcome specific correction requests and review them against the strongest available evidence.</p>
+
+<h2>How to report an error</h2>
+<p>Email ${mail} with the subject line “Correction.” Include the page URL, the statement you believe is wrong, why it is wrong, and any authoritative source that supports the correction. You do not need to be an expert to flag a problem.</p>
+
+<h2>What happens next</h2>
+<ol>
+<li>We locate the original claim and the source or reasoning behind it.</li>
+<li>We compare the request with current authoritative evidence.</li>
+<li>We correct the page when the evidence supports a change.</li>
+<li>For material corrections, we add a dated correction note explaining what changed.</li>
+</ol>
+
+<h2>Material versus minor changes</h2>
+<p>A material correction changes the meaning of health, safety, nutrition, behavior, product, or factual guidance. Material corrections receive a visible note on the affected page. Spelling, grammar, formatting, link repairs, and wording changes that do not alter meaning may be fixed without a correction note.</p>
+
+<h2>Updates are not corrections</h2>
+<p>Guidance can change even when the original article was accurate at publication. Substantive refreshes receive an updated date. If the earlier guidance was materially wrong, we label the change as a correction as well as an update.</p>
+
+<h2>Disagreements and unresolved evidence</h2>
+<p>Not every disagreement proves an error. When reputable sources conflict, we aim to describe the uncertainty rather than manufacture a single confident answer. We may decline a requested change when the evidence does not support it, but we will reassess when better evidence becomes available.</p>
+
+<h2>Corrections log</h2>
+<p>No material corrections are currently recorded. Future material corrections will be listed here and on the affected article.</p>`,
   },
   {
     slug: 'contact',
@@ -898,6 +980,7 @@ button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;
 .legal-body{padding-top:26px;}
 .legal-body h2{margin-top:34px;}
 .legal-body ul{margin:0 0 18px 22px;}
+.legal-body ol{margin:0 0 18px 22px;}
 .legal-body li{margin-bottom:8px;}
 .legal-body a{color:var(--dark);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
 .legal-body a:hover{color:var(--orange);}
@@ -906,6 +989,9 @@ button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;
 .legal-nav a{font-size:0.8rem;font-weight:800;color:var(--dark);text-decoration:none;background:#fff;border:2px solid var(--dark);border-radius:999px;padding:5px 14px;}
 .legal-nav a:hover{background:var(--yellow);}
 .legal-nav a.active{background:var(--dark);color:#fff;}
+.editorial-byline{display:flex;align-items:center;gap:10px;margin-top:18px;padding:12px 14px;background:#fff;border:2px solid var(--dark);border-radius:10px;font-size:.8rem;line-height:1.45;}
+.editorial-mark{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;background:var(--yellow);border:2px solid var(--dark);border-radius:50%;}
+.editorial-byline a{font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
 /* footer: 4th column + sitewide disclosure line */
 .footer-grid{grid-template-columns:1.5fr 1fr 1fr 1fr;}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
