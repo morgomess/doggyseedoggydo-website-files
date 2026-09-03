@@ -437,8 +437,41 @@ function filterBlog(t,b){
   });
 }
 
+const EVIDENCE_REVIEWED = 'September 3, 2026';
+const ARTICLE_SOURCES = {
+  'signs-your-dog-is-sick': [
+    ['When to See a Veterinarian', 'Merck Veterinary Manual', 'https://www.merckvetmanual.com/multimedia/table/when-to-see-a-veterinarian'],
+    ['Help! Is This a Pet Emergency?', 'American Animal Hospital Association', 'https://www.aaha.org/resources/help-is-this-a-pet-emergency/'],
+    ['Recognizing Canine Respiratory Distress', 'Cornell University College of Veterinary Medicine', 'https://www.vet.cornell.edu/departments-centers-and-institutes/riney-canine-health-center/canine-health-topics/recognizing-and-responding-canine-respiratory-distress'],
+  ],
+  'raw-vs-kibble-vs-fresh-dog-food': [
+    ['Raw Pet Food Diets Can Be Dangerous', 'U.S. Food and Drug Administration', 'https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-raw-pet-food-diets-can-be-dangerous-you-and-your-pet'],
+    ['Complete and Balanced Pet Food', 'U.S. Food and Drug Administration', 'https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food'],
+    ['Selecting the Right Pet Food', 'AAFCO', 'https://www.aafco.org/consumers/understanding-pet-food/selecting-the-right-pet-food'],
+  ],
+  'fleas-ticks-late-summer-prevention-dogs': [
+    ['Preventing Ticks on Pets', 'U.S. Centers for Disease Control and Prevention', 'https://www.cdc.gov/ticks/prevention/preventing-ticks-on-pets.html'],
+    ['Controlling Fleas and Ticks on Your Pet', 'U.S. Environmental Protection Agency', 'https://www.epa.gov/pets/controlling-fleas-and-ticks-your-pet'],
+  ],
+  'dog-summer-safety-heat-pavement-cooling': [
+    ['Summer Heat Safety Tips for Dogs', 'Cornell University College of Veterinary Medicine', 'https://www.vet.cornell.edu/departments-centers-and-institutes/riney-canine-health-center/canine-health-topics/summer-heat-safety-tips-dogs'],
+    ['What to Do in a Dog or Cat Emergency', 'Merck Veterinary Manual', 'https://www.merckvetmanual.com/special-pet-topics/emergencies/what-to-do-in-a-dog-or-cat-emergency'],
+  ],
+  'senior-dog-care-guide': [
+    ['2023 AAHA Senior Care Guidelines for Dogs and Cats', 'American Animal Hospital Association', 'https://www.aaha.org/resources/2023-aaha-senior-care-guidelines-for-dogs-and-cats/'],
+    ['Routine Health Care of Dogs', 'Merck Veterinary Manual', 'https://www.merckvetmanual.com/dog-owners/routine-care-of-dogs/routine-health-care-of-dogs'],
+  ],
+  'dog-food-label-decoder': [
+    ['Reading Pet Food Labels', 'AAFCO', 'https://aafco.org/consumers/understanding-pet-food/reading-labels/'],
+    ['Complete and Balanced Pet Food', 'U.S. Food and Drug Administration', 'https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food'],
+    ['Animal Food Labeling and Pet Food Claims', 'U.S. Food and Drug Administration', 'https://www.fda.gov/animal-veterinary/animal-foods-feeds/animal-food-labeling-and-pet-food-claims'],
+  ],
+};
+
 function buildArticle(i) {
   const p = data.blogPosts[i];
+  const slug = SLUGS[i];
+  const sources = ARTICLE_SOURCES[slug] || [];
   const body = data.postBodies[i] || '<p>This article is coming soon.</p>';
   const related = data.blogPosts.map((_, j) => j).filter(j => j !== i)
     .sort((a, b) => (data.blogPosts[b].tag === p.tag) - (data.blogPosts[a].tag === p.tag))
@@ -454,7 +487,7 @@ function buildArticle(i) {
       <div class="article-meta"><span>${p.date}</span><span>•</span><span>${p.read}</span><span>•</span><span>${p.tag}</span></div>
       <div class="editorial-byline"><span class="editorial-mark" aria-hidden="true">🐾</span><span>By the <strong>Doggy See, Doggy Do Editorial Team</strong><br><a href="/editorial-standards/">How we research and review our content</a></span></div>
     </div>
-    <div class="article-body">${body}</div>
+    <div class="article-body">${body}${sources.length ? `<aside class="evidence-note" aria-label="Editorial review note"><strong>Educational information—not veterinary advice.</strong> This guide was checked against the sources below on ${EVIDENCE_REVIEWED}. A source review is not the same as review by a veterinarian who has examined your dog.</aside><section class="article-sources" aria-labelledby="sources-title"><h2 id="sources-title">Sources &amp; further reading</h2><ol>${sources.map(source => `<li><a href="${source[2]}" target="_blank" rel="noopener">${esc(source[0])}</a><span>${esc(source[1])}</span></li>`).join('')}</ol><p>Sources support the core health, safety, or nutrition guidance in this article. <a href="/editorial-standards/">Read our editorial standards</a>.</p></section>` : ''}</div>
     <div class="article-related">
       <h2 class="related-h">Keep reading</h2>
       <div class="grid-3">${related}</div>
@@ -466,6 +499,7 @@ function buildArticle(i) {
     datePublished: isoDate(p.date), dateModified: isoDate(p.date),
     author: { '@id': SITE + '/#organization' },
     publisher: { '@id': SITE + '/#organization' },
+    ...(sources.length ? { dateModified: isoDate(EVIDENCE_REVIEWED), citation: sources.map(source => source[2]) } : {}),
     mainEntityOfPage: SITE + urlFor(i),
   })}</script>`;
   return page({
@@ -992,6 +1026,15 @@ button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;
 .editorial-byline{display:flex;align-items:center;gap:10px;margin-top:18px;padding:12px 14px;background:#fff;border:2px solid var(--dark);border-radius:10px;font-size:.8rem;line-height:1.45;}
 .editorial-mark{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;background:var(--yellow);border:2px solid var(--dark);border-radius:50%;}
 .editorial-byline a{font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
+.evidence-note{margin:34px 0 28px;padding:18px 20px;background:#fff8e6;border:var(--border);border-left:8px solid var(--orange);border-radius:var(--radius);font-size:.86rem;line-height:1.6;}
+.evidence-note strong{display:block;margin-bottom:3px;}
+.article-sources{margin-top:30px;padding-top:26px;border-top:3px solid var(--dark);}
+.article-sources h2{margin-top:0;}
+.article-sources ol{margin:0 0 14px 22px;}
+.article-sources li{padding:7px 0;}
+.article-sources li a{font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
+.article-sources li span{display:block;color:#666;font-size:.8rem;}
+.article-sources>p{font-size:.8rem;color:#666;}
 /* footer: 4th column + sitewide disclosure line */
 .footer-grid{grid-template-columns:1.5fr 1fr 1fr 1fr;}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
