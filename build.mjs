@@ -108,7 +108,7 @@ const nav = active => `<nav class="nav">
     <ul class="nav-links">
       ${NAVLINKS.map(l => `<li><a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a></li>`).join('\n      ')}
     </ul>
-    <button class="mobile-toggle" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
+    <button type="button" class="mobile-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu"><span aria-hidden="true">☰</span></button>
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
@@ -133,10 +133,10 @@ const footer = () => `<footer class="footer">
     <div>
       <h2 class="footer-h">Popular Topics</h2>
       <ul>
-        <li><a href="/faq/">Puppy Training</a></li>
-        <li><a href="/faq/">Dog Nutrition</a></li>
-        <li><a href="/faq/">Fixing Bad Habits</a></li>
-        <li><a href="/blog/">Health &amp; Wellness</a></li>
+        <li><a href="/faq/#faq-puppy-life">Puppy Training</a></li>
+        <li><a href="/faq/#faq-feeding">Dog Nutrition</a></li>
+        <li><a href="/faq/#faq-training">Fixing Bad Habits</a></li>
+        <li><a href="/faq/#faq-health">Health &amp; Wellness</a></li>
       </ul>
     </div>
     <div>
@@ -182,6 +182,22 @@ ${extraHead ? extraHead + '\n' : ''}${CLARITY}${jsonld ? '\n' + jsonld : ''}
 ${nav(active)}
 ${content}
 ${footer()}
+<script>
+(function(){
+  var button=document.querySelector('.mobile-toggle'),menu=document.getElementById('mobileMenu');
+  if(!button||!menu)return;
+  function setOpen(open){
+    menu.classList.toggle('open',open);
+    button.setAttribute('aria-expanded',String(open));
+    button.setAttribute('aria-label',open?'Close navigation':'Open navigation');
+    document.body.classList.toggle('menu-open',open);
+  }
+  button.addEventListener('click',function(){setOpen(button.getAttribute('aria-expanded')!=='true');});
+  menu.addEventListener('click',function(event){if(event.target.closest('a'))setOpen(false);});
+  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true'){setOpen(false);button.focus();}});
+  document.addEventListener('click',function(event){if(button.getAttribute('aria-expanded')==='true'&&!menu.contains(event.target)&&!button.contains(event.target))setOpen(false);});
+})();
+</script>
 ${bodyJs}
 </body>
 </html>
@@ -224,7 +240,7 @@ function buildHome() {
   const content = `<section class="hero-home">
     <div class="hero-home-inner">
       <div>
-        <div class="hero-badge"><span class="star">⭐</span> Rated #1 by Good Boys &amp; Girls</div>
+        <div class="hero-badge"><span class="star" aria-hidden="true">🐾</span> Practical advice for real-life dog people</div>
         <h1>Every Dog Question,<br>Answered.</h1>
         <p>Straight answers to every dog question. Training, food, health and puppy tips that actually work. Because Google (and ChatGPT) doesn't have a dog. 🐾</p>
         <div class="hero-btns">
@@ -723,6 +739,10 @@ a.nav-logo{text-decoration:none;color:inherit;cursor:pointer;}
 a.blog-card{text-decoration:none;color:inherit;}
 a.pill-btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}
 a.article-back{text-decoration:none;display:inline-block;}
+.mobile-toggle{align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;line-height:1;}
+.mobile-toggle:focus-visible,.nav-links a:focus-visible,.mobile-menu a:focus-visible{outline:3px solid var(--dark);outline-offset:3px;}
+body.menu-open{overflow:hidden;}
+.footer li a{display:inline-flex;align-items:center;min-height:44px;padding:4px 0;}
 .footer-h{font-size:1rem;margin-bottom:12px;}
 .related-h{margin-bottom:18px;}
 /* perf: let offscreen cards skip layout/paint until near the viewport (card images are CSS backgrounds) */

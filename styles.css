@@ -507,6 +507,10 @@ a.nav-logo{text-decoration:none;color:inherit;cursor:pointer;}
 a.blog-card{text-decoration:none;color:inherit;}
 a.pill-btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}
 a.article-back{text-decoration:none;display:inline-block;}
+.mobile-toggle{align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;line-height:1;}
+.mobile-toggle:focus-visible,.nav-links a:focus-visible,.mobile-menu a:focus-visible{outline:3px solid var(--dark);outline-offset:3px;}
+body.menu-open{overflow:hidden;}
+.footer li a{display:inline-flex;align-items:center;min-height:44px;padding:4px 0;}
 .footer-h{font-size:1rem;margin-bottom:12px;}
 .related-h{margin-bottom:18px;}
 /* perf: let offscreen cards skip layout/paint until near the viewport (card images are CSS backgrounds) */

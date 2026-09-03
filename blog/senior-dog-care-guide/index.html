@@ -37,7 +37,7 @@
       <li><a href="/blog/" class="active">Blog</a></li>
       <li><a href="/resources/">Resources</a></li>
     </ul>
-    <button class="mobile-toggle" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
+    <button type="button" class="mobile-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu"><span aria-hidden="true">☰</span></button>
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
@@ -118,10 +118,10 @@
     <div>
       <h2 class="footer-h">Popular Topics</h2>
       <ul>
-        <li><a href="/faq/">Puppy Training</a></li>
-        <li><a href="/faq/">Dog Nutrition</a></li>
-        <li><a href="/faq/">Fixing Bad Habits</a></li>
-        <li><a href="/blog/">Health &amp; Wellness</a></li>
+        <li><a href="/faq/#faq-puppy-life">Puppy Training</a></li>
+        <li><a href="/faq/#faq-feeding">Dog Nutrition</a></li>
+        <li><a href="/faq/#faq-training">Fixing Bad Habits</a></li>
+        <li><a href="/faq/#faq-health">Health &amp; Wellness</a></li>
       </ul>
     </div>
     <div>
@@ -140,6 +140,22 @@
     <span class="footer-bottom-links"><a href="/privacy/">Privacy Policy</a><a href="/terms/">Terms and Conditions</a></span>
   </div>
 </footer>
+<script>
+(function(){
+  var button=document.querySelector('.mobile-toggle'),menu=document.getElementById('mobileMenu');
+  if(!button||!menu)return;
+  function setOpen(open){
+    menu.classList.toggle('open',open);
+    button.setAttribute('aria-expanded',String(open));
+    button.setAttribute('aria-label',open?'Close navigation':'Open navigation');
+    document.body.classList.toggle('menu-open',open);
+  }
+  button.addEventListener('click',function(){setOpen(button.getAttribute('aria-expanded')!=='true');});
+  menu.addEventListener('click',function(event){if(event.target.closest('a'))setOpen(false);});
+  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true'){setOpen(false);button.focus();}});
+  document.addEventListener('click',function(event){if(button.getAttribute('aria-expanded')==='true'&&!menu.contains(event.target)&&!button.contains(event.target))setOpen(false);});
+})();
+</script>
 
 </body>
 </html>
