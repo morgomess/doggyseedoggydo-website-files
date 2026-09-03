@@ -195,7 +195,17 @@ const footer = () => `<footer class="footer">
   </div>
 </footer>`;
 
-function page({ title, desc, canonical, active, content, jsonld = '', bodyJs = '', extraHead = '' }) {
+function breadcrumbNav(items) {
+  return `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li>${items.map((item, i) => `<li>${i === items.length - 1 ? `<span aria-current="page">${esc(item.label)}</span>` : `<a href="${item.href}">${esc(item.label)}</a>`}</li>`).join('')}</ol></nav>`;
+}
+
+function page({ title, desc, canonical, active, content, jsonld = '', bodyJs = '', extraHead = '', breadcrumbs = [] }) {
+  const breadcrumbLd = breadcrumbs.length ? `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [{ label: 'Home', href: '/' }, ...breadcrumbs].map((item, i) => ({
+      '@type': 'ListItem', position: i + 1, name: item.label, item: SITE + item.href,
+    })),
+  })}</script>` : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -215,11 +225,12 @@ function page({ title, desc, canonical, active, content, jsonld = '', bodyJs = '
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="/styles.css">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-${extraHead ? extraHead + '\n' : ''}${CLARITY}${ORG_LD}${jsonld ? '\n' + jsonld : ''}
+${extraHead ? extraHead + '\n' : ''}${CLARITY}${ORG_LD}${jsonld ? '\n' + jsonld : ''}${breadcrumbLd}
 </head>
 <body>
 ${nav(active)}
 ${siteSearch()}
+${breadcrumbs.length ? breadcrumbNav(breadcrumbs) : ''}
 ${content}
 ${footer()}
 <script>
@@ -434,6 +445,7 @@ function filterBlog(t,b){
     title: 'Dog Care Blog - Deep-Dive Guides | Doggy See, Doggy Do',
     desc: 'In-depth dog guides on training, nutrition, health, grooming, puppies, and senior care. Researched, practical, and free of fluff.',
     canonical: '/blog/', active: 'blog', content, bodyJs,
+    breadcrumbs: [{ label: 'Blog', href: '/blog/' }],
   });
 }
 
@@ -506,6 +518,7 @@ function buildArticle(i) {
     title: `${p.title} | Doggy See, Doggy Do`,
     desc: p.excerpt, canonical: urlFor(i), active: 'blog', content, jsonld,
     extraHead: `<link rel="preload" as="image" href="${imgFor(p)}" fetchpriority="high">`,
+    breadcrumbs: [{ label: 'Blog', href: '/blog/' }, { label: p.title, href: urlFor(i) }],
   });
 }
 
@@ -566,6 +579,7 @@ window.addEventListener('hashchange',openFromHash);
     title: 'How Do I...? Common Dog Questions Answered | Doggy See, Doggy Do',
     desc: 'Straight answers to the most common dog questions — training, behavior, health, grooming, and more. Search 50+ answered questions.',
     canonical: '/faq/', active: 'faq', content, jsonld, bodyJs,
+    breadcrumbs: [{ label: 'How Do I...?', href: '/faq/' }],
   });
 }
 
@@ -590,6 +604,7 @@ function buildResources() {
     title: 'Dog Resources & Recommended Products | Doggy See, Doggy Do',
     desc: 'Vetted dog training resources, trusted health references, and pet products we have actually tested and recommend.',
     canonical: '/resources/', active: 'resources', content,
+    breadcrumbs: [{ label: 'Resources', href: '/resources/' }],
   });
 }
 
@@ -929,6 +944,7 @@ function buildLegal(l) {
   </div>`;
   return page({
     title: l.title, desc: l.desc, canonical: `/${l.slug}/`, active: l.slug, content,
+    breadcrumbs: [{ label: l.label, href: `/${l.slug}/` }],
   });
 }
 
@@ -952,6 +968,14 @@ a.article-back{text-decoration:none;display:inline-block;}
 .mobile-toggle:focus-visible,.nav-links a:focus-visible,.mobile-menu a:focus-visible,.nav-search:focus-visible,.mobile-search:focus-visible,.search-close:focus-visible,.site-search-form:focus-within,.search-result:focus-visible{outline:3px solid var(--dark);outline-offset:3px;}
 body.menu-open{overflow:hidden;}
 .footer li a{display:inline-flex;align-items:center;min-height:44px;padding:4px 0;}
+.breadcrumbs{max-width:1200px;margin:0 auto;padding:11px 24px 10px;font-size:.76rem;color:#666;}
+.breadcrumbs ol{display:flex;align-items:center;gap:8px;list-style:none;min-width:0;}
+.breadcrumbs li{display:flex;align-items:center;min-width:0;}
+.breadcrumbs li+li::before{content:'›';margin-right:8px;color:var(--orange);font-weight:900;}
+.breadcrumbs a{font-weight:800;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:2px;}
+.breadcrumbs a:hover{color:var(--orange);}
+.breadcrumbs [aria-current="page"]{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+@media(max-width:640px){.breadcrumbs{padding:9px 16px 8px;}.breadcrumbs li:last-child{overflow:hidden;}.breadcrumbs li:not(:first-child):not(:last-child){display:none;}.breadcrumbs li:last-child::before{content:'›';}}
 .nav-search,.mobile-search{border:0;background:transparent;font:inherit;font-weight:800;color:inherit;cursor:pointer;}
 .nav-search{padding:5px 12px;border-radius:999px;font-size:.85rem;}
 .nav-search:hover{background:rgba(0,0,0,.06);}
