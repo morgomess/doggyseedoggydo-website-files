@@ -542,12 +542,116 @@ const ARTICLE_SOURCES = {
   ],
 };
 
+const SEO_OVERRIDES = {
+  'how-to-trim-dog-nails-without-the-struggle': {
+    title: 'How to Trim Black Dog Nails Safely and Find the Quick',
+    desc: 'Learn how to trim black dog nails safely, spot the quick from the cut surface, choose clippers or a grinder, and stop bleeding if you cut too far.',
+  },
+  'puppy-potty-training-no-drama-house-training-guide': {
+    title: 'Apartment Puppy Potty Training: Schedule and Tips',
+    desc: 'Use this apartment puppy potty-training schedule for elevators, shared spaces, no-yard homes, accidents, crate timing, and safe outdoor trips.',
+  },
+  'beat-dog-boredom': {
+    title: 'Is My Dog Bored? Signs and 8 Easy Enrichment Ideas',
+    desc: 'Learn the common signs of dog boredom, how it differs from separation anxiety, and eight indoor enrichment ideas that do not require expensive toys.',
+  },
+  'dog-separation-anxiety-guide': {
+    title: 'Dog Separation Anxiety vs. Boredom: Signs and Solutions',
+    desc: 'Compare dog separation anxiety with boredom, learn what a home camera can reveal, and build a gradual plan for calmer time alone.',
+  },
+  'how-to-stop-dog-jumping-on-guests': {
+    title: 'How to Stop a Dog Jumping on Guests at the Door',
+    desc: 'Use this practical front-door training plan to stop your dog jumping on guests, rehearse calm greetings, and manage exciting arrivals without yelling.',
+  },
+  '3-3-3-decompression-guide-rescue-dogs': {
+    title: '3-3-3 Rule for Rescue Dogs: What to Expect',
+  },
+  'brushing-your-dogs-teeth': {
+    title: 'How Often Should You Brush Your Dog\'s Teeth?',
+    desc: 'Learn how often to brush your dog\'s teeth, which toothpaste and brush to use, how to build cooperation, and when professional dental care is needed.',
+  },
+  'how-to-stop-puppy-biting': {
+    title: 'How to Stop Puppy Biting Hands, Clothes, and Legs',
+  },
+  'how-to-teach-dog-to-stay-duration-distance-distraction': {
+    title: 'How to Teach a Dog to Stay: Duration, Distance, Distraction',
+    desc: 'Teach your dog a reliable stay by building duration, distance, and distraction separately. Follow a clear progression and avoid the common setbacks.',
+  },
+  'dog-body-language-what-your-dog-is-telling-you': {
+    title: 'Dog Body Language: Stress Signals and Warning Signs',
+  },
+  'how-to-train-a-reliable-recall': {
+    desc: 'Build a reliable dog recall with high-value rewards, short practice sessions, and gradual distractions. Learn what to do when your dog ignores the cue.',
+  },
+  'fleas-ticks-late-summer-prevention-dogs': {
+    title: 'Flea and Tick Prevention for Dogs in Late Summer',
+    desc: 'Protect your dog from fleas and ticks with a simple prevention routine, post-walk checks, common warning signs, and veterinarian-approved products.',
+  },
+  'crate-training-101': {
+    desc: 'Crate-train your dog with a gradual, reward-based plan for meals, naps, nighttime, whining, and comfortable time alone without using the crate as punishment.',
+  },
+  'raw-vs-kibble-vs-fresh-dog-food': {
+    title: 'Raw vs. Kibble vs. Fresh Dog Food: Evidence and Safety',
+    desc: 'Compare raw, kibble, and fresh dog food using safety, nutrition, cost, and convenience. Learn what complete and balanced means before choosing a diet.',
+  },
+  'positive-reinforcement-dog-training': {
+    title: 'Positive Reinforcement Dog Training: Why It Works',
+    desc: 'Learn why positive reinforcement dog training works, how rewards shape behavior, and why punishment can increase fear, stress, and unwanted behavior.',
+  },
+  'how-to-stop-dog-pulling-on-leash-loose-leash-walking': {
+    desc: 'Stop leash pulling with a practical loose-leash walking plan. Learn the stop-and-go method, reward timing, equipment options, and distraction practice.',
+  },
+  'essential-dog-gear-guide': {
+    desc: 'A practical dog gear checklist covering collars, harnesses, leashes, crates, bowls, beds, grooming tools, and which popular products you can skip.',
+  },
+  'dog-food-label-decoder': {
+    desc: 'Learn how to read a dog food label, including ingredient lists, guaranteed analysis, feeding trials, nutritional adequacy statements, and marketing claims.',
+  },
+  'leash-reactive-dog-training-plan': {
+    desc: 'Follow a four-week leash-reactivity training plan using distance, counterconditioning, trigger tracking, and calmer alternatives to barking and lunging.',
+  },
+  'back-to-school-dog-separation-anxiety-prep': {
+    title: 'Back-to-School Dog Routine: Prevent Separation Anxiety',
+  },
+  'dog-road-trip-safety-car-travel-tips': {
+    title: 'Dog Road Trip Safety: Carsickness and Long-Drive Tips',
+  },
+  'how-to-bathe-and-brush-your-dog-at-home': {
+    title: 'How to Bathe and Brush Your Dog at Home',
+  },
+};
+
+const ARTICLE_UPGRADES = {
+  'how-to-trim-dog-nails-without-the-struggle': `<section class="search-intent-section"><h2>How to Trim Black Dog Nails Without Hitting the Quick</h2><p>Black nails hide the quick, so do not guess how far you can cut. Work from the tip in very thin slices. After each cut, look straight at the cross-section of the nail. The dry outer material will gradually give way to a smoother center. Stop when a darker central dot becomes visible or the center begins to look soft rather than chalky.</p><ol><li>Hold the paw securely without squeezing.</li><li>Trim one thin slice from the end at a time.</li><li>Check the cut surface after every slice.</li><li>Stop before the dark center becomes prominent.</li><li>Keep styptic powder within reach before you begin.</li></ol><p>A grinder removes less nail with each pass and may feel safer for dark nails, but some dogs dislike the sound or vibration. Clippers are faster. The best tool is the one your dog can calmly tolerate while you work slowly.</p></section>`,
+  'puppy-potty-training-no-drama-house-training-guide': `<section class="search-intent-section"><h2>Apartment Puppy Potty Training Without a Yard</h2><p>Apartment potty training uses the same routine as house training, but elevators, stairs, hallways, and shared dog areas add delay. Keep the leash by the crate, carry a young puppy through the building when practical, and go directly to the same approved potty spot before greetings or play.</p><h3>A Simple Apartment Potty Schedule</h3><ul><li>Immediately after waking, eating, drinking heavily, training, and energetic play</li><li>Before entering the crate and immediately after leaving it</li><li>Every 30 to 60 minutes while a very young puppy is awake</li><li>Once or twice overnight at first, depending on age and individual needs</li></ul><p>If your puppy is not fully vaccinated, ask your veterinarian about local disease risk and safer outdoor locations. Avoid heavily trafficked dog areas until your veterinarian says they are appropriate. Indoor pads or a grass tray can be temporary management tools, but use one consistent location and transition deliberately if outdoor toileting is the long-term goal.</p></section>`,
+  'beat-dog-boredom': `<section class="search-intent-section"><h2>Is Your Dog Bored or Experiencing Separation Anxiety?</h2><p>Boredom and separation anxiety can leave similar evidence, but the pattern is different. A bored dog may explore trash, chew available objects, or invent games while alone without showing panic. Separation-related distress often begins soon after departure and can include frantic exit-focused scratching, sustained vocalizing, drooling, pacing, or house-soiling in a reliably trained dog.</p><p>Record the first 30 to 45 minutes after you leave. If your dog settles after using a food toy, boredom is more likely. If distress escalates or the dog cannot eat, enrichment alone may not solve the problem. Start with our <a href="/blog/dog-separation-anxiety-guide/">dog separation anxiety guide</a> and speak with your veterinarian or a qualified behavior professional when panic is severe.</p></section>`,
+  'how-to-stop-dog-jumping-on-guests': `<section class="search-intent-section"><h2>A Front-Door Plan for Calm Guest Greetings</h2><p>Do not make the first real guest your training session. Rehearse with one helper while your dog is on leash and the house is quiet.</p><ol><li>Set a mat several feet from the door and reward your dog for standing or settling there.</li><li>Have your helper knock once. If your dog leaves the mat, pause the arrival and reset.</li><li>Open the door only while four paws remain on the floor.</li><li>Let the guest enter without immediately touching or speaking to the dog.</li><li>Release your dog for a brief greeting, then guide them back to the mat before excitement climbs.</li></ol><p>Practice several short arrivals instead of one long visit. Consistency matters because jumping that earns attention even occasionally remains worth trying.</p></section>`,
+};
+
+const CONTEXTUAL_LINKS = {
+  'beat-dog-boredom': [['Dog separation anxiety versus boredom', '/blog/dog-separation-anxiety-guide/'], ['Exercise needs by breed and age', '/blog/how-much-exercise-does-your-dog-need-by-breed-and-age/']],
+  'brushing-your-dogs-teeth': [['Dog health and wellness guides', '/topics/dog-health/'], ['How to handle at-home grooming', '/blog/how-to-bathe-and-brush-your-dog-at-home/']],
+  'crate-training-101': [['Crate training and puppy separation anxiety', '/blog/puppy-crate-training-separation-anxiety/'], ['The first 30 days with a puppy', '/blog/first-30-days-with-a-new-puppy/']],
+  'dog-separation-anxiety-guide': [['Dog boredom signs and enrichment ideas', '/blog/beat-dog-boredom/'], ['Back-to-school separation-anxiety preparation', '/blog/back-to-school-dog-separation-anxiety-prep/']],
+  'essential-dog-gear-guide': [['How to choose walking gear for leash pulling', '/blog/how-to-stop-dog-pulling-on-leash-loose-leash-walking/'], ['Seasonal dog safety guides', '/topics/seasonal-dog-safety/']],
+  'first-30-days-with-a-new-puppy': [['Puppy potty-training schedule', '/blog/puppy-potty-training-no-drama-house-training-guide/'], ['Puppy socialization during the first 16 weeks', '/blog/puppy-socialization-guide-first-16-weeks/']],
+  'how-to-stop-puppy-biting': [['Positive reinforcement training', '/blog/positive-reinforcement-dog-training/'], ['Puppy care and training guides', '/topics/puppy-care/']],
+  'how-to-teach-leave-it': [['How to teach a reliable stay', '/blog/how-to-teach-dog-to-stay-duration-distance-distraction/'], ['Positive reinforcement training', '/blog/positive-reinforcement-dog-training/']],
+  'how-to-train-a-reliable-recall': [['How to teach leave it', '/blog/how-to-teach-leave-it/'], ['Loose-leash walking guide', '/blog/how-to-stop-dog-pulling-on-leash-loose-leash-walking/']],
+  'leash-reactive-dog-training-plan': [['Loose-leash walking guide', '/blog/how-to-stop-dog-pulling-on-leash-loose-leash-walking/'], ['Dog body-language warning signs', '/blog/dog-body-language-what-your-dog-is-telling-you/']],
+  'positive-reinforcement-dog-training': [['Dog training and behavior guides', '/topics/dog-training-behavior/'], ['How to teach leave it', '/blog/how-to-teach-leave-it/']],
+};
+
 function buildArticle(i) {
   const p = data.blogPosts[i];
   const slug = SLUGS[i];
+  const seo = SEO_OVERRIDES[slug] || {};
   const primaryTopic = primaryTopicFor(p, slug);
   const sources = ARTICLE_SOURCES[slug] || [];
   const body = data.postBodies[i] || '<p>This article is coming soon.</p>';
+  const upgrade = ARTICLE_UPGRADES[slug] || '';
+  const contextualLinks = CONTEXTUAL_LINKS[slug] || [];
+  const linkBlock = contextualLinks.length ? `<section class="article-next"><h2>Keep building on this</h2><ul>${contextualLinks.map(link => `<li><a href="${link[1]}">${esc(link[0])}</a></li>`).join('')}</ul></section>` : '';
   const related = data.blogPosts.map((_, j) => j).filter(j => j !== i)
     .sort((a, b) => (data.blogPosts[b].tag === p.tag) - (data.blogPosts[a].tag === p.tag))
     .slice(0, 3).map(blogCard).join('\n');
@@ -562,7 +666,7 @@ function buildArticle(i) {
       <div class="article-meta"><span>${p.date}</span><span>•</span><span>${p.read}</span><span>•</span>${primaryTopic ? `<a href="${topicUrl(primaryTopic)}">${primaryTopic.label}</a>` : `<span>${p.tag}</span>`}</div>
       <div class="editorial-byline"><span class="editorial-mark" aria-hidden="true">🐾</span><span>By the <strong>Doggy See, Doggy Do Editorial Team</strong><br><a href="/editorial-standards/">How we research and review our content</a></span></div>
     </div>
-    <div class="article-body">${body}${sources.length ? `<aside class="evidence-note" aria-label="Editorial review note"><strong>Educational information—not veterinary advice.</strong> This guide was checked against the sources below on ${EVIDENCE_REVIEWED}. A source review is not the same as review by a veterinarian who has examined your dog.</aside><section class="article-sources" aria-labelledby="sources-title"><h2 id="sources-title">Sources &amp; further reading</h2><ol>${sources.map(source => `<li><a href="${source[2]}" target="_blank" rel="noopener">${esc(source[0])}</a><span>${esc(source[1])}</span></li>`).join('')}</ol><p>Sources support the core health, safety, or nutrition guidance in this article. <a href="/editorial-standards/">Read our editorial standards</a>.</p></section>` : ''}</div>
+    <div class="article-body">${body}${upgrade}${linkBlock}${sources.length ? `<aside class="evidence-note" aria-label="Editorial review note"><strong>Educational information, not veterinary advice.</strong> This guide was checked against the sources below on ${EVIDENCE_REVIEWED}. A source review is not the same as review by a veterinarian who has examined your dog.</aside><section class="article-sources" aria-labelledby="sources-title"><h2 id="sources-title">Sources &amp; further reading</h2><ol>${sources.map(source => `<li><a href="${source[2]}" target="_blank" rel="noopener">${esc(source[0])}</a><span>${esc(source[1])}</span></li>`).join('')}</ol><p>Sources support the core health, safety, or nutrition guidance in this article. <a href="/editorial-standards/">Read our editorial standards</a>.</p></section>` : ''}</div>
     <div class="article-related">
       <h2 class="related-h">Keep reading</h2>
       <div class="grid-3">${related}</div>
@@ -570,7 +674,7 @@ function buildArticle(i) {
   </div>`;
   const jsonld = `<script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org', '@type': 'BlogPosting',
-    headline: p.title, description: p.excerpt, image: SITE + imgFor(p),
+    headline: p.title, description: seo.desc || p.excerpt, image: SITE + imgFor(p),
     datePublished: isoDate(p.date), dateModified: isoDate(p.date),
     author: { '@id': SITE + '/#organization' },
     publisher: { '@id': SITE + '/#organization' },
@@ -578,8 +682,8 @@ function buildArticle(i) {
     mainEntityOfPage: SITE + urlFor(i),
   })}</script>`;
   return page({
-    title: `${p.title} | Doggy See, Doggy Do`,
-    desc: p.excerpt, canonical: urlFor(i), active: 'blog', content, jsonld,
+    title: seo.title || p.title,
+    desc: seo.desc || p.excerpt, canonical: urlFor(i), active: 'blog', content, jsonld,
     extraHead: `<link rel="preload" as="image" href="${imgFor(p)}" fetchpriority="high">`,
     breadcrumbs: [{ label: 'Blog', href: '/blog/' }, ...(primaryTopic ? [{ label: primaryTopic.label, href: topicUrl(primaryTopic) }] : []), { label: p.title, href: urlFor(i) }],
   });
@@ -1122,6 +1226,17 @@ button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;
 .article-sources li a{font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
 .article-sources li span{display:block;color:#666;font-size:.8rem;}
 .article-sources>p{font-size:.8rem;color:#666;}
+.search-intent-section{margin:34px 0 26px;padding:24px;background:#fff8e6;border:var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
+.search-intent-section h2{margin-top:0;}
+.search-intent-section h3{margin-top:20px;}
+.search-intent-section ul,.search-intent-section ol{margin:0 0 16px 22px;}
+.search-intent-section li{margin-bottom:8px;line-height:1.6;}
+.article-next{margin:34px 0 10px;padding:20px 22px;background:#fff;border:var(--border);border-left:8px solid var(--blue);border-radius:var(--radius);}
+.article-next h2{margin-top:0;font-size:1.2rem;}
+.article-next ul{margin:8px 0 0 20px;}
+.article-next li{margin:7px 0;}
+.article-next a{font-weight:900;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
+.article-next a:hover{color:var(--orange);}
 /* crawlable topic hubs */
 .topic-nav{max-width:1200px;margin:30px auto 4px;padding:0 24px;}
 .topic-nav h2{text-align:center;font-size:1.35rem;margin-bottom:14px;}
