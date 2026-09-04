@@ -79,6 +79,20 @@ const urlFor = i => `/blog/${SLUGS[i]}/`;
 const byDate = data.blogPosts.map((_, i) => i).sort((a, b) => new Date(data.blogPosts[b].date) - new Date(data.blogPosts[a].date));
 const imgFor = p => '/images/' + p.ic.replace('blog-img-', '') + '.jpg';
 
+const TOPIC_HUBS = [
+  { slug: 'dog-health', label: 'Dog Health', icon: '🩺', color: '#FF3B3B', title: 'Dog Health & Wellness Guides', desc: 'Practical guides for spotting health changes, handling everyday care, and knowing when your dog needs veterinary help.', intro: 'Health advice is most useful when it helps you notice changes early and make a calm next-step decision. Start with the guides below, and contact your veterinarian whenever symptoms are severe, sudden, or worrying.', match: (post, slug) => ((post.tag === 'Health' || post.tag === 'Grooming') && !['dog-summer-safety-heat-pavement-cooling', 'fleas-ticks-late-summer-prevention-dogs', 'dog-road-trip-safety-car-travel-tips', 'back-to-school-dog-separation-anxiety-prep'].includes(slug)) || slug === 'how-much-exercise-does-your-dog-need-by-breed-and-age' },
+  { slug: 'dog-nutrition', label: 'Dog Nutrition', icon: '🥗', color: '#4CAF50', title: 'Dog Food & Nutrition Guides', desc: 'Understand dog-food labels, compare feeding approaches, and make better-informed nutrition decisions with your veterinarian.', intro: 'There is no single perfect diet for every dog. These guides focus on reading labels, comparing evidence, and choosing food that is complete, balanced, practical, and appropriate for your individual dog.', match: post => post.tag === 'Nutrition' },
+  { slug: 'dog-training-behavior', label: 'Training & Behavior', icon: '🎓', color: '#8B5CF6', title: 'Dog Training & Behavior Guides', desc: 'Positive, practical training plans for leash walking, recall, barking, reactivity, separation concerns, and everyday manners.', intro: 'Good training is clear, consistent, and humane. Work in small steps, reward the behavior you want, and choose the guide that matches the problem in front of you today.', match: post => post.tag === 'Training' },
+  { slug: 'puppy-care', label: 'Puppy Care', icon: '🐶', color: '#FFD600', title: 'Puppy Care & Training Guides', desc: 'A practical starting point for puppy schedules, socialization, crate training, biting, potty training, and the first month home.', intro: 'Puppyhood moves quickly. Focus first on safety, predictable routines, gentle socialization, and short training sessions that make the right choice easy.', match: (post, slug) => post.tag === 'Puppies' || ['crate-training-101', 'how-to-teach-leave-it'].includes(slug) },
+  { slug: 'senior-dogs', label: 'Senior Dogs', icon: '💛', color: '#FF9F1C', title: 'Senior Dog Care Guides', desc: 'Support an older dog’s comfort, mobility, health monitoring, enrichment, grooming, and changing daily needs.', intro: 'Aging is individual. Small changes in movement, appetite, sleep, behavior, or bathroom habits can matter, so pair thoughtful home care with regular veterinary checkups.', match: (post, slug) => post.tag === 'Seniors' || ['signs-your-dog-is-sick', 'how-much-exercise-does-your-dog-need-by-breed-and-age', 'how-to-trim-dog-nails-without-the-struggle', 'brushing-your-dogs-teeth'].includes(slug) },
+  { slug: 'seasonal-dog-safety', label: 'Seasonal Safety', icon: '☀️', color: '#00B8D9', title: 'Seasonal Dog Safety Guides', desc: 'Prepare your dog for heat, parasites, travel, routine changes, and other seasonal risks before they become emergencies.', intro: 'Weather, travel, parasites, and household schedules all change through the year. These checklists help you plan ahead and reduce avoidable risks.', match: (post, slug) => ['dog-summer-safety-heat-pavement-cooling', 'fleas-ticks-late-summer-prevention-dogs', 'dog-road-trip-safety-car-travel-tips', 'back-to-school-dog-separation-anxiety-prep', 'essential-dog-gear-guide'].includes(slug) },
+];
+const topicUrl = topic => `/topics/${topic.slug}/`;
+const topicPosts = topic => data.blogPosts.map((post, i) => ({ post, i, slug: SLUGS[i] })).filter(item => topic.match(item.post, item.slug));
+const primaryTopicFor = (post, slug) => ['seasonal-dog-safety', 'puppy-care', 'senior-dogs', 'dog-nutrition', 'dog-training-behavior', 'dog-health']
+  .map(topicSlug => TOPIC_HUBS.find(topic => topic.slug === topicSlug))
+  .find(topic => topic.match(post, slug));
+
 // ---------- 2. Shared helpers ----------
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const isoDate = d => { const t = new Date(d); return isNaN(t) ? '' : t.toISOString().slice(0, 10); };
@@ -117,6 +131,10 @@ const SEARCH_INDEX = [
   ...data.blogPosts.map((post, i) => ({
     type: 'guide', category: post.tag, title: post.title, text: post.excerpt,
     url: urlFor(i), meta: `${post.read} · ${post.date}`,
+  })),
+  ...TOPIC_HUBS.map(topic => ({
+    type: 'guide', category: 'Topic hub', title: topic.title, text: topic.desc,
+    url: topicUrl(topic), meta: `${topicPosts(topic).length} practical guides`,
   })),
 ];
 
@@ -170,10 +188,10 @@ const footer = () => `<footer class="footer">
     <div>
       <h2 class="footer-h">Popular Topics</h2>
       <ul>
-        <li><a href="/faq/#faq-puppy-life">Puppy Training</a></li>
-        <li><a href="/faq/#faq-feeding">Dog Nutrition</a></li>
-        <li><a href="/faq/#faq-training">Fixing Bad Habits</a></li>
-        <li><a href="/faq/#faq-health">Health &amp; Wellness</a></li>
+        <li><a href="/topics/puppy-care/">Puppy Care</a></li>
+        <li><a href="/topics/dog-nutrition/">Dog Nutrition</a></li>
+        <li><a href="/topics/dog-training-behavior/">Training &amp; Behavior</a></li>
+        <li><a href="/topics/dog-health/">Health &amp; Wellness</a></li>
       </ul>
     </div>
     <div>
@@ -433,6 +451,10 @@ function buildBlogIndex() {
     <h1>Deep Dives for<br>Dog People.</h1>
     <p>We go beyond the basics so you don't have to.</p>
   </section>
+  <nav class="topic-nav" aria-label="Browse dog advice by topic">
+    <h2>Browse by topic</h2>
+    <div>${TOPIC_HUBS.map(topic => `<a href="${topicUrl(topic)}"><span aria-hidden="true">${topic.icon}</span>${topic.label}</a>`).join('')}</div>
+  </nav>
   <div class="filter-bar">${filters}</div>
   <div class="blog-grid"><div class="grid-3" id="blogGrid">${grid}</div></div>`;
   const bodyJs = `<script>
@@ -446,6 +468,35 @@ function filterBlog(t,b){
     desc: 'In-depth dog guides on training, nutrition, health, grooming, puppies, and senior care. Researched, practical, and free of fluff.',
     canonical: '/blog/', active: 'blog', content, bodyJs,
     breadcrumbs: [{ label: 'Blog', href: '/blog/' }],
+  });
+}
+
+function buildTopicHub(topic) {
+  const items = topicPosts(topic).sort((a, b) => new Date(b.post.date) - new Date(a.post.date));
+  const content = `<section class="topic-hero" style="--topic-color:${topic.color}">
+    <div class="topic-icon" aria-hidden="true">${topic.icon}</div>
+    <p class="topic-kicker">Dog advice topic</p>
+    <h1>${esc(topic.title)}</h1>
+    <p>${esc(topic.desc)}</p>
+  </section>
+  <main class="topic-wrap">
+    <p class="topic-intro">${esc(topic.intro)}</p>
+    <div class="topic-summary"><strong>${items.length} guides</strong><span>Reviewed and organized by the Doggy See, Doggy Do Editorial Team</span></div>
+    <div class="grid-3 topic-grid">${items.map(item => blogCard(item.i)).join('\n')}</div>
+    <aside class="topic-help"><h2>Need a quicker answer?</h2><p>Search our short answers for common questions, or browse every deep-dive guide.</p><div><a class="pill-btn" href="/faq/">Browse quick answers</a><a class="pill-btn outline" href="/blog/">View all guides</a></div></aside>
+  </main>`;
+  const jsonld = `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'CollectionPage',
+    name: topic.title, description: topic.desc, url: SITE + topicUrl(topic),
+    isPartOf: { '@type': 'Blog', url: SITE + '/blog/' },
+    mainEntity: { '@type': 'ItemList', itemListElement: items.map((item, position) => ({
+      '@type': 'ListItem', position: position + 1, url: SITE + urlFor(item.i), name: item.post.title,
+    })) },
+  })}</script>`;
+  return page({
+    title: `${topic.title} | Doggy See, Doggy Do`, desc: topic.desc,
+    canonical: topicUrl(topic), active: 'blog', content, jsonld,
+    breadcrumbs: [{ label: 'Blog', href: '/blog/' }, { label: topic.label, href: topicUrl(topic) }],
   });
 }
 
@@ -483,6 +534,7 @@ const ARTICLE_SOURCES = {
 function buildArticle(i) {
   const p = data.blogPosts[i];
   const slug = SLUGS[i];
+  const primaryTopic = primaryTopicFor(p, slug);
   const sources = ARTICLE_SOURCES[slug] || [];
   const body = data.postBodies[i] || '<p>This article is coming soon.</p>';
   const related = data.blogPosts.map((_, j) => j).filter(j => j !== i)
@@ -493,10 +545,10 @@ function buildArticle(i) {
     <img src="${imgFor(p)}" alt="${esc(p.title)}" width="1000" height="562" fetchpriority="high" decoding="async">
   </div>
   <div class="article-wrap">
-    <a class="article-back" href="/blog/">← Back to all posts</a>
+    <a class="article-back" href="${primaryTopic ? topicUrl(primaryTopic) : '/blog/'}">← Back to ${primaryTopic ? primaryTopic.label : 'all posts'}</a>
     <div class="article-head">
       <h1>${esc(p.title)}</h1>
-      <div class="article-meta"><span>${p.date}</span><span>•</span><span>${p.read}</span><span>•</span><span>${p.tag}</span></div>
+      <div class="article-meta"><span>${p.date}</span><span>•</span><span>${p.read}</span><span>•</span>${primaryTopic ? `<a href="${topicUrl(primaryTopic)}">${primaryTopic.label}</a>` : `<span>${p.tag}</span>`}</div>
       <div class="editorial-byline"><span class="editorial-mark" aria-hidden="true">🐾</span><span>By the <strong>Doggy See, Doggy Do Editorial Team</strong><br><a href="/editorial-standards/">How we research and review our content</a></span></div>
     </div>
     <div class="article-body">${body}${sources.length ? `<aside class="evidence-note" aria-label="Editorial review note"><strong>Educational information—not veterinary advice.</strong> This guide was checked against the sources below on ${EVIDENCE_REVIEWED}. A source review is not the same as review by a veterinarian who has examined your dog.</aside><section class="article-sources" aria-labelledby="sources-title"><h2 id="sources-title">Sources &amp; further reading</h2><ol>${sources.map(source => `<li><a href="${source[2]}" target="_blank" rel="noopener">${esc(source[0])}</a><span>${esc(source[1])}</span></li>`).join('')}</ol><p>Sources support the core health, safety, or nutrition guidance in this article. <a href="/editorial-standards/">Read our editorial standards</a>.</p></section>` : ''}</div>
@@ -518,7 +570,7 @@ function buildArticle(i) {
     title: `${p.title} | Doggy See, Doggy Do`,
     desc: p.excerpt, canonical: urlFor(i), active: 'blog', content, jsonld,
     extraHead: `<link rel="preload" as="image" href="${imgFor(p)}" fetchpriority="high">`,
-    breadcrumbs: [{ label: 'Blog', href: '/blog/' }, { label: p.title, href: urlFor(i) }],
+    breadcrumbs: [{ label: 'Blog', href: '/blog/' }, ...(primaryTopic ? [{ label: primaryTopic.label, href: topicUrl(primaryTopic) }] : []), { label: p.title, href: urlFor(i) }],
   });
 }
 
@@ -1059,6 +1111,28 @@ button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;
 .article-sources li a{font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
 .article-sources li span{display:block;color:#666;font-size:.8rem;}
 .article-sources>p{font-size:.8rem;color:#666;}
+/* crawlable topic hubs */
+.topic-nav{max-width:1200px;margin:30px auto 4px;padding:0 24px;}
+.topic-nav h2{text-align:center;font-size:1.35rem;margin-bottom:14px;}
+.topic-nav>div{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;}
+.topic-nav a{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:8px 14px;background:#fff;border:2px solid var(--dark);border-radius:999px;box-shadow:2px 2px 0 var(--dark);font-size:.82rem;font-weight:900;text-decoration:none;transition:transform .12s,box-shadow .12s;}
+.topic-nav a:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--dark);background:var(--yellow);}
+.topic-hero{text-align:center;padding:58px 24px 62px;background:color-mix(in srgb,var(--topic-color) 28%,var(--offwhite));border-bottom:var(--border);}
+.topic-icon{display:grid;place-items:center;width:74px;height:74px;margin:0 auto 14px;background:#fff;border:var(--border);border-radius:50%;box-shadow:var(--shadow);font-size:2.3rem;}
+.topic-kicker{text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;font-weight:900;margin-bottom:6px;}
+.topic-hero h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1;margin-bottom:14px;}
+.topic-hero>p:last-child{max-width:690px;margin:0 auto;font-size:1rem;line-height:1.65;}
+.topic-wrap{max-width:1200px;margin:0 auto;padding:42px 24px 72px;}
+.topic-intro{max-width:800px;margin:0 auto 24px;text-align:center;font-size:1.04rem;line-height:1.75;}
+.topic-summary{display:flex;justify-content:center;align-items:center;gap:12px 22px;flex-wrap:wrap;margin:0 auto 30px;color:#666;font-size:.82rem;}
+.topic-summary strong{color:var(--dark);background:var(--yellow);border:2px solid var(--dark);border-radius:999px;padding:5px 12px;}
+.topic-grid{margin-top:8px;}
+.topic-help{margin-top:48px;padding:30px;background:var(--dark);color:#fff;border-radius:var(--radius);box-shadow:var(--shadow);text-align:center;}
+.topic-help h2{color:var(--yellow);font-size:1.8rem;margin-bottom:6px;}
+.topic-help p{margin-bottom:18px;color:#ddd;}
+.topic-help>div{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+.article-meta a{font-weight:900;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px;}
+@media(max-width:640px){.topic-nav{padding:0 16px;}.topic-nav>div{display:grid;grid-template-columns:1fr 1fr;}.topic-nav a{justify-content:center;text-align:center;padding:7px 9px;font-size:.74rem;}.topic-hero{padding:42px 18px 46px;}.topic-wrap{padding:32px 16px 54px;}.topic-help{padding:24px 18px;}}
 /* footer: 4th column + sitewide disclosure line */
 .footer-grid{grid-template-columns:1.5fr 1fr 1fr 1fr;}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
@@ -1082,6 +1156,7 @@ button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;
 `);
 write('index.html', buildHome());
 write('blog/index.html', buildBlogIndex());
+TOPIC_HUBS.forEach(topic => write(`topics/${topic.slug}/index.html`, buildTopicHub(topic)));
 data.blogPosts.forEach((_, i) => write(`blog/${SLUGS[i]}/index.html`, buildArticle(i)));
 write('faq/index.html', buildFaq());
 write('resources/index.html', buildResources());
@@ -1089,7 +1164,7 @@ LEGAL.forEach(l => write(`${l.slug}/index.html`, buildLegal(l)));
 write('404.html', buildNotFound());
 
 // sitemap + robots
-const urls = ['/', '/blog/', '/faq/', '/resources/', ...LEGAL.map(l => `/${l.slug}/`), ...SLUGS.map(s => `/blog/${s}/`)];
+const urls = ['/', '/blog/', '/faq/', '/resources/', ...TOPIC_HUBS.map(topicUrl), ...LEGAL.map(l => `/${l.slug}/`), ...SLUGS.map(s => `/blog/${s}/`)];
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${SITE}${u}</loc><changefreq>monthly</changefreq></url>`).join('\n')}
