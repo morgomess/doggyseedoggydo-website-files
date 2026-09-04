@@ -19,6 +19,13 @@ import path from 'path';
 const ROOT = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
 const SITE = 'https://doggyseedoggydo.com';
 const EMAIL = 'doggysee.doggydo@yahoo.com';
+const SOCIAL_LINKS = [
+  {
+    label: 'Instagram',
+    url: 'https://www.instagram.com/doggysee.doggydo/',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>',
+  },
+];
 const LEGAL_UPDATED = 'September 3, 2026';
 
 // ---------- 1. Extract content data + CSS from source ----------
@@ -124,6 +131,7 @@ const ORG_LD = `<script type="application/ld+json">${JSON.stringify({
   name: 'Doggy See, Doggy Do', url: SITE + '/', logo: SITE + '/favicon.svg',
   email: EMAIL, publishingPrinciples: SITE + '/editorial-standards/',
   correctionsPolicy: SITE + '/corrections/',
+  sameAs: SOCIAL_LINKS.map(link => link.url),
 })}</script>`;
 
 const NAVLINKS = [
@@ -185,6 +193,7 @@ const footer = () => `<footer class="footer">
     <div>
       <div class="footer-brand-name">${BRAND_MARK}<span>Doggy See, Doggy Do</span></div>
       <p class="footer-brand">Every question. Every stage. Every dog.</p>
+      <div class="social-links" aria-label="Follow Doggy See, Doggy Do">${SOCIAL_LINKS.map(link => `<a href="${link.url}" target="_blank" rel="me noopener noreferrer" aria-label="Follow Doggy See, Doggy Do on ${link.label}">${link.icon}<span>${link.label}</span></a>`).join('')}</div>
     </div>
     <div>
       <h2 class="footer-h">Explore</h2>
@@ -1285,6 +1294,11 @@ button.cover-card{font:inherit;width:100%;color:inherit;-webkit-appearance:none;
 .brand-mark{display:block;flex:0 0 28px;width:28px;height:28px;fill:none;stroke:var(--blue);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;}
 .footer-brand-name{display:flex;align-items:center;gap:9px;}
 .footer-brand-name .brand-mark{stroke:var(--yellow);}
+.social-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+.social-links a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:7px 13px;color:#fff;border:2px solid #fff;border-radius:999px;font-size:.8rem;font-weight:900;transition:color .15s,background .15s,transform .15s;}
+.social-links a:hover{color:var(--dark);background:var(--yellow);transform:translateY(-2px);}
+.social-links a:focus-visible{outline:3px solid var(--yellow);outline-offset:3px;}
+.social-links svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .hero-home{background:#fffdf5;border-bottom:0;isolation:isolate;}
 .hero-home::before{inset:0 auto auto 0;width:68%;height:100%;opacity:1;background:var(--yellow);clip-path:polygon(0 0,94% 0,79% 100%,0 88%);z-index:-1;}
 .hero-home-inner{padding:70px 24px 58px;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);gap:52px;align-items:center;}
