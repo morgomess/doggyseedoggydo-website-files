@@ -81,6 +81,7 @@ const SLUGS = [
   'how-to-stop-dog-jumping-on-guests',
   'how-to-teach-dog-to-stay-duration-distance-distraction',
   'why-dog-listens-at-home-ignores-you-at-park',
+  'no-pull-dog-harness-gear-guide',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
