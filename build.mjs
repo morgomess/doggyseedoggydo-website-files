@@ -85,6 +85,7 @@ const SLUGS = [
   'drop-it-vs-leave-it-dog-training',
   'how-to-teach-place-command-dog',
   'dog-door-manners-stop-dog-bolting-front-door',
+  'crate-training-adult-dog',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
