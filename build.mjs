@@ -87,6 +87,7 @@ const SLUGS = [
   'dog-door-manners-stop-dog-bolting-front-door',
   'crate-training-adult-dog',
   'nighttime-dog-walking-safety-gear-visibility-loose-leash',
+  'how-to-stop-dog-counter-surfing',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
