@@ -90,6 +90,7 @@ const SLUGS = [
   'how-to-stop-dog-counter-surfing',
   'how-to-walk-two-dogs-at-once-loose-leash',
   'halloween-dog-anxiety-management-plan-trick-or-treaters',
+  'sniffing-loose-leash-walking-tips',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
