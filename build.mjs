@@ -92,6 +92,7 @@ const SLUGS = [
   'halloween-dog-anxiety-management-plan-trick-or-treaters',
   'sniffing-loose-leash-walking-tips',
   'daylight-saving-time-dogs-adjust-routine-clocks-fall-back',
+  'how-cold-is-too-cold-to-walk-your-dog',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
