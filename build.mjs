@@ -94,6 +94,7 @@ const SLUGS = [
   'daylight-saving-time-dogs-adjust-routine-clocks-fall-back',
   'how-cold-is-too-cold-to-walk-your-dog',
   'road-salt-ice-melt-dog-paw-care-winter-routine',
+  'thanksgiving-foods-safe-for-dogs',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
