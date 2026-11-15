@@ -96,6 +96,7 @@ const SLUGS = [
   'road-salt-ice-melt-dog-paw-care-winter-routine',
   'thanksgiving-foods-safe-for-dogs',
   'why-is-my-dogs-skin-so-dry-in-winter',
+  'should-you-feed-your-dog-more-in-winter',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
