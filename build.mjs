@@ -98,6 +98,7 @@ const SLUGS = [
   'why-is-my-dogs-skin-so-dry-in-winter',
   'should-you-feed-your-dog-more-in-winter',
   'dog-boarding-vs-pet-sitter-holiday-care',
+  'how-to-introduce-two-dogs-holidays-visiting-dog',
 ];
 const urlFor = i => `/blog/${SLUGS[i]}/`;
 // display order: newest post first (by date), while keeping data index → SLUGS/postBodies aligned
